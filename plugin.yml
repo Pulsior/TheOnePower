@@ -1,0 +1,26 @@
+name: The One Power
+main: com.pulsior.theonepower.TheOnePower
+version: 1.0
+commands:
+     embrace:
+       description: Embrace saidar
+       usage: /<command>
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission>
+     release:
+       description: Release saidar
+       usage: /<command>
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission>
+     angreal:
+       description: Get an angreal
+       usage: /<command>
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission>
+     dream:
+       description: Dream
+       usage: /<command>
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission>
+
+   
