@@ -12,8 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.pulsior.theonepower.TheOnePower;
-
 public class UnseenGenTask extends BukkitRunnable{
 
 	Logger log = Bukkit.getLogger();
@@ -21,21 +19,21 @@ public class UnseenGenTask extends BukkitRunnable{
 	@Override
 	public void run() {
 		
-		File file = new File("tel'aran'riod/uid.dat");
+		log.info("Starting generation of tel'aran'rhiod... ");
+		File file = new File("tel'aran'rhiod/uid.dat");
 		file.delete();
-		file = new File("tel'aran'riod");
+		file = new File("tel'aran'rhiod");
 		file.delete();
 		
 		try {
 			copyDirectory(new File("world"), file);
-			new File("tel'aran'riod/uid.dat").delete();
+			new File("tel'aran'rhiod/uid.dat").delete();
 			
-			TheOnePower.unseenLand = new UnseenLand();
 		} catch (IOException e) {
-			System.out.println("Error generating Tel'aran'riod");
+			System.out.println("Error generating tel'aran'rhiod");
 		}
 		
-		Bukkit.getServer().createWorld(new WorldCreator("tel'aran'riod"));
+		Bukkit.getServer().createWorld(new WorldCreator("tel'aran'rhiod"));
 		
 	}
 

@@ -51,6 +51,9 @@ public class WeaveHandler implements Listener{
 				log.info(Integer.toString(TheOnePower.power.requiredWeavesMap.get(player.getName() ) ) +" more weaves are required.");
 				log.info("The amount of levels is now "+Integer.toString(TheOnePower.power.requiredWeavesMap.get(player.getName() ) ) );
 			}
+			if(item.getType().equals(Material.NETHER_STAR)){
+				
+			}
 			Channel channel;
 			String itemName = item.getItemMeta().getDisplayName();
 			channel = TheOnePower.channelMap.get( player.getName() );
@@ -95,6 +98,7 @@ public class WeaveHandler implements Listener{
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event){
 		Player player = (Player) event.getEntity();
+		String name = player.getName();
 		Channel channel = TheOnePower.channelMap.get(player.getName());
 		if (channel != null){
 			channel.close();
@@ -105,6 +109,10 @@ public class WeaveHandler implements Listener{
 		if (randomInt == 0){
 			player.sendMessage("<Ba'alzamon> I have won again, Lews Therin.");
 
+		}
+		
+		if( TheOnePower.unseenLand.players.contains(name ) ){
+			TheOnePower.unseenLand.removePlayer(name);
 		}
 	}
 

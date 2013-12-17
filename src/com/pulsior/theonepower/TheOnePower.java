@@ -27,6 +27,7 @@ import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
 import com.pulsior.theonepower.unseenland.UnseenGenTask;
 import com.pulsior.theonepower.unseenland.UnseenLand;
+import com.pulsior.theonepower.unseenland.UnseenLandData;
 
 public final class TheOnePower extends JavaPlugin{
 
@@ -38,7 +39,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static final ItemStack dreamAngreal = getAngrealStack("dream");
 	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
 	public static final ItemStack angreal = getAngrealStack("angreal");
-	
+
 	public static final ItemStack returnToken = getReturnToken();
 
 	public static PowerMap power;
@@ -58,11 +59,24 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
-		load();
 		if (power == null){
 			power = new PowerMap();
 		}
-		scheduler.scheduleSyncDelayedTask(this, new UnseenGenTask() );
+
+		if(Bukkit.getWorld("tel'aran'rhiod") == null){
+			UnseenGenTask task = new UnseenGenTask();
+			task.run();
+		}
+		
+		UnseenLandData data = loadUnseenLand();
+		if (data != null){
+			unseenLand = new UnseenLand(data);
+		}
+		else{
+			unseenLand = new UnseenLand();
+		}
+		
+		loadExp();
 
 
 	}
@@ -79,12 +93,6 @@ public final class TheOnePower extends JavaPlugin{
 			}
 		}
 		save();
-
-		for(String name : unseenLand.players){
-			unseenLand.removePlayer(name);
-		}
-
-		server.unloadWorld("tel'aran'riod", true);
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
@@ -95,8 +103,6 @@ public final class TheOnePower extends JavaPlugin{
 					if(power.levelMap.get(name ) == null){
 						power.add( name );
 					}
-
-
 
 					embraceSaidar((Player) sender);
 
@@ -185,7 +191,7 @@ public final class TheOnePower extends JavaPlugin{
 
 	public void save(){
 		try{
-			FileOutputStream fout = new FileOutputStream("plugins/The One Power/data");
+			FileOutputStream fout = new FileOutputStream("plugins/The One Power/data_levels");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);   
 			oos.writeObject( TheOnePower.power );
 			oos.close();
@@ -194,28 +200,68 @@ public final class TheOnePower extends JavaPlugin{
 		catch(IOException ex){
 			log.info("[The One Power] Saving problem!");
 		}
+
+		try{
+			FileOutputStream fout = new FileOutputStream("plugins/The One Power/data_unseenLand");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);   
+			oos.writeObject( new UnseenLandData(unseenLand) );
+			oos.close();
+
+		}
+		catch(IOException ex){
+			log.info("[The One Power] Saving problem!");
+		}
 	}
 
-	public void load(){
+	public boolean loadExp(){
 		try{
-			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data");
+			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_levels");
 			ObjectInputStream objInput = new ObjectInputStream(fileInput);
 			Object obj = objInput.readObject();
 			if(obj instanceof PowerMap){
-				power = (PowerMap) obj;  
+				power = (PowerMap) obj;
+				objInput.close();
+				return true;
 			}
 			else{
-				log.info("[The One Power] Loading problem, no PowerMap instance!");
+				log.info("[The One Power] Loading problem, the level progress save is corrupt!");
+				log.info("[The One Power] (The save is not an instance of PowerMap.java)");
 			}
 			objInput.close();
 		}
 		catch(IOException ex){
-			log.info("[The One Power] Loading problem, there's an IOException!");
+			log.info("[The One Power] Loading problem, an IOException occurred while loading the level progress data");
 		} 
 		catch (ClassNotFoundException e) {
-			log.info("[The One Power] Loading problem, there's a ClassNotFoundException!");
-			e.printStackTrace();
+			log.info("[The One Power] Loading problem, a ClassNotFoundException occurred while loading the level progress data");
+		}
+		return false;
+	}
+
+	public UnseenLandData loadUnseenLand(){
+		try{
+			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_unseenLand");
+			ObjectInputStream objInput = new ObjectInputStream(fileInput);
+			Object obj = objInput.readObject();
+			if(obj instanceof UnseenLandData){
+				UnseenLandData dat = (UnseenLandData) obj;
+				objInput.close();
+				return dat;
+			}
+			else{
+				log.info("[The One Power] Loading problem, the Unseen Land save is corrupt!");
+				log.info("[The One Power] (The save is not an instance of UnseenLandData.java)");
+			}
+			objInput.close();
+			
+		}
+		catch(IOException ex){
+			log.info("[The One Power] Loading problem, an IOException occured while loading the Unseen Land");
 		} 
+		catch (ClassNotFoundException e) {
+			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading the Unseen Land");
+		}
+		return null;
 	}
 
 	public void makeDir(){
@@ -250,7 +296,7 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		return null;
 	}
-	
+
 	public static ItemStack getReturnToken(){
 		ItemStack stack = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = stack.getItemMeta();
