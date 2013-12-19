@@ -286,7 +286,7 @@ public class Channel {
 
 		String name = player.getName();
 		PlayerInventory inventory = player.getInventory();
-		ItemStack[] savedInventory = TheOnePower.inventoryMap.get(name);
+		ItemStack[] savedInventory = TheOnePower.embraceInventoryMap.get(name);
 
 		for(int y = 0; y < 36; y++){
 			ItemStack item = savedInventory[y];
@@ -300,13 +300,9 @@ public class Channel {
 
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.removePotionEffect(PotionEffectType.ABSORPTION);
-
 		player.setLevel(TheOnePower.currentLevelMap.get( player.getName() ) );
 		TheOnePower.currentLevelMap.remove( player.getName() );
-
 		scheduler.cancelAllTasks();
-
-
 		TheOnePower.channelMap.remove(name);
 
 	}
@@ -314,7 +310,6 @@ public class Channel {
 	public void disband(){
 		weave.clear();
 		gaidinWeaveActive = false;
-
 		nowCasting = false;
 	}
 

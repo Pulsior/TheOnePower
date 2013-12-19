@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.Element;
@@ -40,23 +41,42 @@ public class WeaveHandler implements Listener{
 	public void onWeave(PlayerInteractEvent event){
 		ItemStack item = event.getItem();
 		Player player = event.getPlayer();
+		String name = player.getName();
 		if (item != null){
 			if(item.getType().equals(Material.STICK)){
 				TheOnePower.power.increaseLevel(player.getName());
-				log.info(player.getWorld().getName());
-				return;
+				log.info(player.getName() + " leveled up using a stick!");
+				return; 
 			}
 			if(item.getType().equals(Material.STONE_SPADE) && event.getAction().equals(Action.RIGHT_CLICK_AIR)){
-				log.info("The current progress is "+Integer.toString(TheOnePower.power.weaveProgressMap.get(player.getName())));
-				log.info(Integer.toString(TheOnePower.power.requiredWeavesMap.get(player.getName() ) ) +" more weaves are required.");
-				log.info("The amount of levels is now "+Integer.toString(TheOnePower.power.requiredWeavesMap.get(player.getName() ) ) );
+				log.info("The current progress is "+Integer.toString(TheOnePower.power.weaveProgressMap.get(name) ) );
+				log.info(Integer.toString(TheOnePower.power.requiredWeavesMap.get(name) ) +" more weaves are required.");
+				log.info("The amount of levels is now "+Integer.toString(TheOnePower.power.levelMap.get(name ) ) );
 			}
 			if(item.getType().equals(Material.NETHER_STAR)){
-				
+				if(TheOnePower.unseenLand.players.contains(name)){
+					ItemMeta meta = item.getItemMeta();
+					if(meta != null){
+						if(meta.getDisplayName() . equalsIgnoreCase(ChatColor.RESET+"Wake Up")){
+							log.info("Waking up!");
+							TheOnePower.unseenLand.removePlayer(name);
+
+						}
+					}
+				}
+			}
+			if(item.getType().equals(Material.BLAZE_POWDER)){
+				if(player.getWorld().getName().equals("tel'aran'rhiod") ) {
+					player.sendMessage("In the Unseen Land!");
+				}
+				else{
+					player.sendMessage("Real world!");
+				}
+
 			}
 			Channel channel;
 			String itemName = item.getItemMeta().getDisplayName();
-			channel = TheOnePower.channelMap.get( player.getName() );
+			channel = TheOnePower.channelMap.get( name );
 			if (itemName != null && channel != null){
 				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
 						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
@@ -68,9 +88,9 @@ public class WeaveHandler implements Listener{
 					}
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){
-					if(event.getAction().equals(Action.RIGHT_CLICK_AIR)){
-						channel.cast( event.getClickedBlock() );
-					}
+
+					channel.cast( event.getClickedBlock() );
+
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){
 					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
@@ -110,7 +130,7 @@ public class WeaveHandler implements Listener{
 			player.sendMessage("<Ba'alzamon> I have won again, Lews Therin.");
 
 		}
-		
+
 		if( TheOnePower.unseenLand.players.contains(name ) ){
 			TheOnePower.unseenLand.removePlayer(name);
 		}

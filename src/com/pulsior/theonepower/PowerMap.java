@@ -3,6 +3,8 @@ package com.pulsior.theonepower;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
+
 public class PowerMap implements Serializable{
 
 	/**
@@ -31,12 +33,16 @@ public class PowerMap implements Serializable{
 		int amtOfLevels = levelMap.get(name);
 		amtOfLevels = amtOfLevels + 1;
 		levelMap.put(name, amtOfLevels);
+		weaveProgressMap.put(name, 0);
+		requiredWeavesMap.put(name, requiredWeavesMap.get(name)+2);
+		TheOnePower.channelMap.get(name).maxLevel = amtOfLevels;
 	}
 	
 	public void add(String name){
 		levelMap.put(name, 3);
 		weaveProgressMap.put(name, 0);
 		requiredWeavesMap.put(name, 3);
+		Bukkit.getLogger().info("Added to the levelmap!");
 		
 	}
 	
@@ -48,6 +54,7 @@ public class PowerMap implements Serializable{
 			weaveProgressMap.put(name, 0);
 			requiredWeavesMap.put(name, requiredWeaves+2);
 			increaseLevel(name);
+			return true;
 		}
 	
 		

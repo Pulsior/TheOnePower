@@ -32,9 +32,9 @@ import com.pulsior.theonepower.unseenland.UnseenLandData;
 public final class TheOnePower extends JavaPlugin{
 
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
-	public static HashMap<String, ItemStack[]> inventoryMap = new HashMap<String, ItemStack[]>();
+	public static HashMap<String, ItemStack[]> embraceInventoryMap = new HashMap<String, ItemStack[]>();
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
-
+	public static HashMap<String, String> sleepingInventoryMap = new HashMap<String, String>();
 
 	public static final ItemStack dreamAngreal = getAngrealStack("dream");
 	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
@@ -64,16 +64,19 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		if(Bukkit.getWorld("tel'aran'rhiod") == null){
+			log.info("[The One Power] Initializing Tel'aran'rhiod");
 			UnseenGenTask task = new UnseenGenTask();
 			task.run();
 		}
 		
 		UnseenLandData data = loadUnseenLand();
 		if (data != null){
-			unseenLand = new UnseenLand(data);
+			unseenLand = new UnseenLand(data, this);
+			log.info("[The One Power] Loading Unseen Land data");
 		}
 		else{
-			unseenLand = new UnseenLand();
+			unseenLand = new UnseenLand(this);
+			log.info("[The One Power] Creating new Unseen Land");
 		}
 		
 		loadExp();
@@ -184,7 +187,7 @@ public final class TheOnePower extends JavaPlugin{
 		for (int x = 0; x < 36; x++){
 			inventoryArray[x] = inventory.getItem(x);
 		}
-		inventoryMap.put(name, inventoryArray);
+		embraceInventoryMap.put(name, inventoryArray);
 		Channel channel = new Channel( name , this);
 		channelMap.put(name, channel);
 	}
@@ -300,7 +303,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static ItemStack getReturnToken(){
 		ItemStack stack = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = stack.getItemMeta();
-		meta.setDisplayName(ChatColor.RESET+"Wake up");
+		meta.setDisplayName(ChatColor.RESET+"Wake Up");
 		stack.setItemMeta(meta);
 		return stack;
 	}

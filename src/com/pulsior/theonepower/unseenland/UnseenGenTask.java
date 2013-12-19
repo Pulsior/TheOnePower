@@ -18,23 +18,25 @@ public class UnseenGenTask extends BukkitRunnable{
 
 	@Override
 	public void run() {
-		
-		log.info("Starting generation of tel'aran'rhiod... ");
+
 		File file = new File("tel'aran'rhiod/uid.dat");
 		file.delete();
 		file = new File("tel'aran'rhiod");
 		file.delete();
-		
+
 		try {
+			log.info("[The One Power] Generating Tel'aran'rhiod");
 			copyDirectory(new File("world"), file);
 			new File("tel'aran'rhiod/uid.dat").delete();
-			
+
 		} catch (IOException e) {
 			System.out.println("Error generating tel'aran'rhiod");
 		}
-		
+
 		Bukkit.getServer().createWorld(new WorldCreator("tel'aran'rhiod"));
-		
+		Bukkit.getWorld("tel'aran'rhiod").save();
+		log.info("[The One Power] Done synchronizing");
+
 	}
 
 	public void copyDirectory(File srcPath, File dstPath) throws IOException{
