@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Phil2812
  */
+@SuppressWarnings("deprecation")
 public class SaveInventory {
 	
     public static String InventoryToString (Inventory invInventory)

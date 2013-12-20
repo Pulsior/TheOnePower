@@ -67,10 +67,16 @@ public class WeaveHandler implements Listener{
 			}
 			if(item.getType().equals(Material.BLAZE_POWDER)){
 				if(player.getWorld().getName().equals("tel'aran'rhiod") ) {
-					player.sendMessage("In the Unseen Land!");
+					player.sendMessage("In the Unseen Land, according to your world name");
 				}
 				else{
-					player.sendMessage("Real world!");
+					player.sendMessage("In the real world, according to your world name");
+				}
+				if(TheOnePower.unseenLand.players.contains(name) ){
+					player.sendMessage("In the Unseen Land, according to the UnseenLand ArrayList");
+				}
+				else{
+					player.sendMessage("In the real world, according to the UnseenLand ArrayList");
 				}
 
 			}

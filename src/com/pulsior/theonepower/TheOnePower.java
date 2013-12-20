@@ -34,7 +34,6 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
 	public static HashMap<String, ItemStack[]> embraceInventoryMap = new HashMap<String, ItemStack[]>();
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
-	public static HashMap<String, String> sleepingInventoryMap = new HashMap<String, String>();
 
 	public static final ItemStack dreamAngreal = getAngrealStack("dream");
 	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
@@ -71,8 +70,9 @@ public final class TheOnePower extends JavaPlugin{
 		
 		UnseenLandData data = loadUnseenLand();
 		if (data != null){
-			unseenLand = new UnseenLand(data, this);
 			log.info("[The One Power] Loading Unseen Land data");
+			unseenLand = new UnseenLand(data, this);
+			
 		}
 		else{
 			unseenLand = new UnseenLand(this);
@@ -198,6 +198,7 @@ public final class TheOnePower extends JavaPlugin{
 			ObjectOutputStream oos = new ObjectOutputStream(fout);   
 			oos.writeObject( TheOnePower.power );
 			oos.close();
+			log.info("[The One Power] Saving level data");
 
 		}
 		catch(IOException ex){
@@ -205,10 +206,12 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		try{
+			UnseenLandData data = new UnseenLandData(unseenLand);
 			FileOutputStream fout = new FileOutputStream("plugins/The One Power/data_unseenLand");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);   
-			oos.writeObject( new UnseenLandData(unseenLand) );
+			oos.writeObject( data );
 			oos.close();
+			log.info("[The One Power] Saving Unseen Land data");
 
 		}
 		catch(IOException ex){
@@ -224,6 +227,7 @@ public final class TheOnePower extends JavaPlugin{
 			if(obj instanceof PowerMap){
 				power = (PowerMap) obj;
 				objInput.close();
+				log.info("[The One Power] Loaded level data");
 				return true;
 			}
 			else{
@@ -249,6 +253,7 @@ public final class TheOnePower extends JavaPlugin{
 			if(obj instanceof UnseenLandData){
 				UnseenLandData dat = (UnseenLandData) obj;
 				objInput.close();
+				log.info("[The One Power] Loaded Unseen Land data");
 				return dat;
 			}
 			else{

@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.unseenland;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,6 +29,9 @@ public class UnseenLand {
 	World overworld = Bukkit.getWorld("world");
 	World world = Bukkit.getWorld("tel'aran'rhiod");
 
+	public HashMap<String, String> sleepingInventoryMap = new HashMap<String, String>();
+
+
 	public UnseenLand(TheOnePower plugin){
 		this.plugin = plugin;
 	}
@@ -51,15 +55,13 @@ public class UnseenLand {
 		player.setGameMode(GameMode.ADVENTURE);
 		PlayerInventory inventory = player.getInventory();
 		player.setAllowFlight(true);
-		
-		TheOnePower.sleepingInventoryMap.put(playerName, SaveInventory.InventoryToString(inventory));
-		
+		sleepingInventoryMap.put(playerName, SaveInventory.InventoryToString(inventory));
 		inventory.clear();
 		inventory.addItem(TheOnePower.returnToken);
 
 
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void removePlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
@@ -76,8 +78,8 @@ public class UnseenLand {
 		player.resetPlayerTime();
 		player.getInventory().remove(TheOnePower.returnToken );
 		player.setAllowFlight(false);
-		
-		String invString = TheOnePower.sleepingInventoryMap.get( playerName );
+
+		String invString = sleepingInventoryMap.get( playerName );
 		Inventory inventory = player.getInventory();
 		ItemStack[] savedInventory = SaveInventory.StringToInventory(invString).getContents();
 		for(int y = 0; y < 36; y++){
@@ -89,9 +91,9 @@ public class UnseenLand {
 				inventory.setItem(y, new ItemStack(Material.AIR));
 			}
 		}
-		
+
 		player.updateInventory();
-		
+
 		if(players.size() == 0){
 			enterable = false;
 			log.info("[The One Power] Synchronizing Tel'aran'rhiod with the overworld");
@@ -99,7 +101,7 @@ public class UnseenLand {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task);
 			enterable = true;
 		}
-		
+
 	}
 
 	public void registerPlayer(String playerName){
@@ -116,11 +118,6 @@ public class UnseenLand {
 				registerPlayer(name);
 			}
 		}
+		this.sleepingInventoryMap = data.sleepingInventoryMap;
 	}
-
-	public void updateWorld(){
-
-	}
-
-
 }
