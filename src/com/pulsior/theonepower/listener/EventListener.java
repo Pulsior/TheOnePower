@@ -9,10 +9,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 
 public class EventListener implements Listener {
 
@@ -60,7 +62,11 @@ public class EventListener implements Listener {
 	}
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event){
-		if(TheOnePower.channelMap.containsKey(event.getPlayer().getName()) ){
+		String name = event.getPlayer().getName();
+		if(TheOnePower.channelMap.containsKey(name) ){
+			event.setCancelled(true);
+		}
+		else if(TheOnePower.unseenLand.players.contains(name) ){
 			event.setCancelled(true);
 		}
 	}
@@ -69,8 +75,23 @@ public class EventListener implements Listener {
 
 	@EventHandler
 	public void onItemPickup(PlayerPickupItemEvent event){
-		if(TheOnePower.channelMap.containsKey(event.getPlayer().getName() ) ){
+		String name = event.getPlayer().getName();
+		if(TheOnePower.channelMap.containsKey(name ) ){
 			event.setCancelled(true);
+		}
+		else if(TheOnePower.unseenLand.players.contains(name) ){
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerLogin(PlayerLoginEvent event){
+		Player player = event.getPlayer();
+		String name = player.getName();
+		if( TheOnePower.unseenLand.offlinePlayers.contains(name)  ){
+			TheOnePower.unseenLand.offlinePlayers.remove(name);
+			TheOnePower.unseenLand.players.add(name);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new PlayerRegisterTask(name), 20L );
 		}
 	}
 }

@@ -104,7 +104,7 @@ public final class TheOnePower extends JavaPlugin{
 				String name = sender.getName();
 				if(channelMap.get ( name ) == null){
 					if(power.levelMap.get(name ) == null){
-						power.add( name );
+						power.addPlayer( name );
 					}
 
 					embraceSaidar((Player) sender);
@@ -237,7 +237,7 @@ public final class TheOnePower extends JavaPlugin{
 			objInput.close();
 		}
 		catch(IOException ex){
-			log.info("[The One Power] Loading problem, an IOException occurred while loading the level progress data");
+			log.info("[The One Power] No save found for the level progress data, creating a new one");
 		} 
 		catch (ClassNotFoundException e) {
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occurred while loading the level progress data");
@@ -264,7 +264,7 @@ public final class TheOnePower extends JavaPlugin{
 			
 		}
 		catch(IOException ex){
-			log.info("[The One Power] Loading problem, an IOException occured while loading the Unseen Land");
+			log.info("[The One Power] No save found for the Unseen Land, creating a new one");
 		} 
 		catch (ClassNotFoundException e) {
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading the Unseen Land");

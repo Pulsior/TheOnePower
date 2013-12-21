@@ -149,7 +149,6 @@ public class Channel {
 
 		if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false ){
 			TheOnePower.power.addWeave(player.getName());
-			log.info("Added a weave!");
 		}
 
 		if(effect != null){

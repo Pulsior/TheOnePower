@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.SaveInventory;
 import com.pulsior.theonepower.TheOnePower;
 
@@ -24,6 +25,7 @@ public class UnseenLand {
 	public boolean isGenerated = false;
 	public boolean enterable = false;
 	public List<String> players = new ArrayList<String>();
+	public List<String> offlinePlayers = new ArrayList<String>();
 	UnseenGenTask task = new UnseenGenTask();
 	TheOnePower plugin;
 	World overworld = Bukkit.getWorld("world");
@@ -45,6 +47,10 @@ public class UnseenLand {
 	public void addPlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
 		players.add(player.getName());
+		Channel channel = TheOnePower.channelMap.get(playerName);
+		if (channel != null){
+			channel.close();
+		}
 		Location spawn = player.getBedSpawnLocation();
 		if(spawn == null){
 			spawn = overworld.getSpawnLocation();
@@ -106,9 +112,9 @@ public class UnseenLand {
 
 	public void registerPlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
-		players.add(player.getName());
+		players.add(playerName);
 		player.setPlayerTime(6000, false);
-		//player.setAllowFlight(true);
+		player.setAllowFlight(true);
 
 	}
 
@@ -116,6 +122,9 @@ public class UnseenLand {
 		for (String name : data.players){
 			if(Bukkit.getPlayer(name) != null){
 				registerPlayer(name);
+			}
+			else{
+				offlinePlayers.add(name);
 			}
 		}
 		this.sleepingInventoryMap = data.sleepingInventoryMap;

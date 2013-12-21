@@ -2,12 +2,13 @@ package com.pulsior.theonepower;
 
 import java.util.Map;
 import java.util.Map.Entry;
- 
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * @author Phil2812
@@ -49,9 +50,12 @@ public class SaveInventory {
                     }
                 }
                
-                serialization += i + "#" + serializedItemStack + ";";
+                serialization += i + "#" + serializedItemStack + "/" + is.getItemMeta().getDisplayName() + ";";          
+                
             }
         }
+        
+        
         return serialization;
     }
    
@@ -63,7 +67,9 @@ public class SaveInventory {
        
         for (int i = 1; i < serializedBlocks.length; i++)
         {
-            String[] serializedBlock = serializedBlocks[i].split("#");
+        	String[] twoBlocks = serializedBlocks[i].split("/");
+        	
+            String[] serializedBlock = twoBlocks[0].split("#");
             int stackPosition = Integer.valueOf(serializedBlock[0]);
            
             if (stackPosition >= deserializedInventory.getSize())
@@ -95,6 +101,12 @@ public class SaveInventory {
                 {
                     is.addEnchantment(Enchantment.getById(Integer.valueOf(itemAttribute[1])), Integer.valueOf(itemAttribute[2]));
                 }
+            }
+            String displayName = twoBlocks[1];
+            if(! (displayName.equals("null") ) ){
+            	ItemMeta meta = is.getItemMeta();
+            	meta.setDisplayName(displayName);
+            	is.setItemMeta(meta);
             }
             deserializedInventory.setItem(stackPosition, is);
         }
