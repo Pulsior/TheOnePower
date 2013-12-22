@@ -1,5 +1,6 @@
 package com.pulsior.theonepower.listener;
 
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -24,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.Element;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.unseenland.Memory;
 
 public class WeaveHandler implements Listener{
 
@@ -44,8 +46,9 @@ public class WeaveHandler implements Listener{
 		String name = player.getName();
 		if (item != null){
 			if(item.getType().equals(Material.STICK)){
-				TheOnePower.power.increaseLevel(player.getName());
-				log.info(player.getName() + " leveled up using a stick!");
+				for(Memory mem : TheOnePower.unseenLand.memoryMap.get(name) ){
+					log.info(mem.name);
+				}
 				return; 
 			}
 			if(item.getType().equals(Material.STONE_SPADE) && event.getAction().equals(Action.RIGHT_CLICK_AIR)){
@@ -65,6 +68,7 @@ public class WeaveHandler implements Listener{
 					}
 				}
 			}
+
 			if(item.getType().equals(Material.BLAZE_POWDER)){
 				if(player.getWorld().getName().equals("tel'aran'rhiod") ) {
 					player.sendMessage("In the Unseen Land, according to your world name");
@@ -80,35 +84,50 @@ public class WeaveHandler implements Listener{
 				}
 
 			}
-			Channel channel;
-			String itemName = item.getItemMeta().getDisplayName();
-			channel = TheOnePower.channelMap.get( name );
-			if (itemName != null && channel != null){
-				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
-						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
-						itemName.equalsIgnoreCase(spirit) ){
 
-					Element element = getElementByString(itemName);				
-					if(element != null){
-						channel.addElement(element);
+			if(item.getType().equals(Material.GHAST_TEAR) && TheOnePower.unseenLand.players.contains(name)){
+				String memoryName = item.getItemMeta().getDisplayName();
+				if(memoryName != null){
+					List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
+					for(Memory memory : list){
+						if(memory.name.equals(memoryName) ){
+							player.teleport(memory.getLocation() );
+							player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 0);
+						}
 					}
-				}
-				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){
-
-					channel.cast( event.getClickedBlock() );
-
-				}
-				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){
-					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
-					channel.disband();
-				}
-				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){
-					channel.close();
-					player.updateInventory();
 				}
 			}
 		}
+		Channel channel;
+		String itemName = item.getItemMeta().getDisplayName();
+		channel = TheOnePower.channelMap.get( name );
+		if (itemName != null && channel != null){
+			if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
+					itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
+					itemName.equalsIgnoreCase(spirit) ){
+
+				Element element = getElementByString(itemName);				
+				if(element != null){
+					channel.addElement(element);
+				}
+			}
+			else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){
+
+				channel.cast( event.getClickedBlock() );
+
+			}
+			else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){
+				player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
+				channel.disband();
+			}
+			else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){
+				channel.close();
+				player.updateInventory();
+			}
+		}
 	}
+
+
 
 
 	@EventHandler

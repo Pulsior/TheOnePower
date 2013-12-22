@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.SaveInventory;
@@ -30,17 +31,20 @@ public class UnseenLand {
 	TheOnePower plugin;
 	World overworld = Bukkit.getWorld("world");
 	World world = Bukkit.getWorld("tel'aran'rhiod");
-
+	
+	public HashMap<String, List<Memory> > memoryMap;
 	public HashMap<String, String> sleepingInventoryMap = new HashMap<String, String>();
 
 
 	public UnseenLand(TheOnePower plugin){
 		this.plugin = plugin;
+		memoryMap = new HashMap<String, List <Memory> >();
 	}
 
 	public UnseenLand(UnseenLandData data, TheOnePower plugin){
 		loadData(data);
 		this.plugin = plugin;
+		this.memoryMap = data.memoryMap;
 		enterable = true;
 	}
 
@@ -64,8 +68,7 @@ public class UnseenLand {
 		sleepingInventoryMap.put(playerName, SaveInventory.InventoryToString(inventory));
 		inventory.clear();
 		inventory.addItem(TheOnePower.returnToken);
-
-
+		addMemories(playerName, inventory);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -128,5 +131,40 @@ public class UnseenLand {
 			}
 		}
 		this.sleepingInventoryMap = data.sleepingInventoryMap;
+	}
+	
+	public boolean addMemory(String playerName, Memory memory){
+		List<Memory> list = memoryMap.get(playerName);
+		if( list.size() <= 6 ){
+			Memory testMemory = memoryWithEqualName(playerName, memory);
+			if(testMemory != null){
+				list.remove(testMemory);
+			}
+			list.add(memory);
+			return true;
+		}
+		return false;
+	}
+	
+	public Memory memoryWithEqualName(String playerName, Memory memory){
+		for(Memory mem : memoryMap.get(playerName) ){
+			if(mem.name.equalsIgnoreCase(memory.name) ){
+				return mem;
+			}
+		}
+		return null;
+	}
+	
+	public void addMemories(String playerName, Inventory inv){
+		List<Memory> memories = memoryMap.get(playerName);
+		int counter = 0;
+		for(Memory mem : memories){
+			ItemStack memoryTear = new ItemStack(Material.GHAST_TEAR);
+			ItemMeta meta = memoryTear.getItemMeta();
+			meta.setDisplayName(mem.name);
+			memoryTear.setItemMeta(meta);
+			inv.setItem(counter+2, memoryTear);
+			counter++;
+		}
 	}
 }

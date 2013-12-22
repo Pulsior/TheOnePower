@@ -1,5 +1,6 @@
 package com.pulsior.theonepower.listener;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 
 public class EventListener implements Listener {
@@ -92,6 +94,10 @@ public class EventListener implements Listener {
 			TheOnePower.unseenLand.offlinePlayers.remove(name);
 			TheOnePower.unseenLand.players.add(name);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new PlayerRegisterTask(name), 20L );
+		}
+		
+		if(TheOnePower.unseenLand.memoryMap.get(name) == null){
+			TheOnePower.unseenLand.memoryMap.put(name, new ArrayList<Memory>() );
 		}
 	}
 }

@@ -10,10 +10,12 @@ public class UnseenLandData implements Serializable{
 	
 	public List<String> players;
 	public HashMap<String, String> sleepingInventoryMap = new HashMap<String, String>();
+	public HashMap<String,  List<Memory> > memoryMap = new HashMap<String, List<Memory> >();
 	
 	public UnseenLandData(UnseenLand land){
 		this.players = land.players;
 		this.sleepingInventoryMap = land.sleepingInventoryMap;
+		this.memoryMap = land.memoryMap;
 		land = null;
 	}
 	

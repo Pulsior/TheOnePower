@@ -19,7 +19,7 @@ public class Memory implements Serializable{
 	}
 	
 	public Location getLocation(){
-		return new Location(Bukkit.getWorld("world"), location[0], location[1], location[2]);
+		return new Location(Bukkit.getWorld("tel'aran'rhiod"), location[0], location[1], location[2]);
 	}
 
 }

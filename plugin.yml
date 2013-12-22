@@ -3,23 +3,28 @@ main: com.pulsior.theonepower.TheOnePower
 version: 1.0
 commands:
      embrace:
-       description: Embrace saidar
+       description: Embrace saidar and let the One Power flow through you!
        usage: /<command>
        permission: <plugin name>.basic
        permission-message: You don't have <permission>
      release:
-       description: Release saidar
+       description: Release saidar and return to your ordinary self
        usage: /<command>
        permission: <plugin name>.basic
        permission-message: You don't have <permission>
      angreal:
-       description: Get an angreal
+       description: Get an angreal, ter'angreal or sa'angreal
        usage: /<command>
        permission: <plugin name>.basic
        permission-message: You don't have <permission>
      dream:
-       description: Dream
+       description: Travel to Tel'aran'rhiod
        usage: /<command>
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission>
+     remember:
+       description: Remember a place, so you can revisit it in Tel'aran'rhiod easily
+       usage: /<command> [name of the memory]
        permission: <plugin name>.basic
        permission-message: You don't have <permission>
 

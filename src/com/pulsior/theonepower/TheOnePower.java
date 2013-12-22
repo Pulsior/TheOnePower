@@ -25,6 +25,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
+import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.UnseenGenTask;
 import com.pulsior.theonepower.unseenland.UnseenLand;
 import com.pulsior.theonepower.unseenland.UnseenLandData;
@@ -67,18 +68,18 @@ public final class TheOnePower extends JavaPlugin{
 			UnseenGenTask task = new UnseenGenTask();
 			task.run();
 		}
-		
+
 		UnseenLandData data = loadUnseenLand();
 		if (data != null){
 			log.info("[The One Power] Loading Unseen Land data");
 			unseenLand = new UnseenLand(data, this);
-			
+
 		}
 		else{
 			unseenLand = new UnseenLand(this);
 			log.info("[The One Power] Creating new Unseen Land");
 		}
-		
+
 		loadExp();
 
 
@@ -175,6 +176,22 @@ public final class TheOnePower extends JavaPlugin{
 				return true;
 			}
 		}
+		
+		if(cmd.getName().equalsIgnoreCase("remember")){
+			if(sender instanceof Player && args.length == 1){
+				String playerName = sender.getName();
+				String memoryName = args[0];
+				Player player = (Player) sender;
+				if(unseenLand.addMemory(playerName, new Memory(memoryName, player.getLocation() ) ) ){
+					player.sendMessage(ChatColor.GREEN+"Remembered this place as '"+memoryName+"'");
+					return true;
+				}
+				else{
+					player.sendMessage(ChatColor.RED+"You cannot remember any more places, forget a location first");
+					return true;
+				}
+			}
+		}
 
 		return false; 
 	}
@@ -261,7 +278,7 @@ public final class TheOnePower extends JavaPlugin{
 				log.info("[The One Power] (The save is not an instance of UnseenLandData.java)");
 			}
 			objInput.close();
-			
+
 		}
 		catch(IOException ex){
 			log.info("[The One Power] No save found for the Unseen Land, creating a new one");
