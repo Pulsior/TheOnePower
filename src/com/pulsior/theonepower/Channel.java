@@ -58,20 +58,19 @@ public class Channel {
 
 	public Channel(String playerName, TheOnePower plugin){
 		player = Bukkit.getPlayer(playerName);
-
+		
 
 		TheOnePower.currentLevelMap.put(playerName, player.getLevel());
 		maxLevel = TheOnePower.power.levelMap.get(playerName);
-
 		maxLevel = maxLevel + getAngrealLevels(player);
+		player.setLevel(maxLevel);
+		player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(playerName)  ) * TheOnePower.power.weaveProgressMap.get(playerName) );
 
 		this.plugin = plugin;
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
 
 		taskDuration = (long) 60/maxLevel;
-
-		player.setLevel(maxLevel);
 
 		ItemStack spirit = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = spirit.getItemMeta();
@@ -146,9 +145,11 @@ public class Channel {
 	@SuppressWarnings("deprecation")
 	public void cast(Block clickedBlock){
 		WeaveEffect effect = TheOnePower.weaveList.compare(weave);
+		String name = player.getName();
 
 		if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false ){
 			TheOnePower.power.addWeave(player.getName());
+			player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
 		}
 
 		if(effect != null){

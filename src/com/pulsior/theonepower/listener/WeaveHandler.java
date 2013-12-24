@@ -95,34 +95,35 @@ public class WeaveHandler implements Listener{
 							player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 0);
 						}
 					}
+
 				}
 			}
-		}
-		Channel channel;
-		String itemName = item.getItemMeta().getDisplayName();
-		channel = TheOnePower.channelMap.get( name );
-		if (itemName != null && channel != null){
-			if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
-					itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
-					itemName.equalsIgnoreCase(spirit) ){
+			Channel channel;
+			String itemName = item.getItemMeta().getDisplayName();
+			channel = TheOnePower.channelMap.get( name );
+			if (itemName != null && channel != null){
+				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
+						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
+						itemName.equalsIgnoreCase(spirit) ){
 
-				Element element = getElementByString(itemName);				
-				if(element != null){
-					channel.addElement(element);
+					Element element = getElementByString(itemName);				
+					if(element != null){
+						channel.addElement(element);
+					}
 				}
-			}
-			else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){
 
-				channel.cast( event.getClickedBlock() );
+					channel.cast( event.getClickedBlock() );
 
-			}
-			else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){
-				player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
-				channel.disband();
-			}
-			else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){
-				channel.close();
-				player.updateInventory();
+				}
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){
+					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
+					channel.disband();
+				}
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){
+					channel.close();
+					player.updateInventory();
+				}
 			}
 		}
 	}

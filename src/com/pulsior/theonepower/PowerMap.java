@@ -3,6 +3,10 @@ package com.pulsior.theonepower;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
 public class PowerMap implements Serializable{
 
 	/**
@@ -32,6 +36,8 @@ public class PowerMap implements Serializable{
 		amtOfLevels = amtOfLevels + 1;
 		levelMap.put(name, amtOfLevels);
 		TheOnePower.channelMap.get(name).maxLevel = amtOfLevels;
+		Player player = Bukkit.getPlayer(name);
+		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 0);
 	}
 	
 	public void addPlayer(String name){
