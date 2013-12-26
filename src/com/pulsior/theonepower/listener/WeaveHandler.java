@@ -61,7 +61,6 @@ public class WeaveHandler implements Listener{
 					ItemMeta meta = item.getItemMeta();
 					if(meta != null){
 						if(meta.getDisplayName() . equalsIgnoreCase(ChatColor.RESET+"Wake Up")){
-							log.info("Waking up!");
 							TheOnePower.unseenLand.removePlayer(name);
 
 						}
@@ -95,6 +94,7 @@ public class WeaveHandler implements Listener{
 							player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 0);
 						}
 					}
+					
 
 				}
 			}

@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class UnseenGenTask extends BukkitRunnable{
+public class UnseenGenTask extends BukkitRunnable {
 
 	Logger log = Bukkit.getLogger();
 
@@ -39,28 +39,26 @@ public class UnseenGenTask extends BukkitRunnable{
 
 	}
 
-	public void copyDirectory(File srcPath, File dstPath) throws IOException{
+	public void copyDirectory(File srcPath, File dstPath) throws IOException {
 
-		if (srcPath.isDirectory()){
+		if (srcPath.isDirectory()) {
 
-			if (!dstPath.exists()){
+			if (!dstPath.exists()) {
 				dstPath.mkdir();
 			}
 			String files[] = srcPath.list();
 
-			for(int i = 0; i < files.length; i++){
-				copyDirectory(new File(srcPath, files[i]), 
-						new File(dstPath, files[i]));
+			for (int i = 0; i < files.length; i++) {
+				copyDirectory(new File(srcPath, files[i]), new File(dstPath,
+						files[i]));
 			}
-		}
-		else{
-			if(!srcPath.exists()){
+		} else {
+			if (!srcPath.exists()) {
 				System.exit(0);
-			}
-			else{
+			} else {
 
 				InputStream in = new FileInputStream(srcPath);
-				OutputStream out = new FileOutputStream(dstPath); 
+				OutputStream out = new FileOutputStream(dstPath);
 				// Transfer bytes from in to out
 				byte[] buf = new byte[1024];
 

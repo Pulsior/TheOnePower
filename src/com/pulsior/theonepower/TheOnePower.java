@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -21,6 +22,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
@@ -181,6 +184,9 @@ public final class TheOnePower extends JavaPlugin{
 			if(sender instanceof Player && args.length == 1){
 				String playerName = sender.getName();
 				String memoryName = args[0];
+				if(! (unseenLand.memoryMap.containsKey(playerName) ) ) {
+					unseenLand.memoryMap.put(playerName, new ArrayList<Memory>() );
+				}
 				Player player = (Player) sender;
 				if(unseenLand.addMemory(playerName, new Memory(memoryName, player.getLocation() ) ) ){
 					player.sendMessage(ChatColor.GREEN+"Remembered this place as '"+memoryName+"'");
@@ -211,10 +217,11 @@ public final class TheOnePower extends JavaPlugin{
 
 	public void save(){
 		try{
-			FileOutputStream fout = new FileOutputStream("plugins/The One Power/data_levels");
-			ObjectOutputStream oos = new ObjectOutputStream(fout);   
-			oos.writeObject( TheOnePower.power );
-			oos.close();
+			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_levels");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
+			bukkitOutput.writeObject( TheOnePower.power );
+			bukkitOutput.close();
 			log.info("[The One Power] Saving level data");
 
 		}
@@ -224,26 +231,33 @@ public final class TheOnePower extends JavaPlugin{
 
 		try{
 			UnseenLandData data = new UnseenLandData(unseenLand);
-			FileOutputStream fout = new FileOutputStream("plugins/The One Power/data_unseenLand");
-			ObjectOutputStream oos = new ObjectOutputStream(fout);   
-			oos.writeObject( data );
-			oos.close();
+			File file = new File("plugins/The One Power/data_unseenLand");
+			if(file.exists()){
+				file.delete();
+			}
+			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_unseenLand");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
+			bukkitOutput.writeObject( data );
+			bukkitOutput.close();
 			log.info("[The One Power] Saving Unseen Land data");
 
 		}
 		catch(IOException ex){
-			log.info("[The One Power] Saving problem!");
+			log.info("[The One Power] [WARNING] The Unseen Land data could not be saved!");
+			ex.printStackTrace();
 		}
 	}
 
 	public boolean loadExp(){
 		try{
 			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_levels");
-			ObjectInputStream objInput = new ObjectInputStream(fileInput);
-			Object obj = objInput.readObject();
+			ObjectInputStream input = new ObjectInputStream(fileInput);
+			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(input); 
+			Object obj = bukkitInput.readObject();
 			if(obj instanceof PowerMap){
 				power = (PowerMap) obj;
-				objInput.close();
+				bukkitInput.close();
 				log.info("[The One Power] Loaded level data");
 				return true;
 			}
@@ -251,7 +265,7 @@ public final class TheOnePower extends JavaPlugin{
 				log.info("[The One Power] Loading problem, the level progress save is corrupt!");
 				log.info("[The One Power] (The save is not an instance of PowerMap.java)");
 			}
-			objInput.close();
+			bukkitInput.close();
 		}
 		catch(IOException ex){
 			log.info("[The One Power] No save found for the level progress data, creating a new one");
@@ -266,10 +280,11 @@ public final class TheOnePower extends JavaPlugin{
 		try{
 			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_unseenLand");
 			ObjectInputStream objInput = new ObjectInputStream(fileInput);
-			Object obj = objInput.readObject();
+			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(objInput);
+			Object obj = bukkitInput.readObject();
 			if(obj instanceof UnseenLandData){
 				UnseenLandData dat = (UnseenLandData) obj;
-				objInput.close();
+				bukkitInput.close();
 				log.info("[The One Power] Loaded Unseen Land data");
 				return dat;
 			}
@@ -277,11 +292,12 @@ public final class TheOnePower extends JavaPlugin{
 				log.info("[The One Power] Loading problem, the Unseen Land save is corrupt!");
 				log.info("[The One Power] (The save is not an instance of UnseenLandData.java)");
 			}
-			objInput.close();
+			bukkitInput.close();
 
 		}
 		catch(IOException ex){
 			log.info("[The One Power] No save found for the Unseen Land, creating a new one");
+			log.info("IOException!");
 		} 
 		catch (ClassNotFoundException e) {
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading the Unseen Land");

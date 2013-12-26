@@ -58,7 +58,7 @@ public class Channel {
 
 	public Channel(String playerName, TheOnePower plugin){
 		player = Bukkit.getPlayer(playerName);
-		
+
 
 		TheOnePower.currentLevelMap.put(playerName, player.getLevel());
 		maxLevel = TheOnePower.power.levelMap.get(playerName);
@@ -105,18 +105,30 @@ public class Channel {
 		ItemStack cast = new ItemStack(Material.BLAZE_ROD);
 		meta = cast.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Cast Weave");
+		List<String> castLore = new ArrayList<String>();
+		castLore.add("");
+		castLore.add(ChatColor.GOLD+"Use your prepared weave");
+		meta.setLore(castLore);
 		cast.setItemMeta(meta);
 		inv.setItem(0, cast);
 
 		ItemStack disband = new ItemStack(Material.SHEARS);
 		meta = disband.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Disband Weave");
+		List<String> disbandLore = new ArrayList<String>();
+		disbandLore.add("");
+		disbandLore.add(ChatColor.GOLD+"Stop weaving and start a new weave");
+		meta.setLore(disbandLore);
 		disband.setItemMeta(meta);
 		inv.setItem(1, disband);
 
 		ItemStack rose = new ItemStack(Material.RED_ROSE);
 		meta = rose.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Release Saidar");
+		List<String> releaseLore = new ArrayList<String>();
+		releaseLore.add("");
+		releaseLore.add(ChatColor.GOLD+"Let go of saidar");
+		meta.setLore(releaseLore);
 		rose.setItemMeta(meta);
 		inv.setItem(2, rose);
 

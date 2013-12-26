@@ -17,7 +17,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.Channel;
-import com.pulsior.theonepower.SaveInventory;
 import com.pulsior.theonepower.TheOnePower;
 
 public class UnseenLand {
@@ -33,7 +32,8 @@ public class UnseenLand {
 	World world = Bukkit.getWorld("tel'aran'rhiod");
 	
 	public HashMap<String, List<Memory> > memoryMap;
-	public HashMap<String, String> sleepingInventoryMap = new HashMap<String, String>();
+	public HashMap<String, ItemStack[]> unseenLandInventoryMap = new HashMap<String, ItemStack[]>();
+	public HashMap<String, ItemStack[]> unseenLandArmorMap = new HashMap<String, ItemStack[]>();
 
 
 	public UnseenLand(TheOnePower plugin){
@@ -45,6 +45,8 @@ public class UnseenLand {
 		loadData(data);
 		this.plugin = plugin;
 		this.memoryMap = data.memoryMap;
+		this.unseenLandInventoryMap = data.unseenLandInventoryMap;
+		this.unseenLandArmorMap = data.unseenLandArmorMap;
 		enterable = true;
 	}
 
@@ -65,10 +67,12 @@ public class UnseenLand {
 		player.setGameMode(GameMode.ADVENTURE);
 		PlayerInventory inventory = player.getInventory();
 		player.setAllowFlight(true);
-		sleepingInventoryMap.put(playerName, SaveInventory.InventoryToString(inventory));
+		unseenLandInventoryMap.put(playerName, inventory.getContents());
+		unseenLandArmorMap.put(playerName, inventory.getArmorContents() );
+		setArmor(playerName, inventory, true);
 		inventory.clear();
 		inventory.addItem(TheOnePower.returnToken);
-		addMemories(playerName, inventory);
+		addMemoriesToInventory(playerName, inventory);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -87,10 +91,8 @@ public class UnseenLand {
 		player.resetPlayerTime();
 		player.getInventory().remove(TheOnePower.returnToken );
 		player.setAllowFlight(false);
-
-		String invString = sleepingInventoryMap.get( playerName );
-		Inventory inventory = player.getInventory();
-		ItemStack[] savedInventory = SaveInventory.StringToInventory(invString).getContents();
+		PlayerInventory inventory = player.getInventory();
+		ItemStack[] savedInventory = unseenLandInventoryMap.get(playerName);
 		for(int y = 0; y < 36; y++){
 			ItemStack item = savedInventory[y];
 			if (item != null){
@@ -100,13 +102,15 @@ public class UnseenLand {
 				inventory.setItem(y, new ItemStack(Material.AIR));
 			}
 		}
-
+		
+		setArmor(playerName, inventory, false);
 		player.updateInventory();
+		
 
 		if(players.size() == 0){
 			enterable = false;
 			log.info("[The One Power] Synchronizing Tel'aran'rhiod with the overworld");
-			Bukkit.unloadWorld("tel'aran'rhiod", false);
+			Bukkit.unloadWorld("tel'aran'rhiod", true);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task);
 			enterable = true;
 		}
@@ -130,9 +134,14 @@ public class UnseenLand {
 				offlinePlayers.add(name);
 			}
 		}
-		this.sleepingInventoryMap = data.sleepingInventoryMap;
 	}
 	
+	/**
+	 * Add a memory to a player's mind
+	 * @param playerName
+	 * @param memory
+	 * @return
+	 */
 	public boolean addMemory(String playerName, Memory memory){
 		List<Memory> list = memoryMap.get(playerName);
 		if( list.size() <= 6 ){
@@ -155,8 +164,16 @@ public class UnseenLand {
 		return null;
 	}
 	
-	public void addMemories(String playerName, Inventory inv){
+	/**
+	 * Add ghast tears representing memories to an inventory
+	 * @param playerName
+	 * @param inv
+	 */
+	public void addMemoriesToInventory(String playerName, Inventory inv){
 		List<Memory> memories = memoryMap.get(playerName);
+		if(memories == null){
+			return;
+		}
 		int counter = 0;
 		for(Memory mem : memories){
 			ItemStack memoryTear = new ItemStack(Material.GHAST_TEAR);
@@ -165,6 +182,19 @@ public class UnseenLand {
 			memoryTear.setItemMeta(meta);
 			inv.setItem(counter+2, memoryTear);
 			counter++;
+		}
+	}
+	
+	public void setArmor(String playerName, PlayerInventory inv, boolean clear){
+		if(clear){
+			ItemStack stack = new ItemStack(Material.AIR);
+			inv.setHelmet(stack);
+			inv.setChestplate(stack);
+			inv.setLeggings(stack);
+			inv.setBoots(stack);
+		}
+		else{
+			inv.setArmorContents(TheOnePower.unseenLand.unseenLandArmorMap.get(playerName));
 		}
 	}
 }
