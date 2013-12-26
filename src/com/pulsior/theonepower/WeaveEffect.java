@@ -1,5 +1,10 @@
 package com.pulsior.theonepower;
 
+/**
+ * Enum for all the possible weaves
+ * @author Pulsior
+ *
+ */
 public enum WeaveEffect {
 	INVALID,
 	LIGHTNING,

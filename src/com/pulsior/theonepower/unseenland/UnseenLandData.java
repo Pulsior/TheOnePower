@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
+	
+/**
+ * A serializable data class to preserve data about the Unseen Land
+ * @author Pulsior
+ *
+ */
 
 public class UnseenLandData implements Serializable{
 

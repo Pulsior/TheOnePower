@@ -25,7 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 /**
- * Class with one instance for every saidar-embracing player, stored in TheOnePower.channelMap.
+ * Class with one instance for every saidar-embracing player, stored in TheOnePower.channelMap
  * @author Pulsior
  *
  */
@@ -60,7 +60,7 @@ public class Channel {
 		player = Bukkit.getPlayer(playerName);
 
 
-		TheOnePower.currentLevelMap.put(playerName, player.getLevel());
+		TheOnePower.currentLevelMap.put(playerName, player.getLevel()); //Add the correct levels to the player
 		maxLevel = TheOnePower.power.levelMap.get(playerName);
 		maxLevel = maxLevel + getAngrealLevels(player);
 		player.setLevel(maxLevel);
@@ -70,8 +70,12 @@ public class Channel {
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
 
-		taskDuration = (long) 60/maxLevel;
-
+		taskDuration = (long) 60/maxLevel; //Fully regenerating your levels will always take 60 ticks 
+		
+		
+		/*
+		 * Add items to the inventory 
+		 */
 		ItemStack spirit = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = spirit.getItemMeta();
 		meta.setDisplayName(ChatColor.GRAY+"Spirit");
@@ -139,7 +143,11 @@ public class Channel {
 
 
 	}
-
+	
+	/**
+	 * Add an element to a weave
+	 * @param element
+	 */
 	public void addElement(Element element){
 
 		if(player.getLevel() != 0){
@@ -153,7 +161,12 @@ public class Channel {
 		nowCasting = true;
 
 	}
-
+	
+	
+	/**
+	 * Execute a weave
+	 * @param clickedBlock
+	 */
 	@SuppressWarnings("deprecation")
 	public void cast(Block clickedBlock){
 		WeaveEffect effect = TheOnePower.weaveList.compare(weave);
@@ -267,7 +280,12 @@ public class Channel {
 		weave.clear();
 		nowCasting = false;
 	}
-
+	
+	/**
+	 * Execute a weave in special cases
+	 * @param entity
+	 */
+	
 	public void cast(Entity entity){
 		World world = player.getWorld();
 		if(gaidinWeaveActive == true && entity instanceof Wolf){
@@ -293,7 +311,10 @@ public class Channel {
 
 	}
 
-
+	/**
+	 * Close and remove the channel
+	 */
+	
 	public void close(){
 
 		String name = player.getName();
@@ -318,13 +339,19 @@ public class Channel {
 		TheOnePower.channelMap.remove(name);
 
 	}
-
+	
 	public void disband(){
 		weave.clear();
 		gaidinWeaveActive = false;
 		nowCasting = false;
 	}
-
+	
+	/**
+	 * Returns the amount of extra levels an angreal yields a player
+	 * @param player
+	 * @return
+	 */
+	
 	public int getAngrealLevels(Player player){
 		PlayerInventory inventory = player.getInventory();
 		if(inventory.contains(TheOnePower.angreal)){
@@ -335,7 +362,10 @@ public class Channel {
 		}
 		return 0;
 	}
-
+	
+	/**
+	 * The task used to regenerate a player's xp level
+	 */
 	BukkitRunnable regenTask = new BukkitRunnable(){
 		@Override
 		public void run() {
@@ -344,7 +374,13 @@ public class Channel {
 			}
 		};
 	};
-
+	
+	/**
+	 * Create a fire with a weave
+	 * @param block
+	 * @param large
+	 */
+	
 	public void createFire(Block block, boolean large){
 		if(large){
 			Location location = block.getLocation();

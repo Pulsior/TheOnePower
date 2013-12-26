@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class PowerMap implements Serializable{
 
 	/**
-	 * 
+	 * Serializable class to save the level a player has, along with other data regarding level progress
 	 */
 	private static final long serialVersionUID = 1455786389387906551L;
 	
@@ -24,6 +24,10 @@ public class PowerMap implements Serializable{
 		requiredWeavesMap = new HashMap<String, Integer>();
 	}
 	
+	/**
+	 * Add one weave to the progress map, getting the player closer to the next level
+	 * @param name
+	 */
 	public void addWeave(String name){
 		int amtOfWeaves = weaveProgressMap.get(name);
 		amtOfWeaves = amtOfWeaves+1;
@@ -31,6 +35,10 @@ public class PowerMap implements Serializable{
 		checkLevel(name);
 	}
 	
+	/**
+	 * Increases the level of a player and sets his progress to zero
+	 * @param name
+	 */
 	public void increaseLevel(String name){
 		int amtOfLevels = levelMap.get(name);
 		amtOfLevels = amtOfLevels + 1;
@@ -40,12 +48,21 @@ public class PowerMap implements Serializable{
 		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 0);
 	}
 	
+	/**
+	 * Adds a player to the map with default xp data
+	 * @param name
+	 */
 	public void addPlayer(String name){
 		levelMap.put(name, 3);
 		weaveProgressMap.put(name, 0);
 		requiredWeavesMap.put(name, 3);
 	}
 	
+	/**
+	 * Checks whether the level of a player should be increased
+	 * @param name
+	 * @return
+	 */
 	public boolean checkLevel(String name){
 		int amountOfWeaves = weaveProgressMap.get( name );
 		int requiredWeaves = requiredWeavesMap.get( name );

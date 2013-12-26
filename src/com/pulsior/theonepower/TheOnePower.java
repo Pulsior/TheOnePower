@@ -33,6 +33,11 @@ import com.pulsior.theonepower.unseenland.UnseenGenTask;
 import com.pulsior.theonepower.unseenland.UnseenLand;
 import com.pulsior.theonepower.unseenland.UnseenLandData;
 
+/**
+ * Plugin main class
+ * @author Pulsior
+ *
+ */
 public final class TheOnePower extends JavaPlugin{
 
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
@@ -54,7 +59,10 @@ public final class TheOnePower extends JavaPlugin{
 	Logger log = Bukkit.getLogger();
 	Server server = Bukkit.getServer();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
-
+	
+	/**
+	 * Registers listeners and creates tel'aran'rhiod when the plugin is enabled
+	 */
 	@Override
 	public void onEnable(){
 		makeDir();
@@ -87,7 +95,9 @@ public final class TheOnePower extends JavaPlugin{
 
 
 	}
-
+	/**
+	 * Closes all channels and saves data when the plugin is disabled
+	 */
 	@Override
 	public void onDisable(){
 		Player[] players = server.getOnlinePlayers();
@@ -101,7 +111,11 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		save();
 	}
-
+	
+	/**
+	 * Open Saidar to a player with /embrace and closes it with /release. Get an angreal with /angreal, 
+	 * cheat yourself into tel'aran'rhiod with /dream and store a memory with /remember
+	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
 		if(cmd.getName().equalsIgnoreCase("embrace")){
 			if(sender instanceof Player){
@@ -202,7 +216,10 @@ public final class TheOnePower extends JavaPlugin{
 		return false; 
 	}
 
-
+	/**
+	 * Opens the saidar inventory to a player
+	 * @param player
+	 */
 	public void embraceSaidar(Player player){
 		String name = player.getName();
 		PlayerInventory inventory = player.getInventory();
@@ -214,7 +231,11 @@ public final class TheOnePower extends JavaPlugin{
 		Channel channel = new Channel( name , this);
 		channelMap.put(name, channel);
 	}
-
+	
+	
+	/**
+	 * Saves all level and Unseen Land data
+	 */
 	public void save(){
 		try{
 			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_levels");
@@ -304,7 +325,10 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Makes a new /The One Power folder, to store data files
+	 */
 	public void makeDir(){
 		File dataFolder = new File("plugins/The One Power");
 		if(! (dataFolder.exists() ) ){
@@ -312,6 +336,11 @@ public final class TheOnePower extends JavaPlugin{
 		}
 	}
 
+	/**
+	 * Returns an angreal
+	 * @param type
+	 * @return
+	 */
 	public static ItemStack getAngrealStack(String type){
 		if(type.equals("dream")){
 			ItemStack stack = new ItemStack(Material.NETHER_BRICK_ITEM);
@@ -337,7 +366,11 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Returns an ItemStack to wake up from the Unseen Land
+	 * @return
+	 */
 	public static ItemStack getReturnToken(){
 		ItemStack stack = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = stack.getItemMeta();

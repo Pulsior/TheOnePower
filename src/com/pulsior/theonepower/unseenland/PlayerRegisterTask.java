@@ -4,6 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * Task to register a player. This is a task, so it can be delayed for a few ticks after login
+ * @author Pulsior
+ *
+ */
 public class PlayerRegisterTask extends BukkitRunnable{
 
 	String name;

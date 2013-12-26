@@ -19,6 +19,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.TheOnePower;
 
+/**
+ * Represents the Unseen Land. Serves to add and remove players to the "tel'aran'rhiod" world
+ * @author Pulsior
+ *
+ */
+
 public class UnseenLand {
 
 	Logger log = Bukkit.getLogger();
@@ -49,7 +55,12 @@ public class UnseenLand {
 		this.unseenLandArmorMap = data.unseenLandArmorMap;
 		enterable = true;
 	}
-
+	
+	/**
+	 * Add a player to the Unseen Land
+	 * @param playerName
+	 */
+	
 	public void addPlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
 		players.add(player.getName());
@@ -74,7 +85,11 @@ public class UnseenLand {
 		inventory.addItem(TheOnePower.returnToken);
 		addMemoriesToInventory(playerName, inventory);
 	}
-
+	
+	/**
+	 * Remove a player from the Unseen Land
+	 * @param playerName
+	 */
 	@SuppressWarnings("deprecation")
 	public void removePlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
@@ -116,7 +131,10 @@ public class UnseenLand {
 		}
 
 	}
-
+	/**
+	 * Register a player to the file who is already in the correct world	
+	 * @param playerName
+	 */
 	public void registerPlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
 		players.add(playerName);
@@ -124,7 +142,12 @@ public class UnseenLand {
 		player.setAllowFlight(true);
 
 	}
-
+	
+	
+	/**
+	 * Load data from the UnseenLandData file
+	 * @param data
+	 */
 	public void loadData(UnseenLandData data){
 		for (String name : data.players){
 			if(Bukkit.getPlayer(name) != null){
@@ -155,6 +178,12 @@ public class UnseenLand {
 		return false;
 	}
 	
+	/**
+	 * Util method to check if a player already has a memory with the same name
+	 * @param playerName
+	 * @param memory
+	 * @return
+	 */
 	public Memory memoryWithEqualName(String playerName, Memory memory){
 		for(Memory mem : memoryMap.get(playerName) ){
 			if(mem.name.equalsIgnoreCase(memory.name) ){
@@ -165,7 +194,7 @@ public class UnseenLand {
 	}
 	
 	/**
-	 * Add ghast tears representing memories to an inventory
+	 * Add named ghast tears representing memories to an inventory
 	 * @param playerName
 	 * @param inv
 	 */
@@ -185,6 +214,12 @@ public class UnseenLand {
 		}
 	}
 	
+	/**
+	 * Set the armor a player is wearing
+	 * @param playerName
+	 * @param inv
+	 * @param clear
+	 */
 	public void setArmor(String playerName, PlayerInventory inv, boolean clear){
 		if(clear){
 			ItemStack stack = new ItemStack(Material.AIR);

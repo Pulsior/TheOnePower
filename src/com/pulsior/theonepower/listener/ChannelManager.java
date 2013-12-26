@@ -11,6 +11,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.TheOnePower;
 
+/**
+ * Seperate listener to prevent saidar-embracing players from
+ * doing certain things. Soon to be merged with {@link EventListener}
+ * @author Daniel
+ *
+ */
 public class ChannelManager implements Listener {
 	
 	@SuppressWarnings("deprecation")

@@ -6,7 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
-
+/**
+ * Represents a memory, which can be used to teleport through the Unseen Land
+ * @author Pulsior
+ *
+ */
 public class Memory implements Serializable{
 	
 	private static final long serialVersionUID = -6360739145491482100L;

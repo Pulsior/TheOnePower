@@ -27,6 +27,11 @@ import com.pulsior.theonepower.Element;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.unseenland.Memory;
 
+/**
+ * Most important event listener that registers weave clicks and makes weaves. Also contains events for some items
+ * @author Pulsior
+ *
+ */
 public class WeaveHandler implements Listener{
 
 	Logger log = Bukkit.getLogger();
@@ -39,23 +44,38 @@ public class WeaveHandler implements Listener{
 
 
 	@SuppressWarnings("deprecation")
+	/**
+	 * Registers many types of interact events
+	 * @param event
+	 */
 	@EventHandler
-	public void onWeave(PlayerInteractEvent event){
+	public void onPlayerInteract(PlayerInteractEvent event){
 		ItemStack item = event.getItem();
 		Player player = event.getPlayer();
 		String name = player.getName();
-		if (item != null){
+		if (item != null){	//IF clause for items
+			
+			/*
+			 * Logs memory names to the console (DEBUG)
+			 */
 			if(item.getType().equals(Material.STICK)){
 				for(Memory mem : TheOnePower.unseenLand.memoryMap.get(name) ){
 					log.info(mem.name);
 				}
 				return; 
 			}
+			/*
+			 * Logs level progress to the console (DEBUG)
+			 */
 			if(item.getType().equals(Material.STONE_SPADE) && event.getAction().equals(Action.RIGHT_CLICK_AIR)){
 				log.info("The current progress is "+Integer.toString(TheOnePower.power.weaveProgressMap.get(name) ) );
 				log.info(Integer.toString(TheOnePower.power.requiredWeavesMap.get(name) ) +" more weaves are required.");
 				log.info("The amount of levels is now "+Integer.toString(TheOnePower.power.levelMap.get(name ) ) );
 			}
+			
+			/*
+			 * Allows the player to wake up from and leave the Unseen Land, when the name is correct
+			 */
 			if(item.getType().equals(Material.NETHER_STAR)){
 				if(TheOnePower.unseenLand.players.contains(name)){
 					ItemMeta meta = item.getItemMeta();
@@ -67,7 +87,10 @@ public class WeaveHandler implements Listener{
 					}
 				}
 			}
-
+			
+			/*
+			 * Tells the player whether he is in the normal world or in the Unseen Land (DEBUG)
+			 */
 			if(item.getType().equals(Material.BLAZE_POWDER)){
 				if(player.getWorld().getName().equals("tel'aran'rhiod") ) {
 					player.sendMessage("In the Unseen Land, according to your world name");
@@ -83,7 +106,10 @@ public class WeaveHandler implements Listener{
 				}
 
 			}
-
+			
+			/*
+			 * Teleports the player to a memory location when in the Unseen Land
+			 */
 			if(item.getType().equals(Material.GHAST_TEAR) && TheOnePower.unseenLand.players.contains(name)){
 				String memoryName = item.getItemMeta().getDisplayName();
 				if(memoryName != null){
@@ -98,38 +124,43 @@ public class WeaveHandler implements Listener{
 
 				}
 			}
+			/*
+			 * Channeling and creating weaves starts here
+			 */
 			Channel channel;
 			String itemName = item.getItemMeta().getDisplayName();
 			channel = TheOnePower.channelMap.get( name );
-			if (itemName != null && channel != null){
+			if (itemName != null && channel != null){			//If the player clicked an element, adds the element to the channel
 				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
 						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
 						itemName.equalsIgnoreCase(spirit) ){
 
-					Element element = getElementByString(itemName);				
+					Element element = getElementByString(itemName);
+					
 					if(element != null){
 						channel.addElement(element);
 					}
+					
 				}
-				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){
-
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){ //Casts and executes the weave
 					channel.cast( event.getClickedBlock() );
 
 				}
-				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){ //Clears the weave
 					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 					channel.disband();
 				}
-				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){ //Removes the channel
 					channel.close();
 					player.updateInventory();
 				}
 			}
 		}
 	}
-
-
-
+	
+	/*
+	 * Some more listeners
+	 */
 
 	@EventHandler
 	public void onEntityInteract(PlayerInteractEntityEvent event){
@@ -206,7 +237,11 @@ public class WeaveHandler implements Listener{
 	}
 
 
-
+	/**
+	 * Method to convert a string to an element
+	 * @param element
+	 * @return
+	 */
 	public Element getElementByString(String element){
 		if(element.equalsIgnoreCase(earth)){
 			return Element.EARTH;

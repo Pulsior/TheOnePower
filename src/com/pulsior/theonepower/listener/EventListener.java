@@ -18,6 +18,11 @@ import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 
+/**
+ * Event listener for gameplay and practical uses
+ * @author Pulsior
+ *
+ */
 public class EventListener implements Listener {
 
 	TheOnePower plugin;

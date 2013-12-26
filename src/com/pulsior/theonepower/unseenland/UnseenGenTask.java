@@ -12,6 +12,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * Creates the Unseen Land by copying the overworld
+ * @author Pulsior
+ *
+ */
 public class UnseenGenTask extends BukkitRunnable {
 
 	Logger log = Bukkit.getLogger();
@@ -38,7 +43,14 @@ public class UnseenGenTask extends BukkitRunnable {
 		log.info("[The One Power] Done synchronizing");
 
 	}
-
+	
+	
+	/**
+	 * Copies the folders
+	 * @param srcPath
+	 * @param dstPath
+	 * @throws IOException
+	 */
 	public void copyDirectory(File srcPath, File dstPath) throws IOException {
 
 		if (srcPath.isDirectory()) {
