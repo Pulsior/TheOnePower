@@ -14,7 +14,7 @@ import com.pulsior.theonepower.TheOnePower;
 /**
  * Seperate listener to prevent saidar-embracing players from
  * doing certain things. Soon to be merged with {@link EventListener}
- * @author Daniel
+ * @author Pulsior
  *
  */
 public class ChannelManager implements Listener {
