@@ -1,11 +1,16 @@
 package com.pulsior.theonepower.listener;
 
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.pulsior.theonepower.Channel;
@@ -13,7 +18,7 @@ import com.pulsior.theonepower.TheOnePower;
 
 /**
  * Seperate listener to prevent saidar-embracing players from
- * doing certain things. Soon to be merged with {@link EventListener}
+ * doing certain things.
  * @author Pulsior
  *
  */
@@ -59,6 +64,51 @@ public class ChannelManager implements Listener {
 		Channel channel = TheOnePower.channelMap.get(event.getPlayer().getName());
 		if (channel != null){
 			channel.close();
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent event){
+		Player player = (Player) event.getEntity();
+		String name = player.getName();
+		Channel channel = TheOnePower.channelMap.get(player.getName());
+		if (channel != null){
+			channel.close();
+			event.getDrops().clear();
+		}
+
+		int randomInt = new Random().nextInt(100);
+		if (randomInt == 0){
+			player.sendMessage("<Ba'alzamon> I have won again, Lews Therin."); //Wheel of Time fans will understand
+
+		}
+
+		if( TheOnePower.unseenLand.players.contains(name ) ){
+			TheOnePower.unseenLand.removePlayer(name);
+		}
+	}
+	
+	@EventHandler
+	public void onItemDrop(PlayerDropItemEvent event){
+		String name = event.getPlayer().getName();
+		if(TheOnePower.channelMap.containsKey(name) ){
+			event.setCancelled(true);
+		}
+		else if(TheOnePower.unseenLand.players.contains(name) ){
+			event.setCancelled(true);
+		}
+	}
+
+
+
+	@EventHandler
+	public void onItemPickup(PlayerPickupItemEvent event){
+		String name = event.getPlayer().getName();
+		if(TheOnePower.channelMap.containsKey(name ) ){
+			event.setCancelled(true);
+		}
+		else if(TheOnePower.unseenLand.players.contains(name) ){
+			event.setCancelled(true);
 		}
 	}
 }

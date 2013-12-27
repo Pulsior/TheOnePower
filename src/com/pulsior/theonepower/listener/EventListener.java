@@ -9,9 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.pulsior.theonepower.TheOnePower;
@@ -19,7 +17,7 @@ import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 
 /**
- * Event listener for gameplay and practical uses
+ * Event listener for uses other then creating-casting weaves and limiting saidar/embracing players
  * @author Pulsior
  *
  */
@@ -67,29 +65,6 @@ public class EventListener implements Listener {
 
 		}
 	}
-	@EventHandler
-	public void onItemDrop(PlayerDropItemEvent event){
-		String name = event.getPlayer().getName();
-		if(TheOnePower.channelMap.containsKey(name) ){
-			event.setCancelled(true);
-		}
-		else if(TheOnePower.unseenLand.players.contains(name) ){
-			event.setCancelled(true);
-		}
-	}
-
-
-
-	@EventHandler
-	public void onItemPickup(PlayerPickupItemEvent event){
-		String name = event.getPlayer().getName();
-		if(TheOnePower.channelMap.containsKey(name ) ){
-			event.setCancelled(true);
-		}
-		else if(TheOnePower.unseenLand.players.contains(name) ){
-			event.setCancelled(true);
-		}
-	}
 
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event){
@@ -105,4 +80,5 @@ public class EventListener implements Listener {
 			TheOnePower.unseenLand.memoryMap.put(name, new ArrayList<Memory>() );
 		}
 	}
+	
 }

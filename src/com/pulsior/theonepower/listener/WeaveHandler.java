@@ -1,7 +1,6 @@
 package com.pulsior.theonepower.listener;
 
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -13,12 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -169,70 +164,6 @@ public class WeaveHandler implements Listener{
 		Channel channel = TheOnePower.channelMap.get(player.getName());
 		if (channel != null){
 			channel.cast(entity);
-		}
-	}
-
-	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event){
-		Player player = (Player) event.getEntity();
-		String name = player.getName();
-		Channel channel = TheOnePower.channelMap.get(player.getName());
-		if (channel != null){
-			channel.close();
-			event.getDrops().clear();
-		}
-
-		int randomInt = new Random().nextInt(100);
-		if (randomInt == 0){
-			player.sendMessage("<Ba'alzamon> I have won again, Lews Therin.");
-
-		}
-
-		if( TheOnePower.unseenLand.players.contains(name ) ){
-			TheOnePower.unseenLand.removePlayer(name);
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event){
-		Player player = event.getPlayer();
-		if (TheOnePower.channelMap.get(player.getName()) != null){
-			Material material = event.getBlock().getType();			
-			switch(material){
-			case DIRT:
-				event.setCancelled(true);
-				break;
-			case FIRE:
-				event.setCancelled(true);
-				break;
-			case WATER:
-				event.setCancelled(true);
-				break;
-			case RED_ROSE:
-				event.setCancelled(true);
-				break;
-			default:
-				break;
-			}
-			player.updateInventory();
-
-		}
-
-	}
-
-	@EventHandler
-	public void onExpGet(PlayerExpChangeEvent event){
-		if(TheOnePower.channelMap.get(event.getPlayer().getName()) != null){
-			event.setAmount(0);
-		}
-	}
-
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event){
-		Channel channel = TheOnePower.channelMap.get(event.getPlayer().getName());
-		if (channel != null){
-			channel.close();
 		}
 	}
 
