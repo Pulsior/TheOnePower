@@ -351,15 +351,14 @@ public final class TheOnePower extends JavaPlugin{
 			return stack;
 		}
 		else if(type.equals("angreal")){
-			ItemStack stack = new ItemStack(Material.SKULL);
+			ItemStack stack = new ItemStack(Material.FLINT);
 			ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(ChatColor.RESET+"Angreal");
 			stack.setItemMeta(meta);
 			return stack;
 		}
 		else if(type.equals("sa'angreal")){
-			ItemStack stack = new ItemStack(Material.SKULL);
-			stack.setDurability( (short) 4);
+			ItemStack stack = new ItemStack(Material.EMERALD);
 			ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(ChatColor.RESET+"Sa'angreal");
 			stack.setItemMeta(meta);

@@ -60,7 +60,7 @@ public class Channel {
 	public Channel(String playerName, TheOnePower plugin){
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
-		crouching = player.isSneaking();
+		crouching = false;
 
 
 		TheOnePower.currentLevelMap.put(playerName, player.getLevel()); //Add the correct levels to the player
@@ -336,7 +336,11 @@ public class Channel {
 	}
 
 	public void toggleItems(){
+		crouching = ! (crouching);
 
+		if(crouching){
+			
+		}
 	}
 
 	/**
