@@ -138,7 +138,7 @@ public class WeaveHandler implements Listener{
 					
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){ //Casts and executes the weave
-					channel.cast( event.getClickedBlock() );
+					channel.cast( event.getClickedBlock(), null );
 
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){ //Clears the weave
@@ -163,7 +163,7 @@ public class WeaveHandler implements Listener{
 		Player player = event.getPlayer();
 		Channel channel = TheOnePower.channelMap.get(player.getName());
 		if (channel != null){
-			channel.cast(entity);
+			channel.cast(null, entity);
 		}
 	}
 

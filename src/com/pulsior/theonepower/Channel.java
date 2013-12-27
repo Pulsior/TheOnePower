@@ -33,12 +33,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 public class Channel {
 
 	public Player player;
+	public String playerName;
 	public List<Element> weave = new ArrayList<Element>();
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-	static boolean nowCasting = false;
 
 	Logger log = Bukkit.getLogger();
 
+	boolean crouching;
 	boolean gaidinWeaveActive = false;
 	boolean healingWeaveActive = false;
 
@@ -58,6 +59,8 @@ public class Channel {
 
 	public Channel(String playerName, TheOnePower plugin){
 		player = Bukkit.getPlayer(playerName);
+		this.playerName = playerName;
+		crouching = player.isSneaking();
 
 
 		TheOnePower.currentLevelMap.put(playerName, player.getLevel()); //Add the correct levels to the player
@@ -71,8 +74,8 @@ public class Channel {
 		inv.clear();
 
 		taskDuration = (long) 60/maxLevel; //Fully regenerating your levels will always take 60 ticks 
-		
-		
+
+
 		/*
 		 * Add items to the inventory 
 		 */
@@ -143,7 +146,7 @@ public class Channel {
 
 
 	}
-	
+
 	/**
 	 * Add an element to a weave
 	 * @param element
@@ -158,17 +161,17 @@ public class Channel {
 			player.playSound(location, Sound.CLICK, 1, 0);
 		}
 
-		nowCasting = true;
+		TheOnePower.castingPlayersMap.put(playerName, new Boolean(true) );
 
 	}
-	
-	
+
+
 	/**
 	 * Execute a weave
 	 * @param clickedBlock
 	 */
 	@SuppressWarnings("deprecation")
-	public void cast(Block clickedBlock){
+	public void cast(Block clickedBlock, Entity entity){
 		WeaveEffect effect = TheOnePower.weaveList.compare(weave);
 		String name = player.getName();
 
@@ -205,7 +208,13 @@ public class Channel {
 				lastWeave = WeaveEffect.CLEAR_SKY;
 				break;
 			case BIND_WOLF_GAIDIN:
-				gaidinWeaveActive = true;
+				if(entity instanceof Wolf){
+					Wolf wolf = (Wolf) entity;
+					wolf.setAngry(false);
+					wolf.setTamed(true);
+					wolf.setOwner(player);
+					world.playEffect(wolf.getLocation(), Effect.SMOKE, 0);
+				}
 				lastWeave = WeaveEffect.BIND_WOLF_GAIDIN;
 				break;
 			case FIREBALL:
@@ -219,7 +228,17 @@ public class Channel {
 				lastWeave = WeaveEffect.FIREBALL;
 				break;
 			case HEALING:
-				healingWeaveActive = true;
+				if(entity instanceof Player){
+					Player player = (Player) entity;
+					double playerHealth = player.getHealth();
+					double healthDifference = 20-playerHealth;
+					player.setFoodLevel(player.getFoodLevel()- (int) healthDifference);
+					if(player.getFoodLevel() < 2){
+						player.setFoodLevel(2);
+					}
+					player.setHealth(20);
+					world.playEffect(player.getLocation(), Effect.SMOKE, 0);
+				}
 				lastWeave = WeaveEffect.HEALING;
 				break;
 			case WATERBREATHING:
@@ -259,7 +278,6 @@ public class Channel {
 				location = block2.getLocation();
 				world.strikeLightning(location);
 				world.createExplosion(location, 6F);
-
 				lastWeave = WeaveEffect.STRIKE;
 				break;
 			case INVALID:
@@ -278,43 +296,14 @@ public class Channel {
 			}
 		}
 		weave.clear();
-		nowCasting = false;
+		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
-	
-	/**
-	 * Execute a weave in special cases
-	 * @param entity
-	 */
-	
-	public void cast(Entity entity){
-		World world = player.getWorld();
-		if(gaidinWeaveActive == true && entity instanceof Wolf){
-			Wolf wolf = (Wolf) entity;
-			wolf.setAngry(false);
-			wolf.setTamed(true);
-			wolf.setOwner(player);
-			world.playEffect(wolf.getLocation(), Effect.SMOKE, 0);
-			gaidinWeaveActive = false;
-		}
-		else if (healingWeaveActive == true && entity instanceof Player){
-			Player player = (Player) entity;
-			double playerHealth = player.getHealth();
-			double healthDifference = 20-playerHealth;
-			player.setFoodLevel(player.getFoodLevel()- (int) healthDifference);
-			if(player.getFoodLevel() < 2){
-				player.setFoodLevel(2);
-			}
-			player.setHealth(20);
-			world.playEffect(player.getLocation(), Effect.SMOKE, 0);
-			healingWeaveActive = false;
-		}
 
-	}
 
 	/**
 	 * Close and remove the channel
 	 */
-	
+
 	public void close(){
 
 		String name = player.getName();
@@ -339,19 +328,23 @@ public class Channel {
 		TheOnePower.channelMap.remove(name);
 
 	}
-	
+
 	public void disband(){
 		weave.clear();
 		gaidinWeaveActive = false;
-		nowCasting = false;
+		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
-	
+
+	public void toggleItems(){
+
+	}
+
 	/**
 	 * Returns the amount of extra levels an angreal yields a player
 	 * @param player
 	 * @return
 	 */
-	
+
 	public int getAngrealLevels(Player player){
 		PlayerInventory inventory = player.getInventory();
 		if(inventory.contains(TheOnePower.angreal)){
@@ -362,25 +355,28 @@ public class Channel {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * The task used to regenerate a player's xp level
 	 */
 	BukkitRunnable regenTask = new BukkitRunnable(){
 		@Override
 		public void run() {
-			if( ! (player.getLevel() >= maxLevel) && Channel.nowCasting == false){
-				player.setLevel( player.getLevel()+1 );;
+			if( ! (player.getLevel() >= maxLevel) ) {
+				if(TheOnePower.castingPlayersMap.get(playerName).equals(new Boolean(false) ) ){
+					player.setLevel( player.getLevel()+1 );;
+				}
+
 			}
 		};
 	};
-	
+
 	/**
 	 * Create a fire with a weave
 	 * @param block
 	 * @param large
 	 */
-	
+
 	public void createFire(Block block, boolean large){
 		if(large){
 			Location location = block.getLocation();
@@ -405,4 +401,6 @@ public class Channel {
 			}
 		}
 	}
+
+
 }

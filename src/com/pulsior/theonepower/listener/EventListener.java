@@ -40,22 +40,18 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onPlayerBedEnter(PlayerBedEnterEvent event){
 		final Player player = event.getPlayer();
-		final String playername = player.getName();
-		log.info("Bed event fired!");
+		final String playername = player.getName();		
 
 		Runnable task = new Runnable(){
 			@Override
 			public void run() {
-				log.info("Task executed!");
 				PlayerInventory inventory = player.getInventory();
 
 				if( inventory.contains( TheOnePower.dreamAngreal ) ){
 					player.setBedSpawnLocation( player.getLocation() );
 					TheOnePower.unseenLand.addPlayer(playername);
-					log.info("TP to tel'aran! ");
+					
 				}
-
-
 			}
 		};
 		try{

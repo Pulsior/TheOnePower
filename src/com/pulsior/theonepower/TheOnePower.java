@@ -43,6 +43,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
 	public static HashMap<String, ItemStack[]> embraceInventoryMap = new HashMap<String, ItemStack[]>();
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
+	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
 
 	public static final ItemStack dreamAngreal = getAngrealStack("dream");
 	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
