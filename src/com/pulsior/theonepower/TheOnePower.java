@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -18,7 +19,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -43,7 +43,9 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
 	public static HashMap<String, ItemStack[]> embraceInventoryMap = new HashMap<String, ItemStack[]>();
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
+	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
+
 
 	public static final ItemStack dreamAngreal = getAngrealStack("dream");
 	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
@@ -52,20 +54,21 @@ public final class TheOnePower extends JavaPlugin{
 	public static final ItemStack returnToken = getReturnToken();
 
 	public static PowerMap power;
-
 	public static UnseenLand unseenLand;
+	public static TheOnePower plugin;
 
 	public static WeaveList weaveList = new WeaveList();
 
 	Logger log = Bukkit.getLogger();
 	Server server = Bukkit.getServer();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
-	
+
 	/**
 	 * Registers listeners and creates tel'aran'rhiod when the plugin is enabled
 	 */
 	@Override
 	public void onEnable(){
+		plugin = this;
 		makeDir();
 		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
@@ -112,7 +115,7 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		save();
 	}
-	
+
 	/**
 	 * Open Saidar to a player with /embrace and closes it with /release. Get an angreal with /angreal, 
 	 * cheat yourself into tel'aran'rhiod with /dream and store a memory with /remember
@@ -121,16 +124,29 @@ public final class TheOnePower extends JavaPlugin{
 		if(cmd.getName().equalsIgnoreCase("embrace")){
 			if(sender instanceof Player){
 				String name = sender.getName();
-				if(channelMap.get ( name ) == null){
-					if(power.levelMap.get(name ) == null){
-						power.addPlayer( name );
+				if(args.length == 1){
+					if(args[0].equalsIgnoreCase("bind")){
+						Player player = (Player) sender;
+						ItemStack stack = player.getItemInHand();
+						if(stack != null){
+							ItemMeta meta = stack.getItemMeta();
+							List<String> lore = new ArrayList<String>();
+							lore.add(ChatColor.GOLD+"Click to embrace saidar");
+							meta.setLore(lore);
+							stack.setItemMeta(meta);
+						}
+						else{
+							sender.sendMessage(ChatColor.RED+"You don't have an item in your hand!");
+						}
 					}
-
-					embraceSaidar((Player) sender);
-
 				}
 				else{
-					sender.sendMessage("You have already embraced saidar!");
+					if(channelMap.get ( name ) == null){
+						new Channel(sender.getName(), this);
+					}
+					else{
+						sender.sendMessage("You have already embraced saidar!");
+					}
 				}
 			}
 			else{
@@ -194,7 +210,7 @@ public final class TheOnePower extends JavaPlugin{
 				return true;
 			}
 		}
-		
+
 		if(cmd.getName().equalsIgnoreCase("remember")){
 			if(sender instanceof Player && args.length == 1){
 				String playerName = sender.getName();
@@ -214,26 +230,32 @@ public final class TheOnePower extends JavaPlugin{
 			}
 		}
 
+		if(cmd.getName().equalsIgnoreCase("forget")){
+			if(sender instanceof Player && args.length == 1){
+				String playerName = sender.getName();
+				String memoryName = ChatColor.RESET + args[0];
+				List<Memory> list = unseenLand.memoryMap.get(playerName);
+				if(list != null){
+					Memory removedMemory = null;
+					for(Memory mem : list){
+						if(mem.name.equalsIgnoreCase(memoryName) ){
+							removedMemory = mem;
+						}
+					}
+					if(removedMemory != null){
+						list.remove(removedMemory);
+					}
+					else{
+						sender.sendMessage(ChatColor.RED+"You didn't know the memory '"+args[0]+"'!");
+					}
+					return true;
+				}
+			}
+		}
+
 		return false; 
 	}
 
-	/**
-	 * Opens the saidar inventory to a player
-	 * @param player
-	 */
-	public void embraceSaidar(Player player){
-		String name = player.getName();
-		PlayerInventory inventory = player.getInventory();
-		ItemStack[] inventoryArray = new ItemStack[36];
-		for (int x = 0; x < 36; x++){
-			inventoryArray[x] = inventory.getItem(x);
-		}
-		embraceInventoryMap.put(name, inventoryArray);
-		Channel channel = new Channel( name , this);
-		channelMap.put(name, channel);
-	}
-	
-	
 	/**
 	 * Saves all level and Unseen Land data
 	 */
@@ -326,7 +348,7 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Makes a new /The One Power folder, to store data files
 	 */
@@ -366,7 +388,7 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns an ItemStack to wake up from the Unseen Land
 	 * @return

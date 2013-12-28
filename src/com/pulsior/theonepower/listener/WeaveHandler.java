@@ -49,7 +49,7 @@ public class WeaveHandler implements Listener{
 		Player player = event.getPlayer();
 		String name = player.getName();
 		if (item != null){	//IF clause for items
-			
+
 			/*
 			 * Logs memory names to the console (DEBUG)
 			 */
@@ -57,7 +57,6 @@ public class WeaveHandler implements Listener{
 				for(Memory mem : TheOnePower.unseenLand.memoryMap.get(name) ){
 					log.info(mem.name);
 				}
-				return; 
 			}
 			/*
 			 * Logs level progress to the console (DEBUG)
@@ -67,7 +66,7 @@ public class WeaveHandler implements Listener{
 				log.info(Integer.toString(TheOnePower.power.requiredWeavesMap.get(name) ) +" more weaves are required.");
 				log.info("The amount of levels is now "+Integer.toString(TheOnePower.power.levelMap.get(name ) ) );
 			}
-			
+
 			/*
 			 * Allows the player to wake up from and leave the Unseen Land, when the name is correct
 			 */
@@ -82,7 +81,18 @@ public class WeaveHandler implements Listener{
 					}
 				}
 			}
-			
+
+			List<String> lore = item.getItemMeta().getLore();
+			if(lore != null){
+				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") ){
+					String playerName = player.getName();
+					if(TheOnePower.channelMap.containsKey(playerName) == false){
+						new Channel(playerName, TheOnePower.plugin);
+						player.updateInventory();
+					}
+				}
+			}
+
 			/*
 			 * Tells the player whether he is in the normal world or in the Unseen Land (DEBUG)
 			 */
@@ -101,7 +111,7 @@ public class WeaveHandler implements Listener{
 				}
 
 			}
-			
+
 			/*
 			 * Teleports the player to a memory location when in the Unseen Land
 			 */
@@ -115,7 +125,7 @@ public class WeaveHandler implements Listener{
 							player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 0);
 						}
 					}
-					
+
 
 				}
 			}
@@ -131,11 +141,11 @@ public class WeaveHandler implements Listener{
 						itemName.equalsIgnoreCase(spirit) ){
 
 					Element element = getElementByString(itemName);
-					
+
 					if(element != null){
 						channel.addElement(element);
 					}
-					
+
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){ //Casts and executes the weave
 					channel.cast( event.getClickedBlock(), null );
@@ -152,7 +162,7 @@ public class WeaveHandler implements Listener{
 			}
 		}
 	}
-	
+
 	/*
 	 * Some more listeners
 	 */

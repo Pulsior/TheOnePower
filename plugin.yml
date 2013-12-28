@@ -27,5 +27,10 @@ commands:
        usage: /<command> [name of the memory]
        permission: <plugin name>.basic
        permission-message: You don't have <permission>
+     forget:
+       description: Forget a place you remembered
+       usage: /<command> [name of the memory]
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission>
 
    

@@ -84,7 +84,7 @@ public class ChannelManager implements Listener {
 		}
 
 		if( TheOnePower.unseenLand.players.contains(name ) ){
-			TheOnePower.unseenLand.removePlayer(name);
+			//TheOnePower.unseenLand.removePlayer(name);
 		}
 	}
 	

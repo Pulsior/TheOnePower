@@ -1,17 +1,23 @@
 package com.pulsior.theonepower.listener;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
@@ -40,8 +46,13 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onPlayerBedEnter(PlayerBedEnterEvent event){
 		final Player player = event.getPlayer();
-		final String playername = player.getName();		
-
+		final String playerName = player.getName();		
+		
+		if(TheOnePower.unseenLand.players.contains(playerName)){
+			event.setCancelled(true);
+			player.sendMessage(ChatColor.RED+"You can't sleep in tel'aran'rhiod!");
+		}
+		
 		Runnable task = new Runnable(){
 			@Override
 			public void run() {
@@ -49,7 +60,7 @@ public class EventListener implements Listener {
 
 				if( inventory.contains( TheOnePower.dreamAngreal ) ){
 					player.setBedSpawnLocation( player.getLocation() );
-					TheOnePower.unseenLand.addPlayer(playername);
+					TheOnePower.unseenLand.addPlayer(playerName);
 					
 				}
 			}
@@ -77,4 +88,23 @@ public class EventListener implements Listener {
 		}
 	}
 	
+	@EventHandler
+	public void onPlayerSneak(PlayerToggleSneakEvent event){
+		Channel channel = TheOnePower.channelMap.get(event.getPlayer().getName());
+		if (channel != null){
+			channel.toggleItems();
+		}
+		
+	}
+	
+	@EventHandler
+	public void onEntityDeath(EntityDeathEvent event){
+		LivingEntity entity = event.getEntity();
+		EntityType type = entity.getType();
+		if(type.equals(EntityType.ZOMBIE) || type.equals(EntityType.SKELETON)){
+			if(new Random().nextInt(10) == 0){
+				event.getDrops().add(TheOnePower.dreamAngreal);
+			}
+		}
+	}
 }

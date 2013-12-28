@@ -61,6 +61,20 @@ public class Channel {
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
 		crouching = false;
+		
+		if(TheOnePower.power.levelMap.get(playerName ) == null){
+			TheOnePower.power.addPlayer( playerName );
+		}
+		
+		TheOnePower.expLevelProgressMap.put(playerName, player.getExp());
+		
+		PlayerInventory inventory = player.getInventory();
+		ItemStack[] inventoryArray = new ItemStack[36];
+		for (int x = 0; x < 36; x++){
+			inventoryArray[x] = inventory.getItem(x);
+		}
+		TheOnePower.embraceInventoryMap.put(playerName, inventoryArray);
+		TheOnePower.channelMap.put(playerName, this);
 
 
 		TheOnePower.currentLevelMap.put(playerName, player.getLevel()); //Add the correct levels to the player
@@ -218,7 +232,10 @@ public class Channel {
 				lastWeave = WeaveEffect.BIND_WOLF_GAIDIN;
 				break;
 			case FIREBALL:
-				if(clickedBlock != null){
+				if(entity != null){
+					entity.setFireTicks(200);
+				}
+				else if(clickedBlock != null){
 					createFire(clickedBlock, true);
 				}
 				else{
@@ -322,9 +339,10 @@ public class Channel {
 
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.removePotionEffect(PotionEffectType.ABSORPTION);
-		player.setLevel(TheOnePower.currentLevelMap.get( player.getName() ) );
-		TheOnePower.currentLevelMap.remove( player.getName() );
-		scheduler.cancelAllTasks();
+		player.setLevel(TheOnePower.currentLevelMap.get( playerName ) );
+		player.setExp(TheOnePower.expLevelProgressMap.get(playerName));
+		TheOnePower.currentLevelMap.remove( playerName );
+		scheduler.cancelTask(taskId);
 		TheOnePower.channelMap.remove(name);
 
 	}
@@ -336,10 +354,25 @@ public class Channel {
 	}
 
 	public void toggleItems(){
-		crouching = ! (crouching);
-
-		if(crouching){
-			
+		boolean sneaking = player.isSneaking();
+		PlayerInventory inv = player.getInventory();
+		if( ! (sneaking) ){
+			ItemStack stack = new ItemStack(Material.STICK);
+			ItemMeta meta = stack.getItemMeta();
+			meta.setDisplayName(ChatColor.RESET+"SuperStick");
+			stack.setItemMeta(meta);
+			inv.setItem(2, stack );
+		}
+		else{
+			ItemStack rose = new ItemStack(Material.RED_ROSE);
+			ItemMeta meta = rose.getItemMeta();
+			meta.setDisplayName(ChatColor.RESET + "Release Saidar");
+			List<String> releaseLore = new ArrayList<String>();
+			releaseLore.add("");
+			releaseLore.add(ChatColor.GOLD+"Let go of saidar");
+			meta.setLore(releaseLore);
+			rose.setItemMeta(meta);
+			inv.setItem(2, rose);
 		}
 	}
 

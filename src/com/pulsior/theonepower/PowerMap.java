@@ -35,6 +35,7 @@ public class PowerMap implements Serializable{
 		checkLevel(name);
 	}
 	
+	
 	/**
 	 * Increases the level of a player and sets his progress to zero
 	 * @param name
