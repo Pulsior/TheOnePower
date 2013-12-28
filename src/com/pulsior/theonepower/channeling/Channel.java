@@ -1,4 +1,4 @@
-package com.pulsior.theonepower;
+package com.pulsior.theonepower.channeling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,16 +6,13 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,6 +20,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import com.pulsior.theonepower.TheOnePower;
+
 
 /**
  * Class with one instance for every saidar-embracing player, stored in TheOnePower.channelMap
@@ -35,11 +35,11 @@ public class Channel {
 	public Player player;
 	public String playerName;
 	public List<Element> weave = new ArrayList<Element>();
+	public int taskId;
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
 	Logger log = Bukkit.getLogger();
 
-	boolean crouching;
 	boolean gaidinWeaveActive = false;
 	boolean healingWeaveActive = false;
 
@@ -49,25 +49,30 @@ public class Channel {
 
 	PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1);
 	PotionEffect absorptionEffect = new PotionEffect(PotionEffectType.ABSORPTION, 1000000, 1);
-
-	PotionEffect waterbreathingEffect = new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 1);
-	PotionEffect invisiblilityEffect = new PotionEffect(PotionEffectType.INVISIBILITY, 600, 1);
-
-	int maxLevel;
-	int taskId;
+	
+	public int maxLevel;
 	long taskDuration;
 
 	public Channel(String playerName, TheOnePower plugin){
+		
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
-		crouching = false;
-		
+		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
+
+		/*
+		 * Set up the data in PowerMap
+		 */
+
 		if(TheOnePower.power.levelMap.get(playerName ) == null){
 			TheOnePower.power.addPlayer( playerName );
 		}
-		
+
 		TheOnePower.expLevelProgressMap.put(playerName, player.getExp());
-		
+
+		/*
+		 * Store the inventory in a HashMap
+		 */
+
 		PlayerInventory inventory = player.getInventory();
 		ItemStack[] inventoryArray = new ItemStack[36];
 		for (int x = 0; x < 36; x++){
@@ -87,8 +92,7 @@ public class Channel {
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
 
-		taskDuration = (long) 60/maxLevel; //Fully regenerating your levels will always take 60 ticks 
-
+		taskDuration = (long) 120/maxLevel; //Fully regenerating your levels will always take 120 ticks 
 
 		/*
 		 * Add items to the inventory 
@@ -169,24 +173,20 @@ public class Channel {
 
 		if(player.getLevel() != 0){
 			weave.add(element);
-			player.setLevel(player.getLevel()-1);
 			Location location = player.getLocation();
 			location.setX(location.getX()+14);
 			player.playSound(location, Sound.CLICK, 1, 0);
 		}
-
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(true) );
-
 	}
-
 
 	/**
 	 * Execute a weave
 	 * @param clickedBlock
 	 */
-	@SuppressWarnings("deprecation")
-	public void cast(Block clickedBlock, Entity entity){
-		WeaveEffect effect = TheOnePower.weaveList.compare(weave);
+
+	public void cast(Block clickedBlock, Entity clickedEntity){
+		WeaveEffect effect = compare(weave);
 		String name = player.getName();
 
 		if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false ){
@@ -196,122 +196,16 @@ public class Channel {
 
 		if(effect != null){
 			World world = player.getWorld();
-			switch(effect){			
-			case LIGHTNING:
-				world.strikeLightning(player.getTargetBlock(null, 200).getLocation());
-				lastWeave = WeaveEffect.LIGHTNING;
-				break;
-			case RAIN:			
-				world.setStorm(true);
-				log.info("sound");
-				lastWeave = WeaveEffect.RAIN;
-				break;
-			case CLEAR_SKY:
-				Location location = player.getLocation();
-				location.setY(location.getY()+20);
-				location.setX(location.getX()+10);
-				world.strikeLightning(location);
-				location.setX(location.getX()-20);
-				world.strikeLightning(location);
-				location.setX(location.getX()+10);
-				location.setZ(location.getZ()+10);
-				world.strikeLightning(location);
-				location.setZ(location.getZ()-20);
-				world.strikeLightning(location);
-				world.setStorm(false);
-				lastWeave = WeaveEffect.CLEAR_SKY;
-				break;
-			case BIND_WOLF_GAIDIN:
-				if(entity instanceof Wolf){
-					Wolf wolf = (Wolf) entity;
-					wolf.setAngry(false);
-					wolf.setTamed(true);
-					wolf.setOwner(player);
-					world.playEffect(wolf.getLocation(), Effect.SMOKE, 0);
-				}
-				lastWeave = WeaveEffect.BIND_WOLF_GAIDIN;
-				break;
-			case FIREBALL:
-				if(entity != null){
-					entity.setFireTicks(200);
-				}
-				else if(clickedBlock != null){
-					createFire(clickedBlock, true);
-				}
-				else{
-					player.launchProjectile(Fireball.class); 
-					world.playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 1, 0);
-				}
-				lastWeave = WeaveEffect.FIREBALL;
-				break;
-			case HEALING:
-				if(entity instanceof Player){
-					Player player = (Player) entity;
-					double playerHealth = player.getHealth();
-					double healthDifference = 20-playerHealth;
-					player.setFoodLevel(player.getFoodLevel()- (int) healthDifference);
-					if(player.getFoodLevel() < 2){
-						player.setFoodLevel(2);
-					}
-					player.setHealth(20);
-					world.playEffect(player.getLocation(), Effect.SMOKE, 0);
-				}
-				lastWeave = WeaveEffect.HEALING;
-				break;
-			case WATERBREATHING:
-				player.addPotionEffect(waterbreathingEffect);
-				player.playSound(player.getLocation(), Sound.DRINK, 1, 0);
-				lastWeave = WeaveEffect.WATERBREATHING;
-				break;
-			case EXTINGUISH_FIRE:
-				location = player.getLocation();
-				location.setY(location.getY()+2);
-				final Block block = world.getBlockAt(location);
-				if (block.getType() == Material.AIR){
-					block.setType(Material.WATER);
-
-					Runnable task = new Runnable(){
-						@Override
-						public void run() {
-							block.setType(Material.AIR);
-						}
-					};
-					scheduler.scheduleSyncDelayedTask(plugin, task, 10L);
-				}
-
-				lastWeave = WeaveEffect.EXTINGUISH_FIRE;
-				break;
-			case FOLDED_LIGHT:
-				player.addPotionEffect(invisiblilityEffect);
-				player.playSound(player.getLocation(), Sound.FIZZ, 1, 0);
-				lastWeave = WeaveEffect.FOLDED_LIGHT;
-				break;
-			case TRAVEL:
-				player.teleport(player.getTargetBlock(null, 200).getLocation());
-				lastWeave = WeaveEffect.TRAVEL;
-				break;
-			case STRIKE:
-				Block block2 = player.getTargetBlock(null, 75);
-				location = block2.getLocation();
-				world.strikeLightning(location);
-				world.createExplosion(location, 6F);
-				lastWeave = WeaveEffect.STRIKE;
-				break;
-			case INVALID:
-				double weaveLength = (double) weave.size();
-				double playerHealth = player.getHealth() - weaveLength;
-				if(playerHealth < 0){
-					playerHealth = 0;
-				}
-				if(weaveLength != 0){
-					location = player.getLocation();
-					player.playSound(location, Sound.FIZZ, 1, 0);
-					world.createExplosion(player.getTargetBlock(null, 1).getLocation(), 0);
-					player.setHealth(playerHealth);
-				}
-				break;
+			int xpLevel = player.getLevel();
+			int levelCost = weave.size()*effect.getLevel();
+			int difference = xpLevel-levelCost;
+			if(difference >= 0){
+				effect.cast(player, world, clickedBlock, clickedEntity);
+				player.setLevel(xpLevel-levelCost);
 			}
+			lastWeave = effect;
 		}
+
 		weave.clear();
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
@@ -393,6 +287,21 @@ public class Channel {
 		return 0;
 	}
 
+	public WeaveEffect compare(List<Element> list){
+		WeaveEffect[] effects = WeaveEffect.values();
+		for(WeaveEffect effect : effects){
+			
+			if(! (effect.equals(WeaveEffect.INVALID) ) ) {
+				
+				if(effect.getElements().equals(list)){
+					return effect;
+				}
+			}
+
+		}
+		return WeaveEffect.INVALID;
+	}
+
 	/**
 	 * The task used to regenerate a player's xp level
 	 */
@@ -407,37 +316,6 @@ public class Channel {
 			}
 		};
 	};
-
-	/**
-	 * Create a fire with a weave
-	 * @param block
-	 * @param large
-	 */
-
-	public void createFire(Block block, boolean large){
-		if(large){
-			Location location = block.getLocation();
-			location.add(-1, 1, -1);
-
-			if(location.getBlock().getType().equals(Material.AIR)){
-				location.getBlock().setType(Material.FIRE);
-			}
-
-			for(int x = 0; x < 2; x++){
-				for(int y = 0; y < 3; y++){
-					location.add(0, 0, 1);
-					if(location.getBlock().getType().equals(Material.AIR)){
-						location.getBlock().setType(Material.FIRE);
-					}
-				}
-				location.add(0, 0, -2);
-				location.add(1, 0, 0);
-				if(location.getBlock().getType().equals(Material.AIR)){
-					location.getBlock().setType(Material.FIRE);
-				}
-			}
-		}
-	}
 
 
 }

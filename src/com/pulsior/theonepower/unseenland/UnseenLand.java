@@ -16,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.Channel;
 
 /**
  * Represents the Unseen Land. Serves to add and remove players to the "tel'aran'rhiod" world

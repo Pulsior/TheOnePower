@@ -13,8 +13,8 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.Channel;
 
 /**
  * Seperate listener to prevent saidar-embracing players from

@@ -17,8 +17,8 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.pulsior.theonepower.Channel;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 

@@ -25,6 +25,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
+import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
@@ -45,7 +46,8 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
 	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
-
+	
+	public static List<String> shieldedPlayers = new ArrayList<String>();
 
 	public static final ItemStack dreamAngreal = getAngrealStack("dream");
 	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
@@ -56,8 +58,6 @@ public final class TheOnePower extends JavaPlugin{
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
 	public static TheOnePower plugin;
-
-	public static WeaveList weaveList = new WeaveList();
 
 	Logger log = Bukkit.getLogger();
 	Server server = Bukkit.getServer();
@@ -244,14 +244,58 @@ public final class TheOnePower extends JavaPlugin{
 					}
 					if(removedMemory != null){
 						list.remove(removedMemory);
+						sender.sendMessage(ChatColor.GREEN+"You forgot the memory '"+args[0]+"'");
 					}
 					else{
-						sender.sendMessage(ChatColor.RED+"You didn't know the memory '"+args[0]+"'!");
+						sender.sendMessage(ChatColor.RED+"You didn't know the memory '"+args[0]+"'");
 					}
 					return true;
 				}
 			}
 		}
+
+		if(cmd.getName().equalsIgnoreCase("stats")){
+			String name = sender.getName();
+			if(power.levelMap.containsKey(name)){
+				sender.sendMessage("Your current saidar level is "+ChatColor.GREEN+Integer.toString( power.levelMap.get(name) ) );
+				sender.sendMessage("You have to do "+ChatColor.GREEN+Integer.toString( power.requiredWeavesMap.get(name) - power.weaveProgressMap.get (name) )+ChatColor.RESET+" weaves to reach the next level" );
+				List<Memory> memories = unseenLand.memoryMap.get(name);
+				if(memories != null){
+					int size = memories.size();
+					if(size == 1){
+						sender.sendMessage("You have "+ChatColor.GREEN+Integer.toString(size) + ChatColor.RESET+ " memory:" );
+					}
+
+					else{
+						sender.sendMessage("You have "+ChatColor.GREEN+Integer.toString(size) + ChatColor.RESET+ " memories:" );
+					}
+					if(size > 0){
+						String message = "";
+						for(int x = 0; x < size; x++){
+							message += memories.get(x).rawName;
+							if(size == x+2){
+								message += ChatColor.RESET+" and "+ChatColor.GREEN;
+							}
+							else if(size != x+1){
+								message += ChatColor.RESET+", "+ChatColor.GREEN;
+							}
+						}
+						sender.sendMessage(ChatColor.GREEN+ (Character.toUpperCase(message.charAt(0)) + message.substring(1) ) );
+					}
+				}
+				return true;
+			}
+			else{
+				if(sender instanceof Player){
+					sender.sendMessage("You don't have stats yet, embrace saidar first!");
+				}
+				else{
+					sender.sendMessage("A console can't have stats...");
+				}
+				return true;
+			}
+		}
+
 
 		return false; 
 	}
@@ -369,6 +413,8 @@ public final class TheOnePower extends JavaPlugin{
 			ItemStack stack = new ItemStack(Material.NETHER_BRICK_ITEM);
 			ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(ChatColor.RESET+"Stone of the Unseen Land");
+			List<String> lore = new ArrayList<String>();
+			meta.setLore(lore);
 			stack.setItemMeta(meta);
 			return stack;
 		}
@@ -376,6 +422,9 @@ public final class TheOnePower extends JavaPlugin{
 			ItemStack stack = new ItemStack(Material.FLINT);
 			ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(ChatColor.RESET+"Angreal");
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GOLD+"Click to embrace saidar");
+			meta.setLore(lore);
 			stack.setItemMeta(meta);
 			return stack;
 		}
@@ -383,6 +432,9 @@ public final class TheOnePower extends JavaPlugin{
 			ItemStack stack = new ItemStack(Material.EMERALD);
 			ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(ChatColor.RESET+"Sa'angreal");
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GOLD+"Click to embrace saidar");
+			meta.setLore(lore);
 			stack.setItemMeta(meta);
 			return stack;
 		}

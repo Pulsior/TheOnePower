@@ -17,9 +17,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.pulsior.theonepower.Channel;
-import com.pulsior.theonepower.Element;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.unseenland.Memory;
 
 /**
@@ -54,9 +54,36 @@ public class WeaveHandler implements Listener{
 			 * Logs memory names to the console (DEBUG)
 			 */
 			if(item.getType().equals(Material.STICK)){
-				for(Memory mem : TheOnePower.unseenLand.memoryMap.get(name) ){
-					log.info(mem.name);
+
+				Boolean isCasting = TheOnePower.castingPlayersMap.get(name);
+
+				if(isCasting != null){
+					if(TheOnePower.castingPlayersMap.get(name).equals(new Boolean(true) ) ){
+						player.sendMessage("The boolean is true, this is wrong");
+					}
+					else{
+						player.sendMessage("The boolean is false, as it should be");
+					}
+
+					Channel channel = TheOnePower.channelMap.get(name);
+					if(channel != null){
+
+						int taskId = channel.taskId;
+
+						if(Bukkit.getScheduler().isCurrentlyRunning(taskId)){
+							player.sendMessage("The task is still running");
+						}
+
+						else{
+							player.sendMessage("The task is not running");
+						}
+					}
 				}
+				else{
+					player.sendMessage("IsCasting is null!");
+				}
+
+
 			}
 			/*
 			 * Logs level progress to the console (DEBUG)
@@ -84,7 +111,7 @@ public class WeaveHandler implements Listener{
 
 			List<String> lore = item.getItemMeta().getLore();
 			if(lore != null){
-				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") ){
+				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR) ) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 					String playerName = player.getName();
 					if(TheOnePower.channelMap.containsKey(playerName) == false){
 						new Channel(playerName, TheOnePower.plugin);
@@ -172,8 +199,16 @@ public class WeaveHandler implements Listener{
 		Entity entity = event.getRightClicked();
 		Player player = event.getPlayer();
 		Channel channel = TheOnePower.channelMap.get(player.getName());
-		if (channel != null){
-			channel.cast(null, entity);
+		ItemStack stack = event.getPlayer().getItemInHand();
+		if (channel != null && !(stack.getType().equals(Material.AIR) ) ){ 
+			String displayName = stack.getItemMeta().getDisplayName();
+			if(displayName != null){
+				if(displayName.equalsIgnoreCase(ChatColor.RESET+"Cast Weave")){
+					channel.cast(null, entity);
+				}
+			}
+
+
 		}
 	}
 
@@ -184,6 +219,7 @@ public class WeaveHandler implements Listener{
 	 * @return
 	 */
 	public Element getElementByString(String element){
+
 		if(element.equalsIgnoreCase(earth)){
 			return Element.EARTH;
 		}

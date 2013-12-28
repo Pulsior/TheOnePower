@@ -32,5 +32,10 @@ commands:
        usage: /<command> [name of the memory]
        permission: <plugin name>.basic
        permission-message: You don't have <permission>
+     stats:
+       description: Retrieve stats about your level progress and your memories
+       usage: /<command>
+       permission: <plugin name>.basic
+       permission-message: You don't have <permission> 
 
    
