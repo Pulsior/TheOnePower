@@ -55,35 +55,6 @@ public class WeaveHandler implements Listener{
 			 */
 			if(item.getType().equals(Material.STICK)){
 
-				Boolean isCasting = TheOnePower.castingPlayersMap.get(name);
-
-				if(isCasting != null){
-					if(TheOnePower.castingPlayersMap.get(name).equals(new Boolean(true) ) ){
-						player.sendMessage("The boolean is true, this is wrong");
-					}
-					else{
-						player.sendMessage("The boolean is false, as it should be");
-					}
-
-					Channel channel = TheOnePower.channelMap.get(name);
-					if(channel != null){
-
-						int taskId = channel.taskId;
-
-						if(Bukkit.getScheduler().isCurrentlyRunning(taskId)){
-							player.sendMessage("The task is still running");
-						}
-
-						else{
-							player.sendMessage("The task is not running");
-						}
-					}
-				}
-				else{
-					player.sendMessage("IsCasting is null!");
-				}
-
-
 			}
 			/*
 			 * Logs level progress to the console (DEBUG)
@@ -162,7 +133,9 @@ public class WeaveHandler implements Listener{
 			Channel channel;
 			String itemName = item.getItemMeta().getDisplayName();
 			channel = TheOnePower.channelMap.get( name );
-			if (itemName != null && channel != null){			//If the player clicked an element, adds the element to the channel
+			Action action = event.getAction();
+			if (itemName != null && channel != null && ( action.equals(Action.RIGHT_CLICK_AIR) ||
+					event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){			//If the player clicked an element, adds the element to the channel
 				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
 						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
 						itemName.equalsIgnoreCase(spirit) ){
@@ -175,7 +148,7 @@ public class WeaveHandler implements Listener{
 
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){ //Casts and executes the weave
-					channel.cast( event.getClickedBlock(), null );
+					channel.cast( event.getClickedBlock(), event.getBlockFace(), null );
 
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){ //Clears the weave
@@ -204,7 +177,7 @@ public class WeaveHandler implements Listener{
 			String displayName = stack.getItemMeta().getDisplayName();
 			if(displayName != null){
 				if(displayName.equalsIgnoreCase(ChatColor.RESET+"Cast Weave")){
-					channel.cast(null, entity);
+					channel.cast(null, null, entity);
 				}
 			}
 

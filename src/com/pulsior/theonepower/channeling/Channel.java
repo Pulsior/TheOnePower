@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +34,7 @@ import com.pulsior.theonepower.TheOnePower;
 public class Channel {
 
 	public Player player;
+	public boolean pickUpItems = false;
 	public String playerName;
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
@@ -49,12 +51,12 @@ public class Channel {
 
 	PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1);
 	PotionEffect absorptionEffect = new PotionEffect(PotionEffectType.ABSORPTION, 1000000, 1);
-	
+
 	public int maxLevel;
 	long taskDuration;
 
 	public Channel(String playerName, TheOnePower plugin){
-		
+
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
@@ -177,6 +179,7 @@ public class Channel {
 			location.setX(location.getX()+14);
 			player.playSound(location, Sound.CLICK, 1, 0);
 		}
+		
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(true) );
 	}
 
@@ -185,25 +188,35 @@ public class Channel {
 	 * @param clickedBlock
 	 */
 
-	public void cast(Block clickedBlock, Entity clickedEntity){
+	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity){
+		
 		WeaveEffect effect = compare(weave);
 		String name = player.getName();
-
-		if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false ){
-			TheOnePower.power.addWeave(player.getName());
-			player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
-		}
 
 		if(effect != null){
 			World world = player.getWorld();
 			int xpLevel = player.getLevel();
 			int levelCost = weave.size()*effect.getLevel();
 			int difference = xpLevel-levelCost;
+			boolean casted = false;
+			
 			if(difference >= 0){
-				effect.cast(player, world, clickedBlock, clickedEntity);
+				casted = effect.cast(player, world, clickedBlock, clickedFace, clickedEntity);
 				player.setLevel(xpLevel-levelCost);
 			}
+
+			if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false && casted == true){
+				if(lastWeave != null){
+					log.info(lastWeave.name());
+				}
+				log.info(effect.name());
+				TheOnePower.power.addWeave(player.getName());
+				log.info("Added the weave to PowerKap");
+				player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
+			}
+			
 			lastWeave = effect;
+			
 		}
 
 		weave.clear();
@@ -250,6 +263,7 @@ public class Channel {
 	public void toggleItems(){
 		boolean sneaking = player.isSneaking();
 		PlayerInventory inv = player.getInventory();
+		
 		if( ! (sneaking) ){
 			ItemStack stack = new ItemStack(Material.STICK);
 			ItemMeta meta = stack.getItemMeta();
@@ -257,6 +271,7 @@ public class Channel {
 			stack.setItemMeta(meta);
 			inv.setItem(2, stack );
 		}
+		
 		else{
 			ItemStack rose = new ItemStack(Material.RED_ROSE);
 			ItemMeta meta = rose.getItemMeta();
@@ -278,9 +293,11 @@ public class Channel {
 
 	public int getAngrealLevels(Player player){
 		PlayerInventory inventory = player.getInventory();
+		
 		if(inventory.contains(TheOnePower.angreal)){
 			return 10;
 		}
+		
 		if(inventory.contains(TheOnePower.saAngreal)){
 			return 50;
 		}
@@ -290,9 +307,9 @@ public class Channel {
 	public WeaveEffect compare(List<Element> list){
 		WeaveEffect[] effects = WeaveEffect.values();
 		for(WeaveEffect effect : effects){
-			
+
 			if(! (effect.equals(WeaveEffect.INVALID) ) ) {
-				
+
 				if(effect.getElements().equals(list)){
 					return effect;
 				}
@@ -309,6 +326,7 @@ public class Channel {
 		@Override
 		public void run() {
 			if( ! (player.getLevel() >= maxLevel) ) {
+				
 				if(TheOnePower.castingPlayersMap.get(playerName).equals(new Boolean(false) ) ){
 					player.setLevel( player.getLevel()+1 );;
 				}

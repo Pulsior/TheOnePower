@@ -58,7 +58,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
 	public static TheOnePower plugin;
-
+	
 	Logger log = Bukkit.getLogger();
 	Server server = Bukkit.getServer();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
@@ -124,10 +124,13 @@ public final class TheOnePower extends JavaPlugin{
 		if(cmd.getName().equalsIgnoreCase("embrace")){
 			if(sender instanceof Player){
 				String name = sender.getName();
+				
 				if(args.length == 1){
-					if(args[0].equalsIgnoreCase("bind")){
+					
+					if(args[0].equalsIgnoreCase("bind")){					
 						Player player = (Player) sender;
 						ItemStack stack = player.getItemInHand();
+						
 						if(stack != null){
 							ItemMeta meta = stack.getItemMeta();
 							List<String> lore = new ArrayList<String>();
@@ -135,20 +138,25 @@ public final class TheOnePower extends JavaPlugin{
 							meta.setLore(lore);
 							stack.setItemMeta(meta);
 						}
+						
 						else{
 							sender.sendMessage(ChatColor.RED+"You don't have an item in your hand!");
 						}
 					}
 				}
+				
 				else{
+					
 					if(channelMap.get ( name ) == null){
 						new Channel(sender.getName(), this);
 					}
+					
 					else{
 						sender.sendMessage("You have already embraced saidar!");
 					}
 				}
 			}
+			
 			else{
 				sender.sendMessage("This command cannot be excecuted from the console!");
 			}
@@ -158,13 +166,16 @@ public final class TheOnePower extends JavaPlugin{
 		if(cmd.getName().equalsIgnoreCase("release")){
 			if(sender instanceof Player){
 				Channel channel = channelMap.get(sender.getName()); 
+				
 				if (channel != null){
 					channel.close();
 				}
+				
 				else{
 					sender.sendMessage("You have not embraced saidar!");
 				}
 			}
+			
 			else{
 				sender.sendMessage("This command cannot be excecuted from the console!");
 			}
@@ -172,19 +183,25 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		if(cmd.getName().equalsIgnoreCase("angreal")){
+			
 			if (args.length == 1){
+				
 				if(sender instanceof Player){
 					String arg = args[0];
 					Player player = (Player) sender;
+					
 					if(arg.equalsIgnoreCase("angreal") ){
 						player.getInventory().setItemInHand(angreal);
 					}
+					
 					else if (arg.equalsIgnoreCase("dream") ){						
 						player.getInventory().setItemInHand(dreamAngreal);
 					}
+					
 					else if(arg.equalsIgnoreCase("sa'angreal")){
 						player.getInventory().setItemInHand(saAngreal);
 					}
+					
 					else{
 						player.sendMessage("angreal, dream, sa'angreal");
 					}	
@@ -199,30 +216,37 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		if(cmd.getName().equalsIgnoreCase("dream")){
+			
 			if(sender instanceof Player){
 				String name = sender.getName();
 				if( unseenLand.players.contains( name ) ){
 					unseenLand.removePlayer(name);
 				}
+				
 				else{
 					unseenLand.addPlayer(name);
 				}
+				
 				return true;
 			}
 		}
 
 		if(cmd.getName().equalsIgnoreCase("remember")){
+			
 			if(sender instanceof Player && args.length == 1){
 				String playerName = sender.getName();
 				String memoryName = args[0];
+				
 				if(! (unseenLand.memoryMap.containsKey(playerName) ) ) {
 					unseenLand.memoryMap.put(playerName, new ArrayList<Memory>() );
 				}
+				
 				Player player = (Player) sender;
 				if(unseenLand.addMemory(playerName, new Memory(memoryName, player.getLocation() ) ) ){
 					player.sendMessage(ChatColor.GREEN+"Remembered this place as '"+memoryName+"'");
 					return true;
 				}
+				
 				else{
 					player.sendMessage(ChatColor.RED+"You cannot remember any more places, forget a location first");
 					return true;
@@ -231,24 +255,31 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		if(cmd.getName().equalsIgnoreCase("forget")){
+			
 			if(sender instanceof Player && args.length == 1){
 				String playerName = sender.getName();
 				String memoryName = ChatColor.RESET + args[0];
 				List<Memory> list = unseenLand.memoryMap.get(playerName);
+				
 				if(list != null){
 					Memory removedMemory = null;
+					
 					for(Memory mem : list){
+						
 						if(mem.name.equalsIgnoreCase(memoryName) ){
 							removedMemory = mem;
 						}
 					}
+					
 					if(removedMemory != null){
 						list.remove(removedMemory);
 						sender.sendMessage(ChatColor.GREEN+"You forgot the memory '"+args[0]+"'");
 					}
+					
 					else{
 						sender.sendMessage(ChatColor.RED+"You didn't know the memory '"+args[0]+"'");
 					}
+					
 					return true;
 				}
 			}
@@ -409,6 +440,7 @@ public final class TheOnePower extends JavaPlugin{
 	 * @return
 	 */
 	public static ItemStack getAngrealStack(String type){
+		
 		if(type.equals("dream")){
 			ItemStack stack = new ItemStack(Material.NETHER_BRICK_ITEM);
 			ItemMeta meta = stack.getItemMeta();
@@ -418,6 +450,7 @@ public final class TheOnePower extends JavaPlugin{
 			stack.setItemMeta(meta);
 			return stack;
 		}
+		
 		else if(type.equals("angreal")){
 			ItemStack stack = new ItemStack(Material.FLINT);
 			ItemMeta meta = stack.getItemMeta();
@@ -428,6 +461,7 @@ public final class TheOnePower extends JavaPlugin{
 			stack.setItemMeta(meta);
 			return stack;
 		}
+		
 		else if(type.equals("sa'angreal")){
 			ItemStack stack = new ItemStack(Material.EMERALD);
 			ItemMeta meta = stack.getItemMeta();
@@ -438,6 +472,7 @@ public final class TheOnePower extends JavaPlugin{
 			stack.setItemMeta(meta);
 			return stack;
 		}
+		
 		return null;
 	}
 

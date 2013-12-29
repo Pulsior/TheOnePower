@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ public class ClearSky implements Weave{
 	}
 	
 	@Override
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 
 		Location location = player.getLocation();
 		location.setY(location.getY()+20);
@@ -38,9 +39,11 @@ public class ClearSky implements Weave{
 		world.strikeLightning(location);
 		location.setZ(location.getZ()-20);
 		world.strikeLightning(location);
-		world.setStorm(false);
+		world.setStorm(false);	
+		return true;
 
 	}
+	
 	
 	@Override
 	public List<Element> getElements() {

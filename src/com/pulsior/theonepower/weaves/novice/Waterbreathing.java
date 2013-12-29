@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -25,10 +26,12 @@ public class Waterbreathing implements Weave {
 	}
 	
 	@Override
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
 		player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 1 ) );
 		player.playSound(player.getLocation(), Sound.DRINK, 1, 0);
+		
+		return true;
 
 	}
 

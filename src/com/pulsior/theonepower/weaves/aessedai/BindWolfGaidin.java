@@ -7,6 +7,7 @@ import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -31,7 +32,7 @@ public class BindWolfGaidin implements Weave {
 	}
 	
 	@Override
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 
 		if(clickedEntity instanceof Wolf){
 			Wolf wolf = (Wolf) clickedEntity;
@@ -40,8 +41,9 @@ public class BindWolfGaidin implements Weave {
 			wolf.setOwner(player);
 			world.playEffect(wolf.getLocation(), Effect.SMOKE, 0);
 			player.playSound(player.getLocation(), Sound.WOLF_BARK, 1, 0);
+			return true;
 		}
-
+		return false;
 	}
 
 	@Override

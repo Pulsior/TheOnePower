@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -25,7 +26,7 @@ public class ShootFireball implements Weave{
 	}
 	
 	@Override
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
 		if(clickedEntity != null){
 			clickedEntity.setFireTicks(200);
@@ -37,6 +38,8 @@ public class ShootFireball implements Weave{
 			player.launchProjectile(Fireball.class);
 			world.playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 1, 0);
 		}
+		
+		return true;
 	}
 	
 	@Override

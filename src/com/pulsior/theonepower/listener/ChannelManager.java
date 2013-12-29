@@ -23,7 +23,7 @@ import com.pulsior.theonepower.channeling.Channel;
  *
  */
 public class ChannelManager implements Listener {
-	
+
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event){
@@ -51,14 +51,14 @@ public class ChannelManager implements Listener {
 		}
 
 	}
-	
+
 	@EventHandler
 	public void onExpGet(PlayerExpChangeEvent event){
 		if(TheOnePower.channelMap.get(event.getPlayer().getName()) != null){
 			event.setAmount(0);
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		Channel channel = TheOnePower.channelMap.get(event.getPlayer().getName());
@@ -66,7 +66,7 @@ public class ChannelManager implements Listener {
 			channel.close();
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event){
 		Player player = (Player) event.getEntity();
@@ -87,7 +87,7 @@ public class ChannelManager implements Listener {
 			//TheOnePower.unseenLand.removePlayer(name);
 		}
 	}
-	
+
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event){
 		String name = event.getPlayer().getName();
@@ -104,6 +104,7 @@ public class ChannelManager implements Listener {
 	@EventHandler
 	public void onItemPickup(PlayerPickupItemEvent event){
 		String name = event.getPlayer().getName();
+		
 		if(TheOnePower.channelMap.containsKey(name ) ){
 			event.setCancelled(true);
 		}
@@ -111,4 +112,5 @@ public class ChannelManager implements Listener {
 			event.setCancelled(true);
 		}
 	}
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -25,13 +26,14 @@ public class Strike implements Weave {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
 		Block block2 = player.getTargetBlock(null, 75);
 		Location location = block2.getLocation();
 		world.strikeLightning(location);
 		world.createExplosion(location, 6F);
 		
+		return true;
 	}
 	
 	@Override

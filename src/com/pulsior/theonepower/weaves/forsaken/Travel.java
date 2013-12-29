@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -24,11 +25,13 @@ public class Travel implements Weave {
 		
 	}
 	
-	@Override
 	@SuppressWarnings("deprecation")
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	@Override
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
 		player.teleport(player.getTargetBlock(null, 200).getLocation());
+		
+		return true;
 
 	}
 	

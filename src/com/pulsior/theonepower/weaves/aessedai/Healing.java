@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Effect;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,7 @@ public class Healing implements Weave{
 	}
 	
 	@Override
-	public void cast(Player player, World world, Block clickedBlock, Entity clickedEntity) {
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
 		if(clickedEntity instanceof Player){
 			Player clickedPlayer = (Player) clickedEntity;
@@ -44,7 +45,9 @@ public class Healing implements Weave{
 			}
 			clickedPlayer.setHealth(20);
 			world.playEffect(player.getLocation(), Effect.SMOKE, 0);
+			return true;
 		}
+		return false;
 		
 	}
 
