@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.item.PowerItem;
 
 /**
  * Represents the Unseen Land. Serves to add and remove players to the "tel'aran'rhiod" world
@@ -82,7 +83,7 @@ public class UnseenLand {
 		unseenLandArmorMap.put(playerName, inventory.getArmorContents() );
 		setArmor(playerName, inventory, true);
 		inventory.clear();
-		inventory.addItem(TheOnePower.returnToken);
+		inventory.addItem(PowerItem.returnToken);
 		addMemoriesToInventory(playerName, inventory);
 	}
 	
@@ -104,7 +105,7 @@ public class UnseenLand {
 		}
 		player.teleport(spawn);
 		player.resetPlayerTime();
-		player.getInventory().remove(TheOnePower.returnToken );
+		player.getInventory().remove(PowerItem.returnToken );
 		player.setAllowFlight(false);
 		PlayerInventory inventory = player.getInventory();
 		ItemStack[] savedInventory = unseenLandInventoryMap.get(playerName);

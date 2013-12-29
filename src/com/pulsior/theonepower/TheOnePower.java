@@ -13,12 +13,12 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -26,6 +26,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
@@ -48,12 +49,6 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
 	
 	public static List<String> shieldedPlayers = new ArrayList<String>();
-
-	public static final ItemStack dreamAngreal = getAngrealStack("dream");
-	public static final ItemStack saAngreal = getAngrealStack("sa'angreal");
-	public static final ItemStack angreal = getAngrealStack("angreal");
-
-	public static final ItemStack returnToken = getReturnToken();
 
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
@@ -189,17 +184,22 @@ public final class TheOnePower extends JavaPlugin{
 				if(sender instanceof Player){
 					String arg = args[0];
 					Player player = (Player) sender;
+					PlayerInventory inventory = player.getInventory();
 					
 					if(arg.equalsIgnoreCase("angreal") ){
-						player.getInventory().setItemInHand(angreal);
+						inventory.addItem(PowerItem.ANGREAL);
 					}
 					
 					else if (arg.equalsIgnoreCase("dream") ){						
-						player.getInventory().setItemInHand(dreamAngreal);
+						inventory.addItem(PowerItem.DREAM_ANGREAL);
 					}
 					
 					else if(arg.equalsIgnoreCase("sa'angreal")){
-						player.getInventory().setItemInHand(saAngreal);
+						inventory.addItem(PowerItem.SA_ANGREAL);
+					}
+					
+					else if(arg.equalsIgnoreCase("callandor")){
+						inventory.addItem(PowerItem.CALLANDOR);
 					}
 					
 					else{
@@ -434,58 +434,5 @@ public final class TheOnePower extends JavaPlugin{
 		}
 	}
 
-	/**
-	 * Returns an angreal
-	 * @param type
-	 * @return
-	 */
-	public static ItemStack getAngrealStack(String type){
-		
-		if(type.equals("dream")){
-			ItemStack stack = new ItemStack(Material.NETHER_BRICK_ITEM);
-			ItemMeta meta = stack.getItemMeta();
-			meta.setDisplayName(ChatColor.RESET+"Stone of the Unseen Land");
-			List<String> lore = new ArrayList<String>();
-			meta.setLore(lore);
-			stack.setItemMeta(meta);
-			return stack;
-		}
-		
-		else if(type.equals("angreal")){
-			ItemStack stack = new ItemStack(Material.FLINT);
-			ItemMeta meta = stack.getItemMeta();
-			meta.setDisplayName(ChatColor.RESET+"Angreal");
-			List<String> lore = new ArrayList<String>();
-			lore.add(ChatColor.GOLD+"Click to embrace saidar");
-			meta.setLore(lore);
-			stack.setItemMeta(meta);
-			return stack;
-		}
-		
-		else if(type.equals("sa'angreal")){
-			ItemStack stack = new ItemStack(Material.EMERALD);
-			ItemMeta meta = stack.getItemMeta();
-			meta.setDisplayName(ChatColor.RESET+"Sa'angreal");
-			List<String> lore = new ArrayList<String>();
-			lore.add(ChatColor.GOLD+"Click to embrace saidar");
-			meta.setLore(lore);
-			stack.setItemMeta(meta);
-			return stack;
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Returns an ItemStack to wake up from the Unseen Land
-	 * @return
-	 */
-	public static ItemStack getReturnToken(){
-		ItemStack stack = new ItemStack(Material.NETHER_STAR);
-		ItemMeta meta = stack.getItemMeta();
-		meta.setDisplayName(ChatColor.RESET+"Wake Up");
-		stack.setItemMeta(meta);
-		return stack;
-	}
 
 }

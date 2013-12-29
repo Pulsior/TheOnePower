@@ -19,6 +19,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 
@@ -58,7 +59,7 @@ public class EventListener implements Listener {
 			public void run() {
 				PlayerInventory inventory = player.getInventory();
 
-				if( inventory.contains( TheOnePower.dreamAngreal ) ){
+				if( inventory.contains( PowerItem.DREAM_ANGREAL ) ){
 					player.setBedSpawnLocation( player.getLocation() );
 					TheOnePower.unseenLand.addPlayer(playerName);
 					
@@ -103,7 +104,7 @@ public class EventListener implements Listener {
 		EntityType type = entity.getType();
 		if(type.equals(EntityType.ZOMBIE) || type.equals(EntityType.SKELETON)){
 			if(new Random().nextInt(10) == 0){
-				event.getDrops().add(TheOnePower.dreamAngreal);
+				event.getDrops().add(PowerItem.DREAM_ANGREAL);
 			}
 		}
 	}

@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.item.AngrealType;
 
 
 /**
@@ -294,14 +295,18 @@ public class Channel {
 	public int getAngrealLevels(Player player){
 		PlayerInventory inventory = player.getInventory();
 		
-		if(inventory.contains(TheOnePower.angreal)){
-			return 10;
+		int level = 0;
+		
+		for(AngrealType type : AngrealType.values()){
+			if(inventory.contains(type.getItem() ) ) {
+				int typeLevel = type.getLevel();
+				if(typeLevel > level){
+					level = typeLevel;
+				}
+			}
 		}
 		
-		if(inventory.contains(TheOnePower.saAngreal)){
-			return 50;
-		}
-		return 0;
+		return level;
 	}
 
 	public WeaveEffect compare(List<Element> list){
