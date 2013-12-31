@@ -26,6 +26,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.Shield;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
@@ -47,8 +48,8 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
 	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
+	public static HashMap<String, Shield> shieldedPlayersMap = new HashMap<String, Shield>();
 	
-	public static List<String> shieldedPlayers = new ArrayList<String>();
 
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
@@ -142,8 +143,16 @@ public final class TheOnePower extends JavaPlugin{
 				
 				else{
 					
-					if(channelMap.get ( name ) == null){
-						new Channel(sender.getName(), this);
+					if(channelMap.get ( name ) == null ){
+						
+						if( ! ( shieldedPlayersMap.containsKey( name ) ) ){
+							new Channel(sender.getName(), this);
+						}
+						else{
+							sender.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
+						}
+						
+						
 					}
 					
 					else{

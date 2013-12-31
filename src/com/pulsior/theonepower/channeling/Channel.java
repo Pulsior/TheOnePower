@@ -60,6 +60,7 @@ public class Channel {
 
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
+		
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
 
 		/*
@@ -210,9 +211,7 @@ public class Channel {
 				if(lastWeave != null){
 					log.info(lastWeave.name());
 				}
-				log.info(effect.name());
 				TheOnePower.power.addWeave(player.getName());
-				log.info("Added the weave to PowerKap");
 				player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
 			}
 			

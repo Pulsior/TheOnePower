@@ -5,13 +5,9 @@ commands:
      embrace:
        description: Embrace saidar and let the One Power flow through you!
        usage: /<command>
-       permission: <plugin name>.basic
-       permission-message: You don't have <permission>
      release:
        description: Release saidar and return to your ordinary self
        usage: /<command>
-       permission: <plugin name>.basic
-       permission-message: You don't have <permission>
      angreal:
        description: Get an angreal, ter'angreal or sa'angreal
        usage: /<command>

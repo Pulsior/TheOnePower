@@ -85,8 +85,13 @@ public class WeaveHandler implements Listener{
 				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR) ) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 					String playerName = player.getName();
 					if(TheOnePower.channelMap.containsKey(playerName) == false){
-						new Channel(playerName, TheOnePower.plugin);
-						player.updateInventory();
+						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
+							new Channel(playerName, TheOnePower.plugin);
+							
+						}
+						else{
+							player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
+						}
 					}
 				}
 			}
