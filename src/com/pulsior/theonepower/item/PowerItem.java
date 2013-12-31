@@ -68,6 +68,7 @@ public class PowerItem {
 			stack.setItemMeta(meta);
 			
 			stack.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+			stack.addEnchantment(Enchantment.DURABILITY, 3);
 			
 			return stack;
 		}

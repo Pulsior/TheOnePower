@@ -56,10 +56,12 @@ public class Channel {
 	public int maxLevel;
 	long taskDuration;
 
+	
 	public Channel(String playerName, TheOnePower plugin){
 
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
+		
 		
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
 
@@ -208,9 +210,6 @@ public class Channel {
 			}
 
 			if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false && casted == true){
-				if(lastWeave != null){
-					log.info(lastWeave.name());
-				}
 				TheOnePower.power.addWeave(player.getName());
 				player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
 			}

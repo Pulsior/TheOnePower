@@ -54,8 +54,15 @@ public class WeaveHandler implements Listener{
 			 * Logs memory names to the console (DEBUG)
 			 */
 			if(item.getType().equals(Material.STICK)){
-
+				event.getPlayer().updateInventory();
 			}
+			
+			if(item.getItemMeta().hasDisplayName()){
+				if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
+					item.setDurability((short) 0);
+				}
+			}
+			
 			/*
 			 * Logs level progress to the console (DEBUG)
 			 */
@@ -86,8 +93,7 @@ public class WeaveHandler implements Listener{
 					String playerName = player.getName();
 					if(TheOnePower.channelMap.containsKey(playerName) == false){
 						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
-							new Channel(playerName, TheOnePower.plugin);
-							
+							new Channel(playerName, TheOnePower.plugin);						
 						}
 						else{
 							player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
