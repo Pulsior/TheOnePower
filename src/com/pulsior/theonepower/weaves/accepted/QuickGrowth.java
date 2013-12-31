@@ -17,27 +17,32 @@ import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class QuickGrowth implements Weave{
-	
+
 	List<Element> elements = new ArrayList<Element>();
-	
+
 	public QuickGrowth(){
 		elements.add(Element.EARTH);
 		elements.add(Element.WATER);
 		elements.add(Element.EARTH);
 	}
-	
+
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
-		BlockState state = clickedBlock.getState();
-		MaterialData data = state.getData();
-		if(data instanceof Crops){
-			Crops crops = (Crops) data;
-			crops.setState(CropState.RIPE);
-			state.setData(crops);
-			state.update();
-			return true;
+
+		if(clickedBlock != null){
+
+			BlockState state = clickedBlock.getState();
+			MaterialData data = state.getData();
+			if(data instanceof Crops){
+				Crops crops = (Crops) data;
+				crops.setState(CropState.RIPE);
+				state.setData(crops);
+				state.update();
+				return true;
+			}
+
 		}
-		
+
 		return false;
 	}
 
