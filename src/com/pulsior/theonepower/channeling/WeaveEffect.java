@@ -21,6 +21,8 @@ import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
 import com.pulsior.theonepower.weaves.aessedai.Shielding;
 import com.pulsior.theonepower.weaves.aessedai.ShootFireball;
 import com.pulsior.theonepower.weaves.forsaken.FireSword;
+import com.pulsior.theonepower.weaves.forsaken.HeavenFire;
+import com.pulsior.theonepower.weaves.forsaken.Meteor;
 import com.pulsior.theonepower.weaves.forsaken.Strike;
 import com.pulsior.theonepower.weaves.forsaken.Travel;
 import com.pulsior.theonepower.weaves.novice.ExtinguishFire;
@@ -41,18 +43,20 @@ public enum WeaveEffect {
 	OPEN_DOOR(new OpenDoor(), Level.NOVICE),
 	WATERBREATHING(new Waterbreathing(), Level.NOVICE ),
 	EXTINGUISH_FIRE(new ExtinguishFire(), Level.NOVICE ),
+	BINDING_AIR(new BindingAir(), Level.ACCEPTED),
+	QUICK_GROWTH(new QuickGrowth(), Level.ACCEPTED),
 	RAIN(new Rain(), Level.AES_SEDAI),
 	CLEAR_SKY(new ClearSky(), Level.AES_SEDAI ),
 	BIND_WOLF_GAIDIN(new BindWolfGaidin(), Level.AES_SEDAI ),
 	FIREBALL(new ShootFireball(), Level.AES_SEDAI),
 	HEALING(new Healing(), Level.AES_SEDAI),
 	FOLDED_LIGHT(new FoldedLight(), Level.AES_SEDAI),
-	QUICK_GROWTH(new QuickGrowth(), Level.ACCEPTED),
 	SHIELDING(new Shielding(), Level.AES_SEDAI),
 	REMOVE_SHIELDING(new RemoveShield(), Level.AES_SEDAI),
-	BINDING_AIR(new BindingAir(), Level.ACCEPTED),
+	METEOR(new Meteor(), Level.FORSAKEN),
 	TRAVEL(new Travel(), Level.FORSAKEN),
 	STRIKE(new Strike(), Level.FORSAKEN),
+	HEAVEN_FIRE(new HeavenFire(), Level.FORSAKEN),
 	FIRE_SWORD(new FireSword(), Level.FORSAKEN);
 	
 	Weave weave;

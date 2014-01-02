@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
@@ -37,7 +38,7 @@ public class ExtinguishFire implements Weave {
 		if (block.getType() == Material.AIR){
 			block.setType(Material.WATER);
 
-			Runnable task = new Runnable(){
+			BukkitRunnable task = new BukkitRunnable(){
 				@Override
 				public void run() {
 					block.setType(Material.AIR);

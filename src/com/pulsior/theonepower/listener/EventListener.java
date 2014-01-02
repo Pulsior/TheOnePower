@@ -14,11 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.pulsior.theonepower.TheOnePower;
-import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
@@ -88,15 +86,7 @@ public class EventListener implements Listener {
 			TheOnePower.unseenLand.memoryMap.put(name, new ArrayList<Memory>() );
 		}
 	}
-	
-	@EventHandler
-	public void onPlayerSneak(PlayerToggleSneakEvent event){
-		Channel channel = TheOnePower.channelMap.get(event.getPlayer().getName());
-		if (channel != null){
-			channel.toggleItems();
-		}
-		
-	}
+
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
