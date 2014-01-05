@@ -21,15 +21,15 @@ import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
 import com.pulsior.theonepower.weaves.aessedai.Shielding;
 import com.pulsior.theonepower.weaves.aessedai.ShootFireball;
 import com.pulsior.theonepower.weaves.forsaken.FireSword;
-import com.pulsior.theonepower.weaves.forsaken.HeavenFire;
 import com.pulsior.theonepower.weaves.forsaken.Meteor;
 import com.pulsior.theonepower.weaves.forsaken.Strike;
-import com.pulsior.theonepower.weaves.forsaken.Travel;
+import com.pulsior.theonepower.weaves.forsaken.Teleport;
 import com.pulsior.theonepower.weaves.novice.ExtinguishFire;
 import com.pulsior.theonepower.weaves.novice.LightFire;
 import com.pulsior.theonepower.weaves.novice.Lightning;
 import com.pulsior.theonepower.weaves.novice.OpenDoor;
 import com.pulsior.theonepower.weaves.novice.Waterbreathing;
+import com.pulsior.theonepower.weaves.saangreal.HeavenFire;
 
 /**
  * Enum for all the possible weaves
@@ -54,9 +54,9 @@ public enum WeaveEffect {
 	SHIELDING(new Shielding(), Level.AES_SEDAI),
 	REMOVE_SHIELDING(new RemoveShield(), Level.AES_SEDAI),
 	METEOR(new Meteor(), Level.FORSAKEN),
-	TRAVEL(new Travel(), Level.FORSAKEN),
+	TELEPORT(new Teleport(), Level.FORSAKEN),
 	STRIKE(new Strike(), Level.FORSAKEN),
-	HEAVEN_FIRE(new HeavenFire(), Level.FORSAKEN),
+	HEAVEN_FIRE(new HeavenFire(), Level.SA_ANGREAL),
 	FIRE_SWORD(new FireSword(), Level.FORSAKEN);
 	
 	Weave weave;

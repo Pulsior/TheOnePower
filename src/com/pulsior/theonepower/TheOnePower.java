@@ -375,6 +375,26 @@ public final class TheOnePower extends JavaPlugin{
 			log.info("[The One Power] [WARNING] The Unseen Land data could not be saved!");
 			ex.printStackTrace();
 		}
+		
+		try{
+			Data data = new Data();
+			File file = new File("plugins/The One Power/data_global");
+			if(file.exists()){
+				file.delete();
+			}
+			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_global");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
+			bukkitOutput.writeObject( data );
+			bukkitOutput.close();
+			log.info("[The One Power] Saving Unseen Land data");
+
+		}
+		catch(IOException ex){
+			log.info("[The One Power] [WARNING] The Unseen Land data could not be saved!");
+			ex.printStackTrace();
+		}
+		
 	}
 
 	public boolean loadExp(){
@@ -431,6 +451,35 @@ public final class TheOnePower extends JavaPlugin{
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading the Unseen Land");
 		}
 		return null;
+	}
+	
+	public void loadData(){
+		try{
+			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_global");
+			ObjectInputStream objInput = new ObjectInputStream(fileInput);
+			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(objInput);
+			Object obj = bukkitInput.readObject();
+			if(obj instanceof Data){
+				Data dat = (Data) obj;
+				bukkitInput.close();
+				TheOnePower.shieldedPlayersMap = dat.shieldedPlayersMap;
+				log.info("[The One Power] Loaded global data");
+				return;
+			}
+			else{
+				log.info("[The One Power] Loading problem, the global save is corrupt!");
+				log.info("[The One Power] (The save is not an instance of Data.java)");
+			}
+			bukkitInput.close();
+
+		}
+		catch(IOException ex){
+			log.info("[The One Power] No save found for the global data, creating a new one");
+			log.info("IOException!");
+		} 
+		catch (ClassNotFoundException e) {
+			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading global data");
+		}
 	}
 
 	/**

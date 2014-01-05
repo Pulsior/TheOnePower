@@ -24,9 +24,6 @@ public class ExtinguishFire implements Weave {
 	public ExtinguishFire(){
 		elements.add(Element.WATER);
 		elements.add(Element.WATER);
-		elements.add(Element.FIRE);
-		elements.add(Element.WATER);
-		elements.add(Element.WATER);
 	}
 	
 	@Override

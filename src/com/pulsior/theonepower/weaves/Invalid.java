@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -32,6 +33,7 @@ public class Invalid implements Weave {
 			player.playSound(location, Sound.FIZZ, 1, 0);
 			world.createExplosion(player.getTargetBlock(null, 1).getLocation(), 0);
 			player.setHealth(playerHealth);
+			player.playEffect(EntityEffect.HURT);
 		}
 		
 		return false;

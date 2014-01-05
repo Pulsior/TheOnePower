@@ -36,11 +36,11 @@ public class RemoveShield implements Weave{
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		if(clickedEntity instanceof Player){
 			Player targetPlayer = (Player) clickedEntity;
-			String name = targetPlayer.getName();
-			Shield shield = TheOnePower.shieldedPlayersMap.get(name);
+			String targetName = targetPlayer.getName();
+			Shield shield = TheOnePower.shieldedPlayersMap.get( targetName );
 			if( shield != null ){
 				String casterName = player.getName();
-				int level = TheOnePower.channelMap.get(name).maxLevel;
+				int level = TheOnePower.channelMap.get(player.getName() ).maxLevel;
 				boolean removed = shield.remove(level, casterName);
 
 				if(removed){
@@ -50,9 +50,9 @@ public class RemoveShield implements Weave{
 					FireworkEffect effect = FireworkEffect.builder().flicker(false).withColor(Color.BLUE).withFade(Color.GREEN).with(Type.BALL).trail(false).build();
 					meta.addEffect(effect);
 					meta.setPower(1);
-					firework.setFireworkMeta(meta);
-
+					firework.setFireworkMeta(meta);			
 					( (CraftFirework) firework).getHandle().expectedLifespan = 4;
+					TheOnePower.shieldedPlayersMap.remove(targetName);
 
 				}
 				else{

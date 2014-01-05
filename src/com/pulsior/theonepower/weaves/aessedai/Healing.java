@@ -18,18 +18,10 @@ public class Healing implements Weave{
 	List<Element> elements = new ArrayList<Element>();
 	
 	public Healing(){
-		elements.add(Element.AIR);
+		elements.add(Element.SPIRIT);
 		elements.add(Element.WATER);
 		elements.add(Element.SPIRIT);
 		elements.add(Element.AIR);
-		elements.add(Element.WATER);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.EARTH);
-		elements.add(Element.FIRE);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.EARTH);
-		elements.add(Element.FIRE);
 	}
 	
 	@Override

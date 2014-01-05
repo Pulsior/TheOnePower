@@ -1,11 +1,18 @@
 package com.pulsior.theonepower.channeling;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
 
-public class Shield {
+import com.pulsior.theonepower.TheOnePower;
 
+public class Shield implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -100093208885579522L;
 	public int casterLevel; 
 	public int targetLevel;
 	
@@ -32,6 +39,7 @@ public class Shield {
 		double d = new Random().nextDouble();
 		
 		if ( d <= chance){
+			TheOnePower.shieldedPlayersMap.remove(this);
 			return true;
 		}
 		

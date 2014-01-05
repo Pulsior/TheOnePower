@@ -219,6 +219,10 @@ public class Channel {
 		}
 
 		weave.clear();
+		boolean isRunning = scheduler.isCurrentlyRunning(taskId);
+		if( !(isRunning) ){
+			taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
+		}
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
+
+import com.pulsior.theonepower.channeling.Shield;
 	
 /**
  * A serializable data class to preserve data about the Unseen Land
@@ -20,6 +22,7 @@ public class UnseenLandData implements Serializable{
 	public HashMap<String, ItemStack[]> unseenLandInventoryMap = new HashMap<String, ItemStack[]>();
 	public HashMap<String, ItemStack[]> unseenLandArmorMap = new HashMap<String, ItemStack[]>();
 	public HashMap<String,  List<Memory> > memoryMap = new HashMap<String, List<Memory> >();
+	public HashMap<String, Shield> shieldedPlayersMap = new HashMap<String, Shield>();
 	
 	public UnseenLandData(UnseenLand land){
 		this.players = land.players;

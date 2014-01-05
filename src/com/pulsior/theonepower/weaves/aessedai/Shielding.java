@@ -65,7 +65,7 @@ public class Shielding implements Weave {
 			casterLevel = casterChannel.maxLevel;
 			
 			
-			TheOnePower.shieldedPlayersMap.put(targetName, new Shield(casterLevel, channel.maxLevel, casterName) );
+			TheOnePower.shieldedPlayersMap.put(targetName, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetName), casterName) );
 			Bukkit.getLogger().info("Shielded!");
 
 		}
