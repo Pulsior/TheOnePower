@@ -43,14 +43,14 @@ public class UnseenLand {
 	public HashMap<String, ItemStack[]> unseenLandArmorMap = new HashMap<String, ItemStack[]>();
 
 
-	public UnseenLand(TheOnePower plugin){
-		this.plugin = plugin;
+	public UnseenLand(){
+		this.plugin = TheOnePower.plugin;
 		memoryMap = new HashMap<String, List <Memory> >();
 	}
 
-	public UnseenLand(UnseenLandData data, TheOnePower plugin){
+	public UnseenLand(UnseenLandData data){
 		loadData(data);
-		this.plugin = plugin;
+		this.plugin = TheOnePower.plugin;
 		this.memoryMap = data.memoryMap;
 		this.unseenLandInventoryMap = data.unseenLandInventoryMap;
 		this.unseenLandArmorMap = data.unseenLandArmorMap;

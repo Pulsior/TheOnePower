@@ -72,24 +72,7 @@ public final class TheOnePower extends JavaPlugin{
 		if (power == null){
 			power = new PowerMap();
 		}
-
-		if(Bukkit.getWorld("tel'aran'rhiod") == null){
-			log.info("[The One Power] Initializing Tel'aran'rhiod");
-			UnseenGenTask task = new UnseenGenTask();
-			task.run();
-		}
-
-		UnseenLandData data = loadUnseenLand();
-		if (data != null){
-			log.info("[The One Power] Loading Unseen Land data");
-			unseenLand = new UnseenLand(data, this);
-
-		}
-		else{
-			unseenLand = new UnseenLand(this);
-			log.info("[The One Power] Creating new Unseen Land");
-		}
-
+		
 		loadExp();
 
 
@@ -488,6 +471,25 @@ public final class TheOnePower extends JavaPlugin{
 		File dataFolder = new File("plugins/The One Power");
 		if(! (dataFolder.exists() ) ){
 			dataFolder.mkdir();
+		}
+	}
+	
+	public void createUnseenLand(){
+		if(Bukkit.getWorld("tel'aran'rhiod") == null){
+			log.info("[The One Power] Initializing Tel'aran'rhiod");
+			UnseenGenTask task = new UnseenGenTask();
+			task.run();
+		}
+
+		UnseenLandData data = loadUnseenLand();
+		if (data != null){
+			log.info("[The One Power] Loading Unseen Land data");
+			unseenLand = new UnseenLand(data);
+
+		}
+		else{
+			unseenLand = new UnseenLand();
+			log.info("[The One Power] Creating new Unseen Land");
 		}
 	}
 

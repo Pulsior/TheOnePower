@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -16,7 +17,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
@@ -99,6 +102,22 @@ public class EventListener implements Listener {
 		}
 	}
 
+
+	@EventHandler
+	public void onWorldLoad(WorldLoadEvent event){
+		World world = event.getWorld();
+		if(world.getName().equalsIgnoreCase("world") ){
+
+			BukkitRunnable task = new BukkitRunnable(){
+				@Override
+				public void run() {
+					plugin.createUnseenLand();
+				}
+			};
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task);
+
+		}
+	}
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
