@@ -49,7 +49,6 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
 	public static HashMap<String, Shield> shieldedPlayersMap = new HashMap<String, Shield>();
-	
 
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
@@ -491,6 +490,5 @@ public final class TheOnePower extends JavaPlugin{
 			dataFolder.mkdir();
 		}
 	}
-
 
 }

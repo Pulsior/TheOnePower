@@ -60,7 +60,7 @@ public class HeavenFire implements Weave{
 
 	public void throwFireball(Entity entity){
 		Location fireSpawn = entity.getLocation();
-		fireSpawn.add(0, 5, 0);
+		fireSpawn.add(0, 100, 0);
 		Vector velocity = entity.getLocation().toVector().subtract(fireSpawn.toVector());
 		velocity.multiply(0.5);
 		Fireball ball = (Fireball) entity.getWorld().spawnEntity(fireSpawn, EntityType.FIREBALL);

@@ -57,10 +57,14 @@ public class Channel {
 	long taskDuration;
 
 	
+	@SuppressWarnings("deprecation")
 	public Channel(String playerName, TheOnePower plugin){
-
+		
+		
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
+		
+		player.updateInventory();
 		
 		
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
@@ -102,7 +106,8 @@ public class Channel {
 
 		/*
 		 * Add items to the inventory 
-		 */
+		*/
+		
 		ItemStack spirit = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = spirit.getItemMeta();
 		meta.setDisplayName(ChatColor.GRAY+"Spirit");
@@ -137,7 +142,6 @@ public class Channel {
 		meta = cast.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Cast Weave");
 		List<String> castLore = new ArrayList<String>();
-		castLore.add("");
 		castLore.add(ChatColor.GOLD+"Use your prepared weave");
 		meta.setLore(castLore);
 		cast.setItemMeta(meta);
@@ -147,7 +151,6 @@ public class Channel {
 		meta = disband.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Disband Weave");
 		List<String> disbandLore = new ArrayList<String>();
-		disbandLore.add("");
 		disbandLore.add(ChatColor.GOLD+"Stop weaving and start a new weave");
 		meta.setLore(disbandLore);
 		disband.setItemMeta(meta);
@@ -157,18 +160,19 @@ public class Channel {
 		meta = rose.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Release Saidar");
 		List<String> releaseLore = new ArrayList<String>();
-		releaseLore.add("");
 		releaseLore.add(ChatColor.GOLD+"Let go of saidar");
 		meta.setLore(releaseLore);
 		rose.setItemMeta(meta);
 		inv.setItem(2, rose);
+		
 
 		player.addPotionEffect(nightVisionEffect);
 		player.addPotionEffect(absorptionEffect);
 
 		taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
+		System.out.println("Scheduled task with number "+taskId);
 
-
+		player.updateInventory();
 	}
 
 	/**
@@ -219,10 +223,10 @@ public class Channel {
 		}
 
 		weave.clear();
-		boolean isRunning = scheduler.isCurrentlyRunning(taskId);
-		if( !(isRunning) ){
+		
+			scheduler.cancelTask(taskId);
 			taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
-		}
+			System.out.println("Changed task to "+taskId);
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 
@@ -252,6 +256,9 @@ public class Channel {
 		player.setLevel(TheOnePower.currentLevelMap.get( playerName ) );
 		player.setExp(TheOnePower.expLevelProgressMap.get(playerName));
 		TheOnePower.currentLevelMap.remove( playerName );
+		System.out.println("Cancelled task "+taskId);
+		System.out.println();
+		
 		scheduler.cancelTask(taskId);
 		TheOnePower.channelMap.remove(name);
 

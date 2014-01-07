@@ -62,15 +62,6 @@ public class WeaveHandler implements Listener{
 					item.setDurability((short) 0);
 				}
 			}
-			
-			/*
-			 * Logs level progress to the console (DEBUG)
-			 */
-			if(item.getType().equals(Material.STONE_SPADE) && event.getAction().equals(Action.RIGHT_CLICK_AIR)){
-				log.info("The current progress is "+Integer.toString(TheOnePower.power.weaveProgressMap.get(name) ) );
-				log.info(Integer.toString(TheOnePower.power.requiredWeavesMap.get(name) ) +" more weaves are required.");
-				log.info("The amount of levels is now "+Integer.toString(TheOnePower.power.levelMap.get(name ) ) );
-			}
 
 			/*
 			 * Allows the player to wake up from and leave the Unseen Land, when the name is correct
@@ -93,6 +84,7 @@ public class WeaveHandler implements Listener{
 					String playerName = player.getName();
 					if(TheOnePower.channelMap.containsKey(playerName) == false){
 						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
+							event.setCancelled(true);
 							new Channel(playerName, TheOnePower.plugin);						
 						}
 						else{

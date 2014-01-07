@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.listener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -13,8 +14,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.item.PowerItem;
@@ -36,6 +39,9 @@ public class EventListener implements Listener {
 	String water = ChatColor.AQUA + "Water";
 	String spirit = ChatColor.GRAY + "Spirit";
 
+	HashMap<String, Integer> map = new HashMap<String, Integer>();
+	BukkitScheduler scheduler = Bukkit.getScheduler();
+
 	public EventListener(TheOnePower plugin){
 		this.plugin = plugin;
 	}
@@ -46,12 +52,12 @@ public class EventListener implements Listener {
 	public void onPlayerBedEnter(PlayerBedEnterEvent event){
 		final Player player = event.getPlayer();
 		final String playerName = player.getName();		
-		
+
 		if(TheOnePower.unseenLand.players.contains(playerName)){
 			event.setCancelled(true);
 			player.sendMessage(ChatColor.RED+"You can't sleep in tel'aran'rhiod!");
 		}
-		
+
 		Runnable task = new Runnable(){
 			@Override
 			public void run() {
@@ -60,15 +66,21 @@ public class EventListener implements Listener {
 				if( inventory.contains( PowerItem.DREAM_ANGREAL ) ){
 					player.setBedSpawnLocation( player.getLocation() );
 					TheOnePower.unseenLand.addPlayer(playerName);
-					
+
 				}
 			}
 		};
-		try{
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task, 100L);
-		}
-		catch(NullPointerException ex){
 
+		int taskId = scheduler.scheduleSyncDelayedTask(plugin, task, 100L);
+		map.put(player.getName(),taskId);
+
+	}
+
+	@EventHandler
+	public void onPlayerBedLeave(PlayerBedLeaveEvent event){
+		Integer taskId = map.get( event.getPlayer().getName() );
+		if(taskId != null){
+			scheduler.cancelTask(taskId);
 		}
 	}
 
@@ -79,15 +91,15 @@ public class EventListener implements Listener {
 		if( TheOnePower.unseenLand.offlinePlayers.contains(name)  ){
 			TheOnePower.unseenLand.offlinePlayers.remove(name);
 			TheOnePower.unseenLand.players.add(name);
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new PlayerRegisterTask(name), 20L );
+			scheduler.scheduleSyncDelayedTask(plugin, new PlayerRegisterTask(name), 20L );
 		}
-		
+
 		if(TheOnePower.unseenLand.memoryMap.get(name) == null){
 			TheOnePower.unseenLand.memoryMap.put(name, new ArrayList<Memory>() );
 		}
 	}
 
-	
+
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
 		LivingEntity entity = event.getEntity();
