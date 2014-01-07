@@ -56,7 +56,7 @@ public class WeaveHandler implements Listener{
 			if(item.getType().equals(Material.STICK)){
 				event.getPlayer().updateInventory();
 			}
-			
+
 			if(item.getItemMeta().hasDisplayName()){
 				if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
 					item.setDurability((short) 0);
@@ -84,8 +84,13 @@ public class WeaveHandler implements Listener{
 					String playerName = player.getName();
 					if(TheOnePower.channelMap.containsKey(playerName) == false){
 						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
-							event.setCancelled(true);
-							new Channel(playerName, TheOnePower.plugin);						
+							if(player.hasPermission("theonepower.channel")){
+								event.setCancelled(true);
+								new Channel(playerName, TheOnePower.plugin);					
+							}
+							else{
+								player.sendMessage(ChatColor.RED+"You don't have permission to embrace saidar");
+							}
 						}
 						else{
 							player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
