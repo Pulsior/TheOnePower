@@ -13,28 +13,26 @@ import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class Teleport implements Weave {
-	
+
 	List<Element> elements = new ArrayList<Element>();
-	
+
 	public Teleport(){
 		elements.add(Element.EARTH);
 		elements.add(Element.SPIRIT);
 		elements.add(Element.EARTH);
 		elements.add(Element.SPIRIT);
 		elements.add(Element.EARTH);
-		
+
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
-		
-		player.teleport(player.getTargetBlock(null, 200).getLocation());
-		
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {		
+		player.teleport(player.getTargetBlock(null, 200).getLocation());	
 		return true;
 
 	}
-	
+
 	@Override
 	public List<Element> getElements() {
 		return elements;

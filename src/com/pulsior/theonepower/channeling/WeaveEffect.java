@@ -24,6 +24,7 @@ import com.pulsior.theonepower.weaves.forsaken.FireSword;
 import com.pulsior.theonepower.weaves.forsaken.Meteor;
 import com.pulsior.theonepower.weaves.forsaken.Strike;
 import com.pulsior.theonepower.weaves.forsaken.Teleport;
+import com.pulsior.theonepower.weaves.forsaken.Travel;
 import com.pulsior.theonepower.weaves.novice.ExtinguishFire;
 import com.pulsior.theonepower.weaves.novice.LightFire;
 import com.pulsior.theonepower.weaves.novice.Lightning;
@@ -56,8 +57,9 @@ public enum WeaveEffect {
 	METEOR(new Meteor(), Level.FORSAKEN),
 	TELEPORT(new Teleport(), Level.FORSAKEN),
 	STRIKE(new Strike(), Level.FORSAKEN),
-	HEAVEN_FIRE(new HeavenFire(), Level.SA_ANGREAL),
-	FIRE_SWORD(new FireSword(), Level.FORSAKEN);
+	TRAVEL(new Travel(), Level.FORSAKEN),
+	FIRE_SWORD(new FireSword(), Level.FORSAKEN),
+	HEAVEN_FIRE(new HeavenFire(), Level.SA_ANGREAL);
 	
 	Weave weave;
 	Level level;

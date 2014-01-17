@@ -49,6 +49,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
 	public static HashMap<String, Shield> shieldedPlayersMap = new HashMap<String, Shield>();
+	public static HashMap<String, Memory> portalMemoriesMap = new HashMap<String, Memory>();
 
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
@@ -74,6 +75,12 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		
 		loadExp();
+		loadData();
+		
+		if(Bukkit.getWorld("world") != null){
+			UnseenLandData data = loadUnseenLand();
+			unseenLand = new UnseenLand(data);
+		}
 
 
 	}
@@ -92,6 +99,7 @@ public final class TheOnePower extends JavaPlugin{
 			}
 		}
 		save();
+		saveUnseenLand();
 	}
 
 	/**
@@ -317,13 +325,14 @@ public final class TheOnePower extends JavaPlugin{
 				return true;
 			}
 		}
+		
 
 
 		return false; 
 	}
 
 	/**
-	 * Saves all level and Unseen Land data
+	 * Saves all level data
 	 */
 	public void save(){
 		try{
@@ -339,6 +348,30 @@ public final class TheOnePower extends JavaPlugin{
 			log.info("[The One Power] Saving problem!");
 		}
 
+		
+		
+		try{
+			Data data = new Data();
+			File file = new File("plugins/The One Power/data_global");
+			if(file.exists()){
+				file.delete();
+			}
+			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_global");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
+			bukkitOutput.writeObject( data );
+			bukkitOutput.close();
+			log.info("[The One Power] Saving Unseen Land data");
+
+		}
+		catch(IOException ex){
+			ex.printStackTrace();
+		}
+		
+	}
+	
+	public static void saveUnseenLand(){
+		Logger log = Bukkit.getLogger();
 		try{
 			UnseenLandData data = new UnseenLandData(unseenLand);
 			File file = new File("plugins/The One Power/data_unseenLand");
@@ -357,28 +390,8 @@ public final class TheOnePower extends JavaPlugin{
 			log.info("[The One Power] [WARNING] The Unseen Land data could not be saved!");
 			ex.printStackTrace();
 		}
-		
-		try{
-			Data data = new Data();
-			File file = new File("plugins/The One Power/data_global");
-			if(file.exists()){
-				file.delete();
-			}
-			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_global");
-			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
-			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
-			bukkitOutput.writeObject( data );
-			bukkitOutput.close();
-			log.info("[The One Power] Saving Unseen Land data");
-
-		}
-		catch(IOException ex){
-			log.info("[The One Power] [WARNING] The Unseen Land data could not be saved!");
-			ex.printStackTrace();
-		}
-		
 	}
-
+	
 	public boolean loadExp(){
 		try{
 			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_levels");

@@ -3,7 +3,6 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -38,35 +37,32 @@ public class Shielding implements Weave {
 
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
-		Bukkit.getLogger().info("Excetude");
 		if(clickedEntity instanceof Player){
 			Player targetPlayer = (Player) clickedEntity;
 			String targetName = targetPlayer.getName();
 			Channel channel = TheOnePower.channelMap.get(targetName);
-			Bukkit.getLogger().info("Clicked!");
 			if(channel != null){
 				channel.close();
 			}
 			targetPlayer.sendMessage(ChatColor.RED+"You were shielded from saidar");
-			
-			
+
+
 			Firework firework = (Firework) world.spawnEntity(targetPlayer.getLocation(), EntityType.FIREWORK);
 			FireworkMeta meta = firework.getFireworkMeta();
 			FireworkEffect effect = FireworkEffect.builder().flicker(false).withColor(Color.YELLOW).withFade(Color.RED).with(Type.BALL).trail(false).build();
 			meta.addEffect(effect);
 			meta.setPower(1);
 			firework.setFireworkMeta(meta);
-			
+
 			( (CraftFirework) firework).getHandle().expectedLifespan = 4;
-			
+
 			int casterLevel;
 			String casterName = player.getName();
 			Channel casterChannel = TheOnePower.channelMap.get( casterName );
 			casterLevel = casterChannel.maxLevel;
-			
-			
+
+
 			TheOnePower.shieldedPlayersMap.put(targetName, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetName), casterName) );
-			Bukkit.getLogger().info("Shielded!");
 
 		}
 		return false;

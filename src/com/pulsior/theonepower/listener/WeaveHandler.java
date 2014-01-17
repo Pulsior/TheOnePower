@@ -1,12 +1,12 @@
 package com.pulsior.theonepower.listener;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +29,6 @@ import com.pulsior.theonepower.unseenland.Memory;
  */
 public class WeaveHandler implements Listener{
 
-	Logger log = Bukkit.getLogger();
 
 	String earth = ChatColor.DARK_GREEN + "Earth";
 	String air = ChatColor.BLUE + "Air";
@@ -158,10 +157,17 @@ public class WeaveHandler implements Listener{
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){ //Casts and executes the weave
 					channel.cast( event.getClickedBlock(), event.getBlockFace(), null );
 
+
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){ //Clears the weave
 					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 					channel.disband();
+
+					Block block = event.getClickedBlock();
+
+					if(block != null){
+						clearSurroundingPortalBlocks(block);
+					}
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){ //Removes the channel
 					channel.close();
@@ -217,6 +223,28 @@ public class WeaveHandler implements Listener{
 			return Element.SPIRIT;
 		}
 		return null;
+	}
+
+	/**
+	 * If the block is a portal, remove it
+	 */
+
+	public void clearSurroundingPortalBlocks(Block block){
+		
+		List<Block> list = new ArrayList<Block>();
+		list.add( block.getLocation().add(0, 1, 0).getBlock() );
+		list.add( block.getLocation().add(0, -1, 0).getBlock() );
+		list.add( block.getLocation().add(1, 0, 0).getBlock() );
+		list.add( block.getLocation().add(-1, 0, 0).getBlock() );
+		list.add( block.getLocation().add(0, 0, 1).getBlock() );
+		list.add( block.getLocation().add(0, 0, -1).getBlock() );
+		
+		for(Block block2: list){
+			if(block2.getType().equals(Material.PORTAL)){
+				block2.setType(Material.AIR);
+				clearSurroundingPortalBlocks(block2);
+			}
+		}
 	}
 
 

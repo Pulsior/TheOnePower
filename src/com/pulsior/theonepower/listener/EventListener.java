@@ -2,27 +2,36 @@ package com.pulsior.theonepower.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.Utility;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
@@ -49,7 +58,6 @@ public class EventListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	Logger log = Bukkit.getLogger();
 
 	@EventHandler
 	public void onPlayerBedEnter(PlayerBedEnterEvent event){
@@ -87,10 +95,63 @@ public class EventListener implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	@EventHandler
+	public void onPlayerInventorySelect(InventoryClickEvent event){
+
+		Inventory inv = event.getInventory();
+		ItemStack item = inv.getItem(event.getSlot() );
+		Player player = (Player) inv.getHolder();
+		if(item != null){
+			
+
+			ItemMeta meta = item.getItemMeta();
+			if( inv.getSize() == 9 && meta.hasLore() ){
+				
+
+				if( meta.getLore().contains (ChatColor.YELLOW+"Click to select a gateway destination") ){
+					
+					String name = player.getName();
+					List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
+					if(list != null){
+						
+						for(Memory memory : list){
+							Bukkit.getLogger().info("Memory name: "+memory.name);
+							Bukkit.getLogger().info("Display name: "+meta.getDisplayName());
+							
+							if(memory.name.equals(meta.getDisplayName()) ){
+								Bukkit.getLogger().info("Equal");
+
+								Utility.createGateway( player.getTargetBlock(null, 10).getLocation() );
+								player.closeInventory();
+							}
+						}
+					}
+
+				}
+			}
+		}
+		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPortalEnter(EntityPortalEnterEvent event){
+		
+		Block block = event.getLocation().getBlock();
+		List<MetadataValue> meta = block.getMetadata("isGateway");
+		System.out.println(meta.size());
+		if(meta.contains(true)){
+			
+		}
+	}
+
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event){
 		Player player = event.getPlayer();
 		String name = player.getName();
+
+
+
 		if( TheOnePower.unseenLand.offlinePlayers.contains(name)  ){
 			TheOnePower.unseenLand.offlinePlayers.remove(name);
 			TheOnePower.unseenLand.players.add(name);
@@ -123,10 +184,28 @@ public class EventListener implements Listener {
 	public void onEntityDeath(EntityDeathEvent event){
 		LivingEntity entity = event.getEntity();
 		EntityType type = entity.getType();
+
 		if(type.equals(EntityType.ZOMBIE) || type.equals(EntityType.SKELETON)){
+
 			if(new Random().nextInt(10) == 0){
 				event.getDrops().add(PowerItem.DREAM_ANGREAL);
 			}
+
 		}
+
 	}
+
+	@EventHandler
+	public void onPortalChange(BlockPhysicsEvent event){
+		Block block = event.getBlock();
+		List<MetadataValue> list = block.getMetadata("isGateway");		
+		for(MetadataValue value : list){
+			if(value.asBoolean() == true){
+				event.setCancelled(true);
+			}
+		}
+
+
+	}
+
 }

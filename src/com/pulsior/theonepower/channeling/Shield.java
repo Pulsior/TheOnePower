@@ -32,7 +32,7 @@ public class Shield implements Serializable{
 		}
 		
 		int difference = level - targetLevel;
-		int baseChance = 50;
+		int baseChance = 10;
 		baseChance = baseChance + (5 * difference);
 		double chance = baseChance / 100;
 		Bukkit.getLogger().info(Double.toString(chance));

@@ -2,7 +2,6 @@ package com.pulsior.theonepower.channeling;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +40,6 @@ public class Channel {
 	public int taskId;
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
-	Logger log = Bukkit.getLogger();
 
 	boolean gaidinWeaveActive = false;
 	boolean healingWeaveActive = false;
@@ -56,17 +54,17 @@ public class Channel {
 	public int maxLevel;
 	long taskDuration;
 
-	
+
 	@SuppressWarnings("deprecation")
 	public Channel(String playerName, TheOnePower plugin){
-		
-		
+
+
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
-		
+
 		player.updateInventory();
-		
-		
+
+
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
 
 		/*
@@ -106,8 +104,8 @@ public class Channel {
 
 		/*
 		 * Add items to the inventory 
-		*/
-		
+		 */
+
 		ItemStack spirit = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = spirit.getItemMeta();
 		meta.setDisplayName(ChatColor.GRAY+"Spirit");
@@ -164,13 +162,12 @@ public class Channel {
 		meta.setLore(releaseLore);
 		rose.setItemMeta(meta);
 		inv.setItem(2, rose);
-		
+
 
 		player.addPotionEffect(nightVisionEffect);
 		player.addPotionEffect(absorptionEffect);
 
 		taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
-		System.out.println("Scheduled task with number "+taskId);
 
 		player.updateInventory();
 	}
@@ -187,7 +184,7 @@ public class Channel {
 			location.setX(location.getX()+14);
 			player.playSound(location, Sound.CLICK, 1, 0);
 		}
-		
+
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(true) );
 	}
 
@@ -197,7 +194,7 @@ public class Channel {
 	 */
 
 	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity){
-		
+
 		WeaveEffect effect = compare(weave);
 		String name = player.getName();
 
@@ -207,7 +204,7 @@ public class Channel {
 			int levelCost = weave.size()*effect.getLevel();
 			int difference = xpLevel-levelCost;
 			boolean casted = false;
-			
+
 			if(difference >= 0){
 				casted = effect.cast(player, world, clickedBlock, clickedFace, clickedEntity);
 				player.setLevel(xpLevel-levelCost);
@@ -217,16 +214,16 @@ public class Channel {
 				TheOnePower.power.addWeave(player.getName());
 				player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
 			}
-			
+
 			lastWeave = effect;
-			
+
 		}
 
 		weave.clear();
-		
-			scheduler.cancelTask(taskId);
-			taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
-			System.out.println("Changed task to "+taskId);
+
+		scheduler.cancelTask(taskId);
+		taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
+
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 
@@ -256,9 +253,7 @@ public class Channel {
 		player.setLevel(TheOnePower.currentLevelMap.get( playerName ) );
 		player.setExp(TheOnePower.expLevelProgressMap.get(playerName));
 		TheOnePower.currentLevelMap.remove( playerName );
-		System.out.println("Cancelled task "+taskId);
-		System.out.println();
-		
+
 		scheduler.cancelTask(taskId);
 		TheOnePower.channelMap.remove(name);
 
@@ -273,7 +268,7 @@ public class Channel {
 	public void toggleItems(){
 		boolean sneaking = player.isSneaking();
 		PlayerInventory inv = player.getInventory();
-		
+
 		if( ! (sneaking) ){
 			ItemStack stack = new ItemStack(Material.STICK);
 			ItemMeta meta = stack.getItemMeta();
@@ -281,7 +276,7 @@ public class Channel {
 			stack.setItemMeta(meta);
 			inv.setItem(2, stack );
 		}
-		
+
 		else{
 			ItemStack rose = new ItemStack(Material.RED_ROSE);
 			ItemMeta meta = rose.getItemMeta();
@@ -303,9 +298,9 @@ public class Channel {
 
 	public int getAngrealLevels(Player player){
 		PlayerInventory inventory = player.getInventory();
-		
+
 		int level = 0;
-		
+
 		for(AngrealType type : AngrealType.values()){
 			if(inventory.contains(type.getItem() ) ) {
 				int typeLevel = type.getLevel();
@@ -314,7 +309,7 @@ public class Channel {
 				}
 			}
 		}
-		
+
 		return level;
 	}
 
@@ -340,7 +335,7 @@ public class Channel {
 		@Override
 		public void run() {
 			if( ! (player.getLevel() >= maxLevel) ) {
-				
+
 				if(TheOnePower.castingPlayersMap.get(playerName).equals(new Boolean(false) ) ){
 					player.setLevel( player.getLevel()+1 );;
 				}
