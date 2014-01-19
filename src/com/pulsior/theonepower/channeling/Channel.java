@@ -265,31 +265,6 @@ public class Channel {
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 
-	public void toggleItems(){
-		boolean sneaking = player.isSneaking();
-		PlayerInventory inv = player.getInventory();
-
-		if( ! (sneaking) ){
-			ItemStack stack = new ItemStack(Material.STICK);
-			ItemMeta meta = stack.getItemMeta();
-			meta.setDisplayName(ChatColor.RESET+"SuperStick");
-			stack.setItemMeta(meta);
-			inv.setItem(2, stack );
-		}
-
-		else{
-			ItemStack rose = new ItemStack(Material.RED_ROSE);
-			ItemMeta meta = rose.getItemMeta();
-			meta.setDisplayName(ChatColor.RESET + "Release Saidar");
-			List<String> releaseLore = new ArrayList<String>();
-			releaseLore.add("");
-			releaseLore.add(ChatColor.GOLD+"Let go of saidar");
-			meta.setLore(releaseLore);
-			rose.setItemMeta(meta);
-			inv.setItem(2, rose);
-		}
-	}
-
 	/**
 	 * Returns the amount of extra levels an angreal yields a player
 	 * @param player

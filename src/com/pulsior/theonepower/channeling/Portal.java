@@ -1,5 +1,8 @@
 package com.pulsior.theonepower.channeling;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,9 +20,8 @@ public class Portal {
 	 * @param destination
 	 * @param northSouth
 	 */
-	
-	public Location firstPortalLocation;
-	public Location secondPortalLocation;
+
+	public List<Block> contents = new ArrayList<Block>();
 
 	public Portal(Location location, Location destination, Location playerLocation, Direction spawnDirection){
 
@@ -28,13 +30,17 @@ public class Portal {
 		 */
 
 		if(spawnDirection.equals(Direction.EAST) || spawnDirection.equals(Direction.WEST)){
-			createNorthSouthPortal(location, new Location(destination.getWorld(), destination.getX(), destination.getY(), destination.getZ() ), true );
+			createNorthSouthPortal(location, destination.clone(), true, true);
 		}
 
 		else{
-			createEastWestPortal(location, new Location(destination.getWorld(), destination.getX(), destination.getY(), destination.getZ() ), true );
+			createEastWestPortal(location, destination.clone(), true, true );
 		}
 
+
+		/*
+		 * Calculate the correct direction for the second portal
+		 */
 
 		Direction dstDirection = Utility.getDirection(destination.getYaw());
 		Location portalLocation = destination;
@@ -60,16 +66,19 @@ public class Portal {
 		 * Create second portal
 		 */
 
+
 		if(dstDirection.equals(Direction.EAST) || dstDirection.equals(Direction.WEST)){
-			createNorthSouthPortal(portalLocation, playerLocation, false);
+			createNorthSouthPortal(portalLocation, playerLocation, false, false);
 		}
 		else{
-			createEastWestPortal(portalLocation, playerLocation, false);
+			createEastWestPortal(portalLocation, playerLocation, false, false);
 		}
 
+
+		TheOnePower.portals.add(this);
 	}
 
-	public void createNorthSouthPortal(Location spawnLocation, Location destination, boolean elevate){
+	public void createNorthSouthPortal(Location spawnLocation, Location destination, boolean elevate, boolean firstPortal){
 
 		if(elevate){
 			spawnLocation.add(0, 2, 1);
@@ -90,6 +99,7 @@ public class Portal {
 				block.setMetadata("isGateway", new FixedMetadataValue(TheOnePower.plugin, new Boolean(true) ) );
 				block.setMetadata("getLocation", new FixedMetadataValue(TheOnePower.plugin, destination ) );
 				block.setType(Material.PORTAL);
+				contents.add(block);
 				spawnLocation.add(0, 0, -1);
 			}
 
@@ -97,30 +107,40 @@ public class Portal {
 		}
 	}
 
-	public void createEastWestPortal(Location spawnLocation, Location destination, boolean elevate){
-		
+	public void createEastWestPortal(Location spawnLocation, Location destination, boolean elevate, boolean firstPortal){
+
 		if(elevate){
 			spawnLocation.add(1, 2, 0);
 		}
 		else{
 			spawnLocation.add(1, 1, 0);
 		}
-		
-		
+
+
 		for(int y = 0; y < 2; y++){
 
 			for(int x = 0; x < 3; x++){
 				Block block = spawnLocation.getBlock();
 				block.setMetadata("isGateway", new FixedMetadataValue(TheOnePower.plugin, new Boolean(true) ) );
 				block.setMetadata("getLocation", new FixedMetadataValue(TheOnePower.plugin, destination ) );
-				block.setType(Material.PORTAL);
+				block.setType(Material.PORTAL);				
+				contents.add(block);				
 				spawnLocation.add(-1, 0, 0);
 
 			}
 
 			spawnLocation.add(3, -1, 0);
 		}
+	}	
+
+	public void clear(){
+		
+		for(Block block : contents){
+			block.setType(Material.AIR);
+		}
+		
 	}
+
 }
 
 

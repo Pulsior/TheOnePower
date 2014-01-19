@@ -33,11 +33,17 @@ public class Travel implements Weave {
 
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
-		if(clickedBlock != null){
-
-			openMenu(player);			
-
+		
+		if(TheOnePower.unseenLand.players.contains( player.getName() ) ){
+			player.sendMessage(ChatColor.RED+"You cannot create a portal in the Unseen Land!");
+			return false;
 		}
+		
+		if(clickedBlock != null){
+			openMenu(player);
+			return true;
+		}
+		
 		return false;
 	}
 

@@ -1,8 +1,8 @@
 package com.pulsior.theonepower.listener;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Portal;
 import com.pulsior.theonepower.unseenland.Memory;
 
 /**
@@ -52,6 +53,21 @@ public class WeaveHandler implements Listener{
 			if(item.getItemMeta().hasDisplayName()){
 				if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
 					item.setDurability((short) 0);
+				}
+			}
+
+			if(item.getType().equals(Material.STICK)){
+				Channel channel = TheOnePower.channelMap.get(name);
+				if(channel != null){
+					System.out.println("The max level is "+channel.maxLevel+", the current level is "+player.getLevel());
+					System.out.println("Is the task running? "+Bukkit.getScheduler().isCurrentlyRunning(channel.taskId) );
+					System.out.println("Is it queued? "+Bukkit.getScheduler().isQueued(channel.taskId) );
+					try{
+						System.out.println("Is the player casting, according to the castingPlayerMap? "+TheOnePower.castingPlayersMap.get(name));
+					}
+					catch(NullPointerException ex){
+						System.out.println("A NullPointerException was thrown when trying to access TheOnePower.castingPlayersMap");
+					}
 				}
 			}
 
@@ -136,6 +152,7 @@ public class WeaveHandler implements Listener{
 			Action action = event.getAction();
 			if (itemName != null && channel != null && ( action.equals(Action.RIGHT_CLICK_AIR) ||
 					event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){			//If the player clicked an element, adds the element to the channel
+
 				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
 						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
 						itemName.equalsIgnoreCase(spirit) ){
@@ -159,7 +176,11 @@ public class WeaveHandler implements Listener{
 					Block block = event.getClickedBlock();
 
 					if(block != null){
-						clearSurroundingPortalBlocks(block);
+						for(Portal portal : TheOnePower.portals){
+							if(portal.contents.contains(block) ){
+								portal.clear();
+							}
+						}
 					}
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){ //Removes the channel
@@ -169,7 +190,7 @@ public class WeaveHandler implements Listener{
 				}
 			}
 		}
-		
+
 	}
 
 	/*
@@ -222,10 +243,10 @@ public class WeaveHandler implements Listener{
 
 	/**
 	 * If the block is a portal, remove it
-	 */
+
 
 	public void clearSurroundingPortalBlocks(Block block){
-		
+
 		List<Block> list = new ArrayList<Block>();
 		list.add( block.getLocation().add(0, 1, 0).getBlock() );
 		list.add( block.getLocation().add(0, -1, 0).getBlock() );
@@ -233,7 +254,7 @@ public class WeaveHandler implements Listener{
 		list.add( block.getLocation().add(-1, 0, 0).getBlock() );
 		list.add( block.getLocation().add(0, 0, 1).getBlock() );
 		list.add( block.getLocation().add(0, 0, -1).getBlock() );
-		
+
 		for(Block block2: list){
 			if(block2.getType().equals(Material.PORTAL)){
 				block2.setType(Material.AIR);
@@ -241,6 +262,8 @@ public class WeaveHandler implements Listener{
 			}
 		}
 	}
+
+	 */
 
 
 
