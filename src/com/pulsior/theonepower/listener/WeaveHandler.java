@@ -49,13 +49,6 @@ public class WeaveHandler implements Listener{
 		String name = player.getName();
 		if (item != null){	//IF clause for items
 
-			/*
-			 * Logs memory names to the console (DEBUG)
-			 */
-			if(item.getType().equals(Material.STICK)){
-				event.getPlayer().updateInventory();
-			}
-
 			if(item.getItemMeta().hasDisplayName()){
 				if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
 					item.setDurability((short) 0);
@@ -126,7 +119,7 @@ public class WeaveHandler implements Listener{
 					List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
 					for(Memory memory : list){
 						if(memory.name.equals(memoryName) ){
-							player.teleport(memory.getLocation() );
+							player.teleport(memory.getLocation(true) );
 							player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1, 0);
 						}
 					}
@@ -172,9 +165,11 @@ public class WeaveHandler implements Listener{
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Release Saidar")){ //Removes the channel
 					channel.close();
 					player.updateInventory();
+					event.setCancelled(true);
 				}
 			}
 		}
+		
 	}
 
 	/*

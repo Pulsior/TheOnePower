@@ -7,8 +7,10 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -30,8 +32,10 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import com.pulsior.theonepower.Direction;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.Utility;
+import com.pulsior.theonepower.channeling.Portal;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
@@ -95,62 +99,82 @@ public class EventListener implements Listener {
 		}
 	}
 
+	/**
+	 * Select a memory from the GUI with the traveling weave.
+	 * @param event
+	 */
+
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInventorySelect(InventoryClickEvent event){
 
+
 		Inventory inv = event.getInventory();
 		ItemStack item = inv.getItem(event.getSlot() );
 		Player player = (Player) inv.getHolder();
+		float yaw = player.getLocation().getYaw();
 		if(item != null){
-			
+
 
 			ItemMeta meta = item.getItemMeta();
 			if( inv.getSize() == 9 && meta.hasLore() ){
-				
+
 
 				if( meta.getLore().contains (ChatColor.YELLOW+"Click to select a gateway destination") ){
-					
+
 					String name = player.getName();
 					List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
 					if(list != null){
-						
-						for(Memory memory : list){
-							Bukkit.getLogger().info("Memory name: "+memory.name);
-							Bukkit.getLogger().info("Display name: "+meta.getDisplayName());
-							
-							if(memory.name.equals(meta.getDisplayName()) ){
-								Bukkit.getLogger().info("Equal");
 
-								Utility.createGateway( player.getTargetBlock(null, 10).getLocation() );
+						for(Memory memory : list){
+
+							if(memory.name.equals(meta.getDisplayName()) ){
+
+								Location spawnLocation = player.getTargetBlock(null, 5).getLocation();
+								Location destination = memory.getLocation(false);
+								Direction direction = Utility.getDirection(yaw);
+								new Portal(spawnLocation, destination,  player.getLocation(), direction);
 								player.closeInventory();
 							}
 						}
 					}
+				}
+				event.setCancelled(true);
+			}
+		}
 
+	}
+
+	/**
+	 * Listener method for the Traveling weave
+	 * @param event
+	 */
+
+	@EventHandler
+	public void onPortalEnter(EntityPortalEnterEvent event){
+
+		Block block = event.getLocation().getBlock();
+		List<MetadataValue> meta = block.getMetadata("isGateway");
+		for(MetadataValue value : meta){
+			if(value.asBoolean() == true){
+				Location destination = (Location) block.getMetadata("getLocation").get(0).value();
+				Entity entity = event.getEntity();
+				if(entity != null){
+					entity.teleport(destination);
 				}
 			}
 		}
-		event.setCancelled(true);
 	}
-	
-	@EventHandler
-	public void onPortalEnter(EntityPortalEnterEvent event){
-		
-		Block block = event.getLocation().getBlock();
-		List<MetadataValue> meta = block.getMetadata("isGateway");
-		System.out.println(meta.size());
-		if(meta.contains(true)){
-			
-		}
-	}
+
+	/**
+	 * Add player to the Unseen Land if necessary.
+	 * @param event
+	 */
 
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event){
 		Player player = event.getPlayer();
 		String name = player.getName();
-
-
 
 		if( TheOnePower.unseenLand.offlinePlayers.contains(name)  ){
 			TheOnePower.unseenLand.offlinePlayers.remove(name);
@@ -163,6 +187,11 @@ public class EventListener implements Listener {
 		}
 	}
 
+
+	/**
+	 * Generate the Unseen Land when the overworld has loaded.
+	 * @param event
+	 */
 
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event){
@@ -180,6 +209,11 @@ public class EventListener implements Listener {
 		}
 	}
 
+	/**
+	 * Add mob drops
+	 * @param event
+	 */
+
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
 		LivingEntity entity = event.getEntity();
@@ -194,6 +228,11 @@ public class EventListener implements Listener {
 		}
 
 	}
+
+	/**
+	 * Makes sure a gateway does not disappear immediately.
+	 * @param event
+	 */
 
 	@EventHandler
 	public void onPortalChange(BlockPhysicsEvent event){

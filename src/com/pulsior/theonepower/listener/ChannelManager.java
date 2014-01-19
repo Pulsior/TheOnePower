@@ -52,6 +52,7 @@ public class ChannelManager implements Listener {
 
 	}
 
+
 	@EventHandler
 	public void onExpGet(PlayerExpChangeEvent event){
 		if(TheOnePower.channelMap.get(event.getPlayer().getName()) != null){

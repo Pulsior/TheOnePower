@@ -26,6 +26,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.Portal;
 import com.pulsior.theonepower.channeling.Shield;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.listener.ChannelManager;
@@ -49,7 +50,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
 	public static HashMap<String, Shield> shieldedPlayersMap = new HashMap<String, Shield>();
-	public static HashMap<String, Memory> portalMemoriesMap = new HashMap<String, Memory>();
+	public static List<Portal> portals = new ArrayList<Portal>();
 
 	public static PowerMap power;
 	public static UnseenLand unseenLand;
