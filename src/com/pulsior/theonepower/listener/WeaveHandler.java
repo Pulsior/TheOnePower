@@ -62,6 +62,7 @@ public class WeaveHandler implements Listener{
 					System.out.println("The max level is "+channel.maxLevel+", the current level is "+player.getLevel());
 					System.out.println("Is the task running? "+Bukkit.getScheduler().isCurrentlyRunning(channel.taskId) );
 					System.out.println("Is it queued? "+Bukkit.getScheduler().isQueued(channel.taskId) );
+					
 					try{
 						System.out.println("Is the player casting, according to the castingPlayerMap? "+TheOnePower.castingPlayersMap.get(name));
 					}
@@ -94,7 +95,7 @@ public class WeaveHandler implements Listener{
 						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
 							if(player.hasPermission("theonepower.channel")){
 								event.setCancelled(true);
-								new Channel(playerName, TheOnePower.plugin);					
+								new Channel(playerName);					
 							}
 							else{
 								player.sendMessage(ChatColor.RED+"You don't have permission to embrace saidar");

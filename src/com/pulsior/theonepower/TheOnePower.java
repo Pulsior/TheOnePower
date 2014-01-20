@@ -32,8 +32,8 @@ import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
+import com.pulsior.theonepower.task.UnseenGenTask;
 import com.pulsior.theonepower.unseenland.Memory;
-import com.pulsior.theonepower.unseenland.UnseenGenTask;
 import com.pulsior.theonepower.unseenland.UnseenLand;
 import com.pulsior.theonepower.unseenland.UnseenLandData;
 
@@ -66,10 +66,13 @@ public final class TheOnePower extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
+		
 		makeDir();
+		
 		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		
 
 		if (power == null){
 			power = new PowerMap();
@@ -137,7 +140,7 @@ public final class TheOnePower extends JavaPlugin{
 					if(channelMap.get ( name ) == null ){
 						
 						if( ! ( shieldedPlayersMap.containsKey( name ) ) ){
-							new Channel(sender.getName(), this);
+							new Channel ( sender.getName() );
 						}
 						else{
 							sender.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");

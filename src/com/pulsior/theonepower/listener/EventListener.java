@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -25,6 +26,7 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,8 +39,8 @@ import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.Utility;
 import com.pulsior.theonepower.channeling.Portal;
 import com.pulsior.theonepower.item.PowerItem;
+import com.pulsior.theonepower.task.PlayerRegisterTask;
 import com.pulsior.theonepower.unseenland.Memory;
-import com.pulsior.theonepower.unseenland.PlayerRegisterTask;
 
 /**
  * Event listener for uses other then creating-casting weaves and limiting saidar/embracing players
@@ -107,42 +109,53 @@ public class EventListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInventorySelect(InventoryClickEvent event){
-
-
+		
 		Inventory inv = event.getInventory();
-		ItemStack item = inv.getItem(event.getSlot() );
-		Player player = (Player) inv.getHolder();
-		float yaw = player.getLocation().getYaw();
-		if(item != null){
+		InventoryHolder inventoryHolder = inv.getHolder();
+		
+		if(inventoryHolder instanceof Player && inv.getSize() == 9 ){
+			
+			ItemStack item = inv.getItem(event.getSlot() );
+
+			Player player = (Player) inv.getHolder();
+			float yaw = player.getLocation().getYaw();
+			if(item != null){
 
 
-			ItemMeta meta = item.getItemMeta();
-			if( inv.getSize() == 9 && meta.hasLore() ){
+				ItemMeta meta = item.getItemMeta();
+				if( meta.hasLore() ){
 
 
-				if( meta.getLore().contains (ChatColor.YELLOW+"Click to select a gateway destination") ){
+					if( meta.getLore().contains (ChatColor.YELLOW+"Click to select a gateway destination") ){
 
-					String name = player.getName();
-					List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
-					if(list != null){
+						String name = player.getName();
+						List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
+						if(list != null){
 
-						for(Memory memory : list){
+							for(Memory memory : list){
 
-							if(memory.name.equals(meta.getDisplayName()) ){
+								if(memory.name.equals(meta.getDisplayName()) ){
 
-								Location spawnLocation = player.getTargetBlock(null, 5).getLocation();
-								Location destination = memory.getLocation(false);
-								Direction direction = Utility.getDirection(yaw);
-								new Portal(spawnLocation, destination,  player.getLocation(), direction);
-								player.closeInventory();
+									Location spawnLocation = player.getTargetBlock(null, 5).getLocation();
+									Location destination = memory.getLocation(false);
+									Direction direction = Utility.getDirection(yaw);
+									new Portal(spawnLocation, destination,  player.getLocation(), direction);
+									player.closeInventory();
+								}
 							}
 						}
 					}
+					event.setCancelled(true);
 				}
-				event.setCancelled(true);
 			}
 		}
 
+	}
+	
+	@EventHandler
+	public void e(InventoryClickEvent event){
+		Furnace f = (Furnace) event.getInventory().getHolder();
+		System.out.println(f.getBurnTime());
 	}
 
 	/**

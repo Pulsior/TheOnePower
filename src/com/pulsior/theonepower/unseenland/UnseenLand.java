@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.item.PowerItem;
+import com.pulsior.theonepower.task.UnseenGenTask;
 
 /**
  * Represents the Unseen Land. Serves to add and remove players to the "tel'aran'rhiod" world

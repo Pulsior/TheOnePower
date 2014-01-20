@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,13 @@ public class LightFire implements Weave {
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 
 		if(clickedFace != null && clickedBlock != null){
-
+			
+			if(clickedBlock.getState() instanceof Furnace){
+				Furnace furnace = (Furnace) clickedBlock.getState();
+				furnace.setBurnTime( (short) 200);
+				return true;
+			}
+			
 			Location blockLocation = clickedBlock.getLocation();
 
 			switch(clickedFace){

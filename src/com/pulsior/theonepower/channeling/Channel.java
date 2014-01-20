@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.item.AngrealType;
+import com.pulsior.theonepower.task.PlayerRegenerationTask;
 
 
 /**
@@ -39,6 +40,7 @@ public class Channel {
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+	BukkitRunnable regenerationTask;
 
 
 	boolean gaidinWeaveActive = false;
@@ -56,7 +58,7 @@ public class Channel {
 
 
 	@SuppressWarnings("deprecation")
-	public Channel(String playerName, TheOnePower plugin){
+	public Channel(String playerName){
 
 
 		player = Bukkit.getPlayer(playerName);
@@ -96,10 +98,10 @@ public class Channel {
 		player.setLevel(maxLevel);
 		player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(playerName)  ) * TheOnePower.power.weaveProgressMap.get(playerName) );
 
-		this.plugin = plugin;
+		this.plugin = TheOnePower.plugin;
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
-
+		
 		taskDuration = (long) 120/maxLevel; //Fully regenerating your levels will always take 120 ticks 
 
 		/*
@@ -166,8 +168,9 @@ public class Channel {
 
 		player.addPotionEffect(nightVisionEffect);
 		player.addPotionEffect(absorptionEffect);
-
-		taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
+		
+		regenerationTask = new PlayerRegenerationTask(player, maxLevel);
+		regenerationTask.runTaskTimer(plugin, 0, taskDuration);
 
 		player.updateInventory();
 	}
@@ -221,9 +224,6 @@ public class Channel {
 
 		weave.clear();
 
-		scheduler.cancelTask(taskId);
-		taskId = scheduler.scheduleSyncRepeatingTask(plugin, regenTask, 0, taskDuration);
-
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 
@@ -254,7 +254,7 @@ public class Channel {
 		player.setExp(TheOnePower.expLevelProgressMap.get(playerName));
 		TheOnePower.currentLevelMap.remove( playerName );
 
-		scheduler.cancelTask(taskId);
+		regenerationTask.cancel();
 		TheOnePower.channelMap.remove(name);
 
 	}
