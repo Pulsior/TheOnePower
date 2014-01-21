@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Furnace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -150,12 +149,6 @@ public class EventListener implements Listener {
 			}
 		}
 
-	}
-	
-	@EventHandler
-	public void e(InventoryClickEvent event){
-		Furnace f = (Furnace) event.getInventory().getHolder();
-		System.out.println(f.getBurnTime());
 	}
 
 	/**
