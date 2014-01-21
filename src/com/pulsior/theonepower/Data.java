@@ -3,7 +3,7 @@ package com.pulsior.theonepower;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.pulsior.theonepower.channeling.Shield;
+import com.pulsior.theonepower.channeling.weave.Shield;
 
 public class Data implements Serializable{
 

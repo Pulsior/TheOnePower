@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Element;
-import com.pulsior.theonepower.channeling.Portal;
+import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.unseenland.Memory;
 
 /**

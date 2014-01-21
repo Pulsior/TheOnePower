@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
-import com.pulsior.theonepower.channeling.Shield;
+import com.pulsior.theonepower.channeling.weave.Shield;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class RemoveShield implements Weave{

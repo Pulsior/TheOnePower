@@ -26,8 +26,8 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
-import com.pulsior.theonepower.channeling.Portal;
-import com.pulsior.theonepower.channeling.Shield;
+import com.pulsior.theonepower.channeling.weave.Portal;
+import com.pulsior.theonepower.channeling.weave.Shield;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;

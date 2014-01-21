@@ -1,4 +1,4 @@
-package com.pulsior.theonepower.channeling;
+package com.pulsior.theonepower.channeling.weave;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.pulsior.theonepower;
 
+import java.util.Random;
+
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -43,6 +45,17 @@ public class Utility {
 			return Direction.WEST;
 		}
 		
+	}
+	
+	public static boolean chance(int percentage){
+		Random random = new Random();
+		
+		int randomInt = random.nextInt(100)+1;
+		if(randomInt <= percentage){
+			return true;
+		}
+		
+		return false;
 	}
 
 }

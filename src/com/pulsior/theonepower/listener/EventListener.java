@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -23,6 +25,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -36,7 +39,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import com.pulsior.theonepower.Direction;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.Utility;
-import com.pulsior.theonepower.channeling.Portal;
+import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.task.PlayerRegisterTask;
 import com.pulsior.theonepower.unseenland.Memory;
@@ -193,7 +196,40 @@ public class EventListener implements Listener {
 		}
 	}
 
-
+	
+	@EventHandler
+	public void onChunkPopulate(ChunkPopulateEvent event){
+		
+		BlockState[] tileEntities = event.getChunk().getTileEntities();
+		
+		for(BlockState state : tileEntities){
+			
+			if(state instanceof Chest){
+				Chest chest = (Chest) state;
+				Inventory inventory = chest.getBlockInventory();
+				
+				System.out.println("Generated a chest!");
+				
+				if( Utility.chance(40) ){
+					inventory.addItem(PowerItem.ANGREAL);
+					System.out.println("Added an angreal");
+				}
+				
+				if( Utility.chance(15)){
+					inventory.addItem(PowerItem.SA_ANGREAL);
+					System.out.println("Added a sa'angreal");
+				}
+				
+				if( Utility.chance(5) ){
+					inventory.addItem(PowerItem.CALLANDOR);
+					System.out.println("Added Callandor");
+				}
+								
+				
+			}	
+		}
+	}
+	
 	/**
 	 * Generate the Unseen Land when the overworld has loaded.
 	 * @param event

@@ -1,4 +1,4 @@
-package com.pulsior.theonepower.channeling;
+package com.pulsior.theonepower.channeling.weave;
 
 import java.io.Serializable;
 import java.util.Random;

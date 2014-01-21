@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.pulsior.theonepower.channeling.Shield;
+import com.pulsior.theonepower.channeling.weave.Shield;
 	
 /**
  * A serializable data class to preserve data about the Unseen Land

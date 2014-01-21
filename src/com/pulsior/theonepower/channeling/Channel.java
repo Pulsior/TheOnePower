@@ -42,10 +42,6 @@ public class Channel {
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 	BukkitRunnable regenerationTask;
 
-
-	boolean gaidinWeaveActive = false;
-	boolean healingWeaveActive = false;
-
 	WeaveEffect lastWeave = null;
 
 	TheOnePower plugin;
@@ -261,7 +257,6 @@ public class Channel {
 
 	public void disband(){
 		weave.clear();
-		gaidinWeaveActive = false;
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 
@@ -288,13 +283,19 @@ public class Channel {
 		return level;
 	}
 
-	public WeaveEffect compare(List<Element> list){
+	public WeaveEffect compare(List<Element> list){ 
 		WeaveEffect[] effects = WeaveEffect.values();
 		for(WeaveEffect effect : effects){
 
 			if(! (effect.equals(WeaveEffect.INVALID) ) ) {
-
-				if(effect.getElements().equals(list)){
+				
+				List<Element> weaveElements = effect.getElements();
+				
+				if(weaveElements == null){
+					throw new IllegalArgumentException("The elements of a weave cannot be null");
+				}
+				
+				if(weaveElements.equals(list)){
 					return effect;
 				}
 			}
