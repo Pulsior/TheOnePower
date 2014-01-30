@@ -1,4 +1,4 @@
-package com.pulsior.theonepower;
+package com.pulsior.theonepower.util;
 
 public enum Direction {
 	NORTH,

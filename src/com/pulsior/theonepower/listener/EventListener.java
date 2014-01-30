@@ -36,13 +36,13 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.pulsior.theonepower.Direction;
 import com.pulsior.theonepower.TheOnePower;
-import com.pulsior.theonepower.Utility;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.PowerItem;
 import com.pulsior.theonepower.task.PlayerRegisterTask;
 import com.pulsior.theonepower.unseenland.Memory;
+import com.pulsior.theonepower.util.Direction;
+import com.pulsior.theonepower.util.Utility;
 
 /**
  * Event listener for uses other then creating-casting weaves and limiting saidar/embracing players

@@ -1,30 +1,39 @@
 package com.pulsior.theonepower.channeling.weave;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Warder {
+public class Warder{
 
-	String aesSedai;
-	String playerName;
+	AesSedai aesSedai;
+	String name;
+	Player player;
 	
-	public Warder(String playerName, String aesSedai){
-		this.playerName = playerName;
+	public Warder(Player player, AesSedai aesSedai){
+		this.name = player.getName();
 		this.aesSedai = aesSedai;
+		aesSedai.setWarder(this);
 		
-		Player player = Bukkit.getPlayer(playerName);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000, 1), true);
+		player.setCompassTarget(aesSedai.getPlayer().getLocation() );
+		player.getInventory().addItem(new ItemStack(Material.COMPASS) );
+		player.addPotionEffect( new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 10000, 1), true);
+		
 	}
 
 	
-	public String getAesSedai(){
+	public AesSedai getAesSedai(){
 		return aesSedai;
 	}
 	
-	public void setAesSedai(String aesSedai){
+	public void setAesSedai(AesSedai aesSedai){
 		this.aesSedai = aesSedai;
+	}
+	
+	public Player getPlayer(){
+		return player;
 	}
 	
 }

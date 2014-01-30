@@ -12,6 +12,7 @@ import com.pulsior.theonepower.weaves.Invalid;
 import com.pulsior.theonepower.weaves.Weave;
 import com.pulsior.theonepower.weaves.accepted.BindingAir;
 import com.pulsior.theonepower.weaves.accepted.QuickGrowth;
+import com.pulsior.theonepower.weaves.aessedai.BindWarder;
 import com.pulsior.theonepower.weaves.aessedai.BindWolfGaidin;
 import com.pulsior.theonepower.weaves.aessedai.ClearSky;
 import com.pulsior.theonepower.weaves.aessedai.FoldedLight;
@@ -54,6 +55,7 @@ public enum WeaveEffect {
 	FOLDED_LIGHT(new FoldedLight(), Level.AES_SEDAI),
 	SHIELDING(new Shielding(), Level.AES_SEDAI),
 	REMOVE_SHIELDING(new RemoveShield(), Level.AES_SEDAI),
+	BIND_WARDER(new BindWarder(), Level.AES_SEDAI),
 	METEOR(new Meteor(), Level.FORSAKEN),
 	TELEPORT(new Teleport(), Level.FORSAKEN),
 	STRIKE(new Strike(), Level.FORSAKEN),

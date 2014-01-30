@@ -1,4 +1,4 @@
-package com.pulsior.theonepower;
+package com.pulsior.theonepower.util;
 
 import java.util.Random;
 

@@ -9,7 +9,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.weave.AesSedai;
+import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class BindWarder implements Weave{
@@ -27,6 +30,16 @@ public class BindWarder implements Weave{
 	
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
+			
+		if (clickedEntity instanceof Player){
+			
+			AesSedai aesSedai = new AesSedai(player);
+			
+			Warder warder = new Warder((Player) clickedEntity, aesSedai);
+			TheOnePower.warders.add(warder);
+			
+			return true;
+		}
 		
 		return false;
 	}

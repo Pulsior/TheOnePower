@@ -8,9 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.pulsior.theonepower.Direction;
 import com.pulsior.theonepower.TheOnePower;
-import com.pulsior.theonepower.Utility;
+import com.pulsior.theonepower.util.Direction;
+import com.pulsior.theonepower.util.Utility;
 
 public class Portal {
 
