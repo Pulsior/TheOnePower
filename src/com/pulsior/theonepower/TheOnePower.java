@@ -354,8 +354,6 @@ public final class TheOnePower extends JavaPlugin{
 		catch(IOException ex){
 			log.info("[The One Power] Saving problem!");
 		}
-
-		
 		
 		try{
 			Data data = new Data();
@@ -454,6 +452,7 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		return null;
 	}
+
 	
 	public void loadData(){
 		try{
@@ -465,6 +464,7 @@ public final class TheOnePower extends JavaPlugin{
 				Data dat = (Data) obj;
 				bukkitInput.close();
 				TheOnePower.shieldedPlayersMap = dat.shieldedPlayersMap;
+				TheOnePower.warders = dat.warders;
 				log.info("[The One Power] Loaded global data");
 				return;
 			}
