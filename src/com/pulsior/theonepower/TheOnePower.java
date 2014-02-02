@@ -29,7 +29,10 @@ import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.channeling.weave.Shield;
 import com.pulsior.theonepower.channeling.weave.Warder;
-import com.pulsior.theonepower.item.PowerItem;
+import com.pulsior.theonepower.item.angreal.Angreal;
+import com.pulsior.theonepower.item.angreal.Callandor;
+import com.pulsior.theonepower.item.angreal.SaAngreal;
+import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
@@ -115,6 +118,7 @@ public final class TheOnePower extends JavaPlugin{
 	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
 		if(cmd.getName().equalsIgnoreCase("embrace")){
+			
 			if(sender instanceof Player){
 				String name = sender.getName();
 				
@@ -193,30 +197,30 @@ public final class TheOnePower extends JavaPlugin{
 					PlayerInventory inventory = player.getInventory();
 					
 					if(arg.equalsIgnoreCase("angreal") ){
-						inventory.addItem(PowerItem.ANGREAL);
+						inventory.addItem( new Angreal().asItem() );
 					}
 					
 					else if (arg.equalsIgnoreCase("dream") ){						
-						inventory.addItem(PowerItem.DREAM_ANGREAL);
+						inventory.addItem( new UnseenLandStone().asItem() );
 					}
 					
 					else if(arg.equalsIgnoreCase("sa'angreal")){
-						inventory.addItem(PowerItem.SA_ANGREAL);
+						inventory.addItem( new SaAngreal().asItem() );
 					}
 					
 					else if(arg.equalsIgnoreCase("callandor")){
-						inventory.addItem(PowerItem.CALLANDOR);
+						inventory.addItem( new Callandor().asItem() );
 					}
 					
 					else{
-						player.sendMessage("angreal, dream, sa'angreal");
+						sender.sendMessage(ChatColor.RED+"You can choose between angreal, dream, Callandor and sa'angreal");
 					}	
 
 					return true;
 				}
 			}
 			else{
-				sender.sendMessage(ChatColor.RED+"You can choose between angreal, dream and sa'angreal");
+				sender.sendMessage(ChatColor.RED+"You can choose between angreal, dream, Callandor and sa'angreal");
 				return true;
 			}
 		}

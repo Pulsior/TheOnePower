@@ -38,7 +38,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.weave.Portal;
-import com.pulsior.theonepower.item.PowerItem;
+import com.pulsior.theonepower.item.angreal.Angreal;
+import com.pulsior.theonepower.item.angreal.Callandor;
+import com.pulsior.theonepower.item.angreal.SaAngreal;
+import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.task.PlayerRegisterTask;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.util.Direction;
@@ -82,7 +85,7 @@ public class EventListener implements Listener {
 			public void run() {
 				PlayerInventory inventory = player.getInventory();
 
-				if( inventory.contains( PowerItem.DREAM_ANGREAL ) ){
+				if( inventory.contains( new UnseenLandStone().asItem() ) ){
 					player.setBedSpawnLocation( player.getLocation() );
 					TheOnePower.unseenLand.addPlayer(playerName);
 
@@ -211,17 +214,17 @@ public class EventListener implements Listener {
 				System.out.println("Generated a chest!");
 				
 				if( Utility.chance(40) ){
-					inventory.addItem(PowerItem.ANGREAL);
+					inventory.addItem(new Angreal().asItem());
 					System.out.println("Added an angreal");
 				}
 				
 				if( Utility.chance(15)){
-					inventory.addItem(PowerItem.SA_ANGREAL);
+					inventory.addItem(new SaAngreal().asItem() );
 					System.out.println("Added a sa'angreal");
 				}
 				
 				if( Utility.chance(5) ){
-					inventory.addItem(PowerItem.CALLANDOR);
+					inventory.addItem(new Callandor().asItem() );
 					System.out.println("Added Callandor");
 				}
 								
@@ -264,7 +267,7 @@ public class EventListener implements Listener {
 		if(type.equals(EntityType.ZOMBIE) || type.equals(EntityType.SKELETON)){
 
 			if(new Random().nextInt(10) == 0){
-				event.getDrops().add(PowerItem.DREAM_ANGREAL);
+				event.getDrops().add(new UnseenLandStone().asItem());
 			}
 
 		}

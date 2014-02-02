@@ -18,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
-import com.pulsior.theonepower.item.PowerItem;
+import com.pulsior.theonepower.item.utilitem.ReturnToken;
 import com.pulsior.theonepower.task.UnseenGenTask;
 
 /**
@@ -84,7 +84,7 @@ public class UnseenLand {
 		unseenLandArmorMap.put(playerName, inventory.getArmorContents() );
 		setArmor(playerName, inventory, true);
 		inventory.clear();
-		inventory.addItem(PowerItem.returnToken);
+		inventory.addItem(new ReturnToken().asItem());
 		addMemoriesToInventory(playerName, inventory);
 	}
 	
@@ -106,7 +106,7 @@ public class UnseenLand {
 		}
 		player.teleport(spawn);
 		player.resetPlayerTime();
-		player.getInventory().remove(PowerItem.returnToken );
+		player.getInventory().remove( new ReturnToken().asItem() );
 		player.setAllowFlight(false);
 		PlayerInventory inventory = player.getInventory();
 		ItemStack[] savedInventory = unseenLandInventoryMap.get(playerName);

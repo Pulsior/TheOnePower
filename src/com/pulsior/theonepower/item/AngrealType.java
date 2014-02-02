@@ -2,11 +2,15 @@ package com.pulsior.theonepower.item;
 
 import org.bukkit.inventory.ItemStack;
 
+import com.pulsior.theonepower.item.angreal.Angreal;
+import com.pulsior.theonepower.item.angreal.Callandor;
+import com.pulsior.theonepower.item.angreal.SaAngreal;
+
 public enum AngrealType {
 	
-	ANGREAL(PowerItem.ANGREAL, 15),
-	SA_ANGREAL(PowerItem.SA_ANGREAL, 50),
-	CALLANDOR(PowerItem.CALLANDOR, 150);
+	ANGREAL(new Angreal().asItem(), 15),
+	SA_ANGREAL(new SaAngreal().asItem(), 50),
+	CALLANDOR(new Callandor().asItem(), 150);
 	
 	final ItemStack ITEM;
 	final int LEVEL;

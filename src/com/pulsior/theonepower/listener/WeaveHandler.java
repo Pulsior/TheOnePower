@@ -55,6 +55,7 @@ public class WeaveHandler implements Listener{
 			if(item.getItemMeta().hasDisplayName()){
 				if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
 					item.setDurability((short) 0);
+					player.updateInventory();
 				}
 			}
 
