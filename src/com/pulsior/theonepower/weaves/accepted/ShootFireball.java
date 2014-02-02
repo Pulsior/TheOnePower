@@ -1,4 +1,4 @@
-package com.pulsior.theonepower.weaves.aessedai;
+package com.pulsior.theonepower.weaves.accepted;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,6 +13,9 @@ public class Warder{
 	Player player;
 	
 	public Warder(Player player, AesSedai aesSedai){
+		System.out.println(player.getName()+" became the warder of " + aesSedai.getPlayer().getName() );
+		
+		this.player = player;
 		this.name = player.getName();
 		this.aesSedai = aesSedai;
 		aesSedai.setWarder(this);

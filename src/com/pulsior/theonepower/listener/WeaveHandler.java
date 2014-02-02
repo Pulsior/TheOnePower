@@ -20,7 +20,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.weave.AesSedai;
 import com.pulsior.theonepower.channeling.weave.Portal;
+import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.unseenland.Memory;
 
 /**
@@ -84,6 +86,27 @@ public class WeaveHandler implements Listener{
 
 						}
 					}
+				}
+			}
+			
+			/*
+			 * Reset compass location for warders and warder-holding Aes Sedai
+			 */
+			if( item.getType().equals(Material.STICK) ){
+				
+				for(Warder warder: TheOnePower.warders){
+
+					AesSedai aesSedai = warder.getAesSedai();
+					
+					if( warder.getPlayer().getName().equals(name)){
+						player.setCompassTarget(warder.getAesSedai().getPlayer().getLocation());
+						return;
+					}
+					
+					else if ( aesSedai.getPlayer().getName().equals(name)){
+						player.setCompassTarget(warder.getPlayer().getLocation());
+					}
+					
 				}
 			}
 

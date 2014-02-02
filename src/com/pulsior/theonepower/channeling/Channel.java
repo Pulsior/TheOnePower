@@ -302,22 +302,6 @@ public class Channel {
 
 		}
 		return WeaveEffect.INVALID;
-	}
-
-	/**
-	 * The task used to regenerate a player's xp level
-	 */
-	BukkitRunnable regenTask = new BukkitRunnable(){
-		@Override
-		public void run() {
-			if( ! (player.getLevel() >= maxLevel) ) {
-
-				if(TheOnePower.castingPlayersMap.get(playerName).equals(new Boolean(false) ) ){
-					player.setLevel( player.getLevel()+1 );;
-				}
-
-			}
-		};
 	};
 
 

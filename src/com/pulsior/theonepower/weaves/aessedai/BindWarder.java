@@ -33,9 +33,17 @@ public class BindWarder implements Weave{
 			
 		if (clickedEntity instanceof Player){
 			
+			Player clickedPlayer = (Player) clickedEntity;
+			
+			String clickedName = clickedPlayer.getName();
+			String playerName = player.getName();
+			
+			if(TheOnePower.warders.contains(clickedName) || TheOnePower.warders.contains(playerName)){
+				return false;
+			}
 			AesSedai aesSedai = new AesSedai(player);
 			
-			Warder warder = new Warder((Player) clickedEntity, aesSedai);
+			Warder warder = new Warder(clickedPlayer, aesSedai);
 			TheOnePower.warders.add(warder);
 			
 			return true;
