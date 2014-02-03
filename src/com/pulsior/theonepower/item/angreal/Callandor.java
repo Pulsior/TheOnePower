@@ -11,7 +11,7 @@ public class Callandor extends CustomItem{
 	public Callandor(){
 		
 		super(Material.DIAMOND_SWORD);
-		setLore(ChatColor.GOLD+"Click to embrace saidar");
+		addLore(ChatColor.GOLD+"Click to embrace saidar");
 		setDisplayName(ChatColor.RESET+"Callandor");
 		setEnchantment(Enchantment.DAMAGE_ALL, 3);
 		

@@ -9,7 +9,8 @@ public class ReturnToken extends CustomItem{
 
 	public ReturnToken(){
 		super(Material.NETHER_STAR);
-		setLore(ChatColor.GOLD+"Click to wake up");
+		
+		addLore(ChatColor.GOLD+"Click to wake up");
 		setDisplayName(ChatColor.RESET+"Wake up");
 	}
 	

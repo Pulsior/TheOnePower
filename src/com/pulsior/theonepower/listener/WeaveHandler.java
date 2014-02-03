@@ -23,6 +23,7 @@ import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.channeling.weave.AesSedai;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.channeling.weave.Warder;
+import com.pulsior.theonepower.item.terangreal.TerAngreal;
 import com.pulsior.theonepower.unseenland.Memory;
 
 /**
@@ -93,7 +94,7 @@ public class WeaveHandler implements Listener{
 			/*
 			 * Reset compass location for warders and warder-holding Aes Sedai
 			 */
-			if( item.getType().equals(Material.STICK) ){
+			if( item.getType().equals(Material.COMPASS) ){
 				
 				for(Warder warder: TheOnePower.warders){
 
@@ -110,7 +111,11 @@ public class WeaveHandler implements Listener{
 					
 				}
 			}
-
+			
+			/*
+			 * Check if the item is bound to saidar embracing 
+			 */
+			
 			List<String> lore = item.getItemMeta().getLore();
 			if(lore != null){
 				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR) ) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
@@ -129,6 +134,20 @@ public class WeaveHandler implements Listener{
 							player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
 						}
 					}
+				}
+			}
+			
+			/*
+			 * Check if the item is a ter'angreal
+			 */
+			
+			ItemMeta meta = item.getItemMeta();
+			
+			if( meta.hasDisplayName() ){
+				TerAngreal terAngreal = TerAngreal.toTerAngreal(item);
+				
+				if(terAngreal != null){
+					terAngreal.use(player, event.getClickedBlock(), event.getBlockFace(), null);
 				}
 			}
 
@@ -228,15 +247,21 @@ public class WeaveHandler implements Listener{
 		Player player = event.getPlayer();
 		Channel channel = TheOnePower.channelMap.get(player.getName());
 		ItemStack stack = event.getPlayer().getItemInHand();
+		
 		if (channel != null && !(stack.getType().equals(Material.AIR) ) ){ 
 			String displayName = stack.getItemMeta().getDisplayName();
 			if(displayName != null){
 				if(displayName.equalsIgnoreCase(ChatColor.RESET+"Cast Weave")){
 					channel.cast(null, null, entity);
+					return;
 				}
 			}
-
-
+		}
+		
+		TerAngreal terAngreal = TerAngreal.toTerAngreal(stack);
+		
+		if (terAngreal != null){
+			terAngreal.use(player, null, null, entity);
 		}
 	}
 

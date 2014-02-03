@@ -32,6 +32,8 @@ import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
 import com.pulsior.theonepower.item.angreal.SaAngreal;
+import com.pulsior.theonepower.item.terangreal.StaffOfFire;
+import com.pulsior.theonepower.item.terangreal.TerAngreal;
 import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
@@ -66,6 +68,7 @@ public final class TheOnePower extends JavaPlugin{
 	Server server = Bukkit.getServer();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
 
+	
 	/**
 	 * Registers listeners and creates tel'aran'rhiod when the plugin is enabled
 	 */
@@ -79,6 +82,7 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		
+		TerAngreal.registerName(ChatColor.RESET+"Staff of Fire");
 
 		if (power == null){
 			power = new PowerMap();
@@ -210,6 +214,10 @@ public final class TheOnePower extends JavaPlugin{
 					
 					else if(arg.equalsIgnoreCase("callandor")){
 						inventory.addItem( new Callandor().asItem() );
+					}
+					
+					else if (arg.equalsIgnoreCase("firestaff") ){
+						inventory.addItem( new StaffOfFire().asItem() );
 					}
 					
 					else{

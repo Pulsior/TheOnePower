@@ -20,7 +20,7 @@ public class CustomItem {
 		item.setType(type);
 	}
 	
-	public void setLore(String lore){
+	public void addLore(String lore){
 		ItemMeta meta = item.getItemMeta();
 		List<String> list = new ArrayList<String>();
 		list.add(lore);

@@ -8,8 +8,9 @@ import com.pulsior.theonepower.item.CustomItem;
 public class SaAngreal extends CustomItem{
 
 	public SaAngreal(){
+		
 		super(Material.EMERALD);
-		setLore(ChatColor.GOLD+"Click to embrace saidar");
+		addLore(ChatColor.GOLD+"Click to embrace saidar");
 		setDisplayName(ChatColor.RESET+"Sa'angreal");
 	}
 	
