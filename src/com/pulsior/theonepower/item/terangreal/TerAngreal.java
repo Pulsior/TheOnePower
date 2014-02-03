@@ -20,7 +20,7 @@ public abstract class TerAngreal extends CustomItem{
 
 	public TerAngreal(Material type) {
 		super(type);
-		addLore(ChatColor.GOLD+"Right-click to use this ter'angreal");
+		addLore(ChatColor.BLUE+"Right-click to use this ter'angreal");
 	}
 
 	public static TerAngreal toTerAngreal(ItemStack item){
@@ -40,8 +40,8 @@ public abstract class TerAngreal extends CustomItem{
 		return null;
 	}
 	
-	public static void registerName(String name){
-		TerAngreal.itemMap.put(name, new StaffOfFire());
+	public static void registerItem(String name, TerAngreal item){
+		TerAngreal.itemMap.put(name, item);
 	}
 
 	/**

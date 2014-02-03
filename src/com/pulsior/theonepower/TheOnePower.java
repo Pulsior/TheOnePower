@@ -32,6 +32,7 @@ import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
 import com.pulsior.theonepower.item.angreal.SaAngreal;
+import com.pulsior.theonepower.item.terangreal.Adam;
 import com.pulsior.theonepower.item.terangreal.StaffOfFire;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
 import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
@@ -83,7 +84,8 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		
-		TerAngreal.registerName(Strings.FIRE_STAFF_NAME);
+		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire() );
+		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam());
 
 		if (power == null){
 			power = new PowerMap();
@@ -219,6 +221,10 @@ public final class TheOnePower extends JavaPlugin{
 					
 					else if (arg.equalsIgnoreCase("firestaff") ){
 						inventory.addItem( new StaffOfFire().asItem() );
+					}
+					
+					else if (arg.equalsIgnoreCase("adam") ){
+						inventory.addItem( new Adam().asItem() );
 					}
 					
 					else{

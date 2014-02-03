@@ -20,9 +20,22 @@ public class CustomItem {
 		item.setType(type);
 	}
 	
+	public void setDurability(short data){
+		item.setDurability(data);
+	}
+	
 	public void addLore(String lore){
 		ItemMeta meta = item.getItemMeta();
-		List<String> list = new ArrayList<String>();
+		List<String> list;
+		
+		if(meta.hasLore() ){
+			list = meta.getLore();
+		}
+		
+		else{
+			list = new ArrayList<String>();
+		}
+		
 		list.add(lore);
 		meta.setLore(list);
 		item.setItemMeta(meta);

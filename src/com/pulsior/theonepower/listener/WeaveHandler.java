@@ -119,7 +119,6 @@ public class WeaveHandler implements Listener{
 			List<String> lore = item.getItemMeta().getLore();
 			if(lore != null){
 				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR)  || event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){
-					System.out.println("Through line 122!");
 					String playerName = player.getName();
 					if(TheOnePower.channelMap.containsKey(playerName) == false){
 						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
