@@ -42,6 +42,7 @@ import com.pulsior.theonepower.task.UnseenGenTask;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.unseenland.UnseenLand;
 import com.pulsior.theonepower.unseenland.UnseenLandData;
+import com.pulsior.theonepower.util.Strings;
 
 /**
  * Plugin main class
@@ -82,7 +83,7 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		
-		TerAngreal.registerName(ChatColor.RESET+"Staff of Fire");
+		TerAngreal.registerName(Strings.FIRE_STAFF_NAME);
 
 		if (power == null){
 			power = new PowerMap();
