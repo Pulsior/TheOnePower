@@ -257,6 +257,7 @@ public class Channel {
 	}
 
 	public void disband(){
+		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 		weave.clear();
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
@@ -283,7 +284,7 @@ public class Channel {
 
 		return level;
 	}
-
+	
 	public WeaveEffect compare(List<Element> list){ 
 		WeaveEffect[] effects = WeaveEffect.values();
 		for(WeaveEffect effect : effects){

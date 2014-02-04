@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,11 +35,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.SaidarEmbraceEvent;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
@@ -197,7 +202,7 @@ public class EventListener implements Listener {
 	}
 
 	@EventHandler
-	public void onX(SaidarEmbraceEvent event){
+	public void onSaidarEmbrace(SaidarEmbraceEvent event){
 
 		Player player = event.getPlayer();
 		String name = player.getName();
@@ -207,12 +212,42 @@ public class EventListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		if (TheOnePower.shieldedPlayersMap.containsKey(name) ) {
+		if (TheOnePower.database.hasShield(name) ) {
 			player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
+			event.setCancelled(true);
+		}
+
+		if (TheOnePower.database.isDamane(name) ){
+			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10, 3) );
 			event.setCancelled(true);
 		}
 	}
 
+	@EventHandler
+	public void onDamage(EntityDamageEvent event){
+		Entity entity = event.getEntity();
+
+		if(entity instanceof Player){
+			String name = ( (Player) entity).getName();
+
+			if (TheOnePower.database.isSuldam(name) ){
+				Damane damane = TheOnePower.database.getSuldam(name).getDamane();
+				
+				if(damane != null){
+					Player damanePlayer = Bukkit.getPlayer( damane.getName() );
+					double health = damanePlayer.getHealth() - event.getDamage();
+					
+					if(health < 0){
+						health = 0;
+					}
+					
+					damanePlayer.setHealth( health );
+					damanePlayer.playEffect(EntityEffect.HURT);
+				}
+				
+			}
+		}
+	}
 
 	@EventHandler
 	public void onChunkPopulate(ChunkPopulateEvent event){

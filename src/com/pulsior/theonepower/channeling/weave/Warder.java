@@ -39,4 +39,8 @@ public class Warder{
 		return player;
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
 }

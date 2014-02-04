@@ -34,6 +34,7 @@ import com.pulsior.theonepower.item.angreal.Callandor;
 import com.pulsior.theonepower.item.angreal.SaAngreal;
 import com.pulsior.theonepower.item.terangreal.Adam;
 import com.pulsior.theonepower.item.terangreal.StaffOfFire;
+import com.pulsior.theonepower.item.terangreal.StaffOfMeteor;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
 import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.listener.ChannelManager;
@@ -57,7 +58,7 @@ public final class TheOnePower extends JavaPlugin{
 	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
 	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
 	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
-	public static HashMap<String, Shield> shieldedPlayersMap = new HashMap<String, Shield>();
+	public static HashMap<String, Shield> shieldedPlayersMapz = new HashMap<String, Shield>();
 
 	public static List<Portal> portals = new ArrayList<Portal>();
 	public static List<Warder> warders = new ArrayList<Warder>();
@@ -87,7 +88,8 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new EventListener(), this);
 
 		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire() );
-		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam());
+		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam() );
+		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor() );
 
 		if (power == null){
 			power = new PowerMap();
@@ -109,16 +111,24 @@ public final class TheOnePower extends JavaPlugin{
 	@Override
 	public void onDisable(){
 		Player[] players = server.getOnlinePlayers();
+		
 		for(Player p : players){
+			
 			String name = p.getName();
 			Channel channel = channelMap.get(name);
+			
 			if (channel != null){
 				channel.close();
 				channelMap.remove(name);
 			}
 		}
+		
 		save();
 		saveUnseenLand();
+		
+		for(Portal p : portals){
+			p.clear();
+		}
 	}
 
 	/**
@@ -214,6 +224,10 @@ public final class TheOnePower extends JavaPlugin{
 
 					else if (arg.equalsIgnoreCase("firestaff") ){
 						inventory.addItem( new StaffOfFire().asItem() );
+					}
+					
+					else if (arg.equalsIgnoreCase("meteorstaff") ){
+						inventory.addItem( new StaffOfMeteor().asItem() );
 					}
 
 					else if (arg.equalsIgnoreCase("adam") ){
@@ -368,7 +382,6 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		try{
-			Data data = new Data();
 			File file = new File("plugins/The One Power/data_global");
 			if(file.exists()){
 				file.delete();
@@ -376,7 +389,7 @@ public final class TheOnePower extends JavaPlugin{
 			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_global");
 			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
 			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
-			bukkitOutput.writeObject( data );
+			bukkitOutput.writeObject( database );
 			bukkitOutput.close();
 
 		}
@@ -471,10 +484,10 @@ public final class TheOnePower extends JavaPlugin{
 			ObjectInputStream objInput = new ObjectInputStream(fileInput);
 			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(objInput);
 			Object obj = bukkitInput.readObject();
-			if(obj instanceof Data){
-				Data dat = (Data) obj;
+			if(obj instanceof Database){
+				Database db = (Database) obj;
 				bukkitInput.close();
-				TheOnePower.shieldedPlayersMap = dat.shieldedPlayersMap;
+				database = db;
 				log.info("[The One Power] Loaded global data");
 				return;
 			}

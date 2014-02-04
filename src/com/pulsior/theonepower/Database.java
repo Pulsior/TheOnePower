@@ -1,15 +1,24 @@
 package com.pulsior.theonepower;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.pulsior.theonepower.channeling.weave.Damane;
+import com.pulsior.theonepower.channeling.weave.Shield;
 import com.pulsior.theonepower.channeling.weave.Suldam;
+import com.pulsior.theonepower.channeling.weave.Warder;
 
-public class Database {
+public class Database implements Serializable{
 	
-	public List<Damane> damaneList = new ArrayList<Damane>();
-	public List<Suldam> suldamList = new ArrayList<Suldam>();
+	private static final long serialVersionUID = -1169318961339172944L;
+	
+	private List<Damane> damaneList = new ArrayList<Damane>();
+	private List<Suldam> suldamList = new ArrayList<Suldam>();
+	private List<Warder> warderList = new ArrayList<Warder>();
+	
+	private HashMap<String, Shield> shieldMap = new HashMap<String, Shield>();
 	
 	public void addDamane(Damane damane){
 		damaneList.add(damane);
@@ -63,5 +72,49 @@ public class Database {
 		return null;
 	}
 	
+	public void addWarder(Warder warder){
+		warderList.add(warder);
+	}
+	
+	public boolean isWarder(String name){
+		
+		for(Warder w : warderList){
+			
+			if(w.getName().equalsIgnoreCase( name ) ){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public Warder getWarder(String name){
+		
+		for(Warder w : warderList){
+			
+			if(w.getName().equalsIgnoreCase(name)){
+				return w;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	public boolean hasShield(String name){
+		return shieldMap.containsKey(name);
+	}
+	
+	public Shield getShield(String name){
+		return shieldMap.get(name);
+	}
+	
+	public void addShield(String name, Shield shield){
+		shieldMap.put(name, shield);
+	}
+	
+	public void removeShield(String name){
+		shieldMap.remove(name);
+	}
 	
 }

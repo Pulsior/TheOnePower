@@ -218,9 +218,8 @@ public class WeaveHandler implements Listener{
 
 				}
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){ //Clears the weave
-					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
+			
 					channel.disband();
-
 					Block block = event.getClickedBlock();
 
 					if(block != null){

@@ -62,7 +62,7 @@ public class Shielding implements Weave {
 			casterLevel = casterChannel.maxLevel;
 
 
-			TheOnePower.shieldedPlayersMap.put(targetName, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetName), casterName) );
+			TheOnePower.database.addShield(targetName, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetName), casterName) );
 
 		}
 		return false;

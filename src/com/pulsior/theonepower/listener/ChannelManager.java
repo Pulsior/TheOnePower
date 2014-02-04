@@ -121,17 +121,13 @@ public class ChannelManager implements Listener {
 			else{
 				channel.cast(block, null, null);
 			}
-			
-
-
-
-
-
 		}
+		
 		else if(TheOnePower.unseenLand.players.contains(name) ){
 			event.setCancelled(true);
 		}
 	}
+
 
 
 

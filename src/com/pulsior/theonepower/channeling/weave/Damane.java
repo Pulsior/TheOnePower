@@ -1,9 +1,13 @@
 package com.pulsior.theonepower.channeling.weave;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Player;
 
-public class Damane {
+public class Damane implements Serializable{
 
+	private static final long serialVersionUID = -2456688996940473532L;
+	
 	String name;
 	Suldam suldam;
 	

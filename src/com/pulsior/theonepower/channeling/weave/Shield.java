@@ -5,8 +5,6 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 
-import com.pulsior.theonepower.TheOnePower;
-
 public class Shield implements Serializable{
 
 	/**
@@ -39,7 +37,6 @@ public class Shield implements Serializable{
 		double d = new Random().nextDouble();
 		
 		if ( d <= chance){
-			TheOnePower.shieldedPlayersMap.remove(this);
 			return true;
 		}
 		

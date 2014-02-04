@@ -1,5 +1,6 @@
 package com.pulsior.theonepower.item.terangreal;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -29,6 +30,11 @@ public class Adam extends TerAngreal{
 			Suldam suldam = new Suldam(player);
 			Player targetPlayer = (Player) entity;
 			Damane damane = new Damane(targetPlayer, suldam);
+			
+			System.out.println(suldam.getName()+" has leashed "+damane.getName() );
+			targetPlayer.sendMessage(ChatColor.GRAY+"You were leashed by "+ player.getName() );
+			player.sendMessage(ChatColor.GREEN+"You leashed "+targetPlayer.getName() );
+			
 			
 			TheOnePower.database.addDamane(damane);
 			TheOnePower.database.addSuldam(suldam);

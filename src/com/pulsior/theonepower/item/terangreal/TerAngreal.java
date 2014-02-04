@@ -26,20 +26,23 @@ public abstract class TerAngreal extends CustomItem{
 	public static TerAngreal toTerAngreal(ItemStack item){
 
 		ItemMeta meta = item.getItemMeta();
-		if (meta.hasLore()){
+		if(meta != null){
 
-			if( meta.hasDisplayName() ){
-				
-				TerAngreal terAngreal = itemMap.get( meta.getDisplayName() );
-				if(terAngreal != null){
-					return terAngreal;
+			if (meta.hasLore()){
+
+				if( meta.hasDisplayName() ){
+
+					TerAngreal terAngreal = itemMap.get( meta.getDisplayName() );
+					if(terAngreal != null){
+						return terAngreal;
+					}
 				}
 			}
 		}
 
 		return null;
 	}
-	
+
 	public static void registerItem(String name, TerAngreal item){
 		TerAngreal.itemMap.put(name, item);
 	}
