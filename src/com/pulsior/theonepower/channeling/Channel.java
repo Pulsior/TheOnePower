@@ -55,7 +55,8 @@ public class Channel {
 
 	@SuppressWarnings("deprecation")
 	public Channel(String playerName){
-
+		
+		
 		
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;

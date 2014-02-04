@@ -36,6 +36,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import com.pulsior.theonepower.SaidarEmbraceEvent;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.angreal.Angreal;
@@ -54,7 +55,7 @@ import com.pulsior.theonepower.util.Utility;
  */
 public class EventListener implements Listener {
 
-	TheOnePower plugin;
+	TheOnePower plugin = TheOnePower.plugin;
 
 	String earth = ChatColor.DARK_GREEN + "Earth";
 	String air = ChatColor.BLUE + "Air";
@@ -64,10 +65,6 @@ public class EventListener implements Listener {
 
 	HashMap<String, Integer> map = new HashMap<String, Integer>();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
-
-	public EventListener(TheOnePower plugin){
-		this.plugin = plugin;
-	}
 
 
 	@EventHandler
@@ -114,12 +111,12 @@ public class EventListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInventorySelect(InventoryClickEvent event){
-		
+
 		Inventory inv = event.getInventory();
 		InventoryHolder inventoryHolder = inv.getHolder();
-		
+
 		if(inventoryHolder instanceof Player && inv.getSize() == 9 ){
-			
+
 			ItemStack item = inv.getItem(event.getSlot() );
 
 			Player player = (Player) inv.getHolder();
@@ -199,40 +196,57 @@ public class EventListener implements Listener {
 		}
 	}
 
-	
+	@EventHandler
+	public void onX(SaidarEmbraceEvent event){
+
+		Player player = event.getPlayer();
+		String name = player.getName();
+
+		if ( ! player.hasPermission("theonepower.channel")){
+			player.sendMessage(ChatColor.RED+"You don't have permission to embrace saidar");
+			event.setCancelled(true);
+		}
+
+		if (TheOnePower.shieldedPlayersMap.containsKey(name) ) {
+			player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
+			event.setCancelled(true);
+		}
+	}
+
+
 	@EventHandler
 	public void onChunkPopulate(ChunkPopulateEvent event){
-		
+
 		BlockState[] tileEntities = event.getChunk().getTileEntities();
-		
+
 		for(BlockState state : tileEntities){
-			
+
 			if(state instanceof Chest){
 				Chest chest = (Chest) state;
 				Inventory inventory = chest.getBlockInventory();
-				
+
 				System.out.println("Generated a chest!");
-				
+
 				if( Utility.chance(40) ){
 					inventory.addItem(new Angreal().asItem());
 					System.out.println("Added an angreal");
 				}
-				
+
 				if( Utility.chance(15)){
 					inventory.addItem(new SaAngreal().asItem() );
 					System.out.println("Added a sa'angreal");
 				}
-				
+
 				if( Utility.chance(5) ){
 					inventory.addItem(new Callandor().asItem() );
 					System.out.println("Added Callandor");
 				}
-								
-				
+
+
 			}	
 		}
 	}
-	
+
 	/**
 	 * Generate the Unseen Land when the overworld has loaded.
 	 * @param event
@@ -288,7 +302,6 @@ public class EventListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
-
 
 	}
 

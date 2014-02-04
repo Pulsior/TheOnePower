@@ -3,6 +3,8 @@ package com.pulsior.theonepower.listener;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +14,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
@@ -89,11 +92,41 @@ public class ChannelManager implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event){
-		String name = event.getPlayer().getName();
-		if(TheOnePower.channelMap.containsKey(name) ){
-			event.setCancelled(true);
+		Player player = event.getPlayer();
+		String name = player.getName();
+		Channel channel = TheOnePower.channelMap.get(name);
+		if(channel != null ){
+
+			Item item = event.getItemDrop();
+			ItemStack stack = item.getItemStack();
+
+			if(stack.getAmount() > 1){
+				event.setCancelled(true);
+			}
+
+			else{
+				player.setItemInHand(stack);
+				item.remove();
+			}
+
+			Block block = player.getTargetBlock(null, 5);
+			
+			if(block.getType() == Material.AIR){
+				channel.cast(null, null, null);
+			
+			}
+			else{
+				channel.cast(block, null, null);
+			}
+			
+
+
+
+
+
 		}
 		else if(TheOnePower.unseenLand.players.contains(name) ){
 			event.setCancelled(true);
@@ -105,7 +138,7 @@ public class ChannelManager implements Listener {
 	@EventHandler
 	public void onItemPickup(PlayerPickupItemEvent event){
 		String name = event.getPlayer().getName();
-		
+
 		if(TheOnePower.channelMap.containsKey(name ) ){
 			event.setCancelled(true);
 		}

@@ -6,6 +6,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.weave.Damane;
+import com.pulsior.theonepower.channeling.weave.Suldam;
 import com.pulsior.theonepower.util.Strings;
 
 public class Adam extends TerAngreal{
@@ -23,6 +26,12 @@ public class Adam extends TerAngreal{
 		
 		if(entity instanceof Player){
 			
+			Suldam suldam = new Suldam(player);
+			Player targetPlayer = (Player) entity;
+			Damane damane = new Damane(targetPlayer, suldam);
+			
+			TheOnePower.database.addDamane(damane);
+			TheOnePower.database.addSuldam(suldam);
 		}
 		
 	}

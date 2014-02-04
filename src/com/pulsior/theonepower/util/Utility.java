@@ -6,7 +6,6 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftFirework;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -22,7 +21,7 @@ public class Utility {
 		meta.setPower(1);
 		firework.setFireworkMeta(meta);
 
-		( (CraftFirework) firework).getHandle().expectedLifespan = lifeSpan;
+		firework.detonate();
 
 		return firework;
 	}

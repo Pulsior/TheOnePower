@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.pulsior.theonepower.SaidarEmbraceEvent;
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Element;
@@ -25,6 +26,7 @@ import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
 import com.pulsior.theonepower.unseenland.Memory;
+import com.pulsior.theonepower.util.Strings;
 
 /**
  * Most important event listener that registers weave clicks and makes weaves. Also contains events for some items
@@ -48,15 +50,28 @@ public class WeaveHandler implements Listener{
 	 */
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
+		
 		ItemStack item = event.getItem();
 		Player player = event.getPlayer();
 		String name = player.getName();
 		if (item != null){	//IF clause for items
-
-			if(item.getItemMeta().hasDisplayName()){
-				if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
+			
+			ItemMeta meta = item.getItemMeta();
+			
+			if(meta.hasDisplayName()){
+				if(meta.getDisplayName().equalsIgnoreCase(ChatColor.RESET+"Callandor") ){
 					item.setDurability((short) 0);
 					player.updateInventory();
+				}
+			}
+			
+			
+			/*
+			 * Cancel the event if it's an a'dam
+			 */
+			if(meta.hasDisplayName()){
+				if(meta.getDisplayName().equalsIgnoreCase( Strings.A_DAM_NAME) ){
+					event.setCancelled(true);
 				}
 			}
 
@@ -81,7 +96,6 @@ public class WeaveHandler implements Listener{
 			 */
 			if(item.getType().equals(Material.NETHER_STAR)){
 				if(TheOnePower.unseenLand.players.contains(name)){
-					ItemMeta meta = item.getItemMeta();
 					if(meta != null){
 						if(meta.getDisplayName() . equalsIgnoreCase(ChatColor.RESET+"Wake Up")){
 							TheOnePower.unseenLand.removePlayer(name);
@@ -119,20 +133,12 @@ public class WeaveHandler implements Listener{
 			List<String> lore = item.getItemMeta().getLore();
 			if(lore != null){
 				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR)  || event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){
-					String playerName = player.getName();
-					if(TheOnePower.channelMap.containsKey(playerName) == false){
-						if( ! ( TheOnePower.shieldedPlayersMap.containsKey( playerName ) ) ){
-							if(player.hasPermission("theonepower.channel")){
-								event.setCancelled(true);
-								new Channel(playerName);					
-							}
-							else{
-								player.sendMessage(ChatColor.RED+"You don't have permission to embrace saidar");
-							}
-						}
-						else{
-							player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
-						}
+					
+					SaidarEmbraceEvent saidarEvent = new SaidarEmbraceEvent( player );
+					Bukkit.getServer().getPluginManager().callEvent(saidarEvent);
+					if(! saidarEvent.isCancelled() ){
+						event.setCancelled(true);
+						new Channel ( name );
 					}
 				}
 			}
@@ -140,8 +146,6 @@ public class WeaveHandler implements Listener{
 			/*
 			 * Check if the item is a ter'angreal
 			 */
-			
-			ItemMeta meta = item.getItemMeta();
 			
 			if( meta.hasDisplayName() ){
 				TerAngreal terAngreal = TerAngreal.toTerAngreal(item);
