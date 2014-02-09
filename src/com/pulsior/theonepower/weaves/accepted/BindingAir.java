@@ -5,14 +5,15 @@ import java.util.List;
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.bukkit.World;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftFirework;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
@@ -33,11 +34,11 @@ public class BindingAir implements Weave {
 	
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
-		if( clickedEntity instanceof Player){
-			Player targetPlayer = (Player) clickedEntity;
-			targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 400, 10) ) ;
+		if( clickedEntity instanceof LivingEntity){
+			LivingEntity entity = (LivingEntity) clickedEntity;
+			entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 400, 10) ) ;
 			
-			Firework firework = (Firework) world.spawnEntity(targetPlayer.getLocation(), EntityType.FIREWORK);
+			Firework firework = (Firework) world.spawnEntity(entity.getLocation(), EntityType.FIREWORK);
 			FireworkMeta meta = firework.getFireworkMeta();
 			FireworkEffect effect = FireworkEffect.builder().flicker(false).withColor(Color.BLACK).withFade(Color.GRAY).with(Type.BALL).trail(false).build();
 			meta.addEffect(effect);
@@ -54,7 +55,6 @@ public class BindingAir implements Weave {
 
 	@Override
 	public List<Element> getElements() {
-		// TODO Auto-generated method stub
 		return elements;
 	}
 

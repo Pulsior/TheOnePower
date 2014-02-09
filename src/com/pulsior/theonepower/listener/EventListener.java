@@ -47,6 +47,7 @@ import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
 import com.pulsior.theonepower.item.angreal.SaAngreal;
+import com.pulsior.theonepower.item.terangreal.Adam;
 import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.task.PlayerRegisterTask;
 import com.pulsior.theonepower.unseenland.Memory;
@@ -232,19 +233,21 @@ public class EventListener implements Listener {
 
 			if (TheOnePower.database.isSuldam(name) ){
 				Damane damane = TheOnePower.database.getSuldam(name).getDamane();
-				
+
 				if(damane != null){
 					Player damanePlayer = Bukkit.getPlayer( damane.getName() );
 					double health = damanePlayer.getHealth() - event.getDamage();
-					
+
 					if(health < 0){
 						health = 0;
 					}
-					
-					damanePlayer.setHealth( health );
-					damanePlayer.playEffect(EntityEffect.HURT);
+
+					if( ! damanePlayer.isDead() ){
+						damanePlayer.setHealth( health );
+						damanePlayer.playEffect(EntityEffect.HURT);
+					}
 				}
-				
+
 			}
 		}
 	}
@@ -266,12 +269,17 @@ public class EventListener implements Listener {
 					inventory.addItem(new Angreal().asItem());
 					System.out.println("Added an angreal");
 				}
-
+				
+				if( Utility.chance(20)){
+					inventory.addItem( new Adam().asItem() );
+					System.out.println("Added an a'dam");
+				}
+				
 				if( Utility.chance(15)){
 					inventory.addItem(new SaAngreal().asItem() );
 					System.out.println("Added a sa'angreal");
 				}
-
+								
 				if( Utility.chance(5) ){
 					inventory.addItem(new Callandor().asItem() );
 					System.out.println("Added Callandor");

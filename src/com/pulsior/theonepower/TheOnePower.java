@@ -80,7 +80,6 @@ public final class TheOnePower extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
-
 		makeDir();
 
 		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
@@ -88,8 +87,8 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new EventListener(), this);
 
 		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire() );
-		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam() );
 		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor() );
+		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam() );
 
 		if (power == null){
 			power = new PowerMap();

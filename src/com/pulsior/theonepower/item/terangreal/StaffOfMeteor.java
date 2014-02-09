@@ -19,8 +19,8 @@ import com.pulsior.theonepower.util.Utility;
 public class StaffOfMeteor extends TerAngreal{
 
 	public StaffOfMeteor() {
+		
 		super(Material.BLAZE_ROD);
-
 		setDisplayName(Strings.METEOR_STAFF_NAME);
 
 	}
@@ -36,7 +36,7 @@ public class StaffOfMeteor extends TerAngreal{
 
 			@Override
 			public void run() {
-				if(ball.isDead() == false){
+				if( ! ball.isDead() ){
 					Utility.spawnFireworkEffect(ball.getLocation(), Color.YELLOW, Color.RED, Type.BURST, true, true, 0);
 				}
 			}
