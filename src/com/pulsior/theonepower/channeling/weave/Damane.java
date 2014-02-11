@@ -2,6 +2,7 @@ package com.pulsior.theonepower.channeling.weave;
 
 import java.io.Serializable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Damane implements Serializable{
@@ -23,5 +24,9 @@ public class Damane implements Serializable{
 	
 	public String getName(){
 		return name;
+	}
+	
+	public Player getPlayer(){
+		return Bukkit.getPlayer(name);
 	}
 }

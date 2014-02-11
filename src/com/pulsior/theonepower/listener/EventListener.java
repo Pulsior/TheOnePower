@@ -52,6 +52,7 @@ import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.task.PlayerRegisterTask;
 import com.pulsior.theonepower.unseenland.Memory;
 import com.pulsior.theonepower.util.Direction;
+import com.pulsior.theonepower.util.Strings;
 import com.pulsior.theonepower.util.Utility;
 
 /**
@@ -123,41 +124,65 @@ public class EventListener implements Listener {
 
 		if(inventoryHolder instanceof Player && inv.getSize() == 9 ){
 
-			ItemStack item = inv.getItem(event.getSlot() );
+			ItemStack item = event.getCurrentItem();
 
 			Player player = (Player) inv.getHolder();
+			String name = player.getName();
+
 			float yaw = player.getLocation().getYaw();
+
 			if(item != null){
 
-
 				ItemMeta meta = item.getItemMeta();
-				if( meta.hasLore() ){
+
+				if (meta != null){
+
+					if( meta.hasLore() ){
 
 
-					if( meta.getLore().contains (ChatColor.YELLOW+"Click to select a gateway destination") ){
+						if( meta.getLore().contains (ChatColor.YELLOW+"Click to select a gateway destination") ){
 
-						String name = player.getName();
-						List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
-						if(list != null){
+							List<Memory> list = TheOnePower.unseenLand.memoryMap.get(name);
+							if(list != null){
 
-							for(Memory memory : list){
+								for(Memory memory : list){
 
-								if(memory.name.equals(meta.getDisplayName()) ){
+									if(memory.name.equals(meta.getDisplayName()) ){
 
-									Location spawnLocation = player.getTargetBlock(null, 5).getLocation();
-									Location destination = memory.getLocation(false);
-									Direction direction = Utility.getDirection(yaw);
-									new Portal(spawnLocation, destination,  player.getLocation(), direction);
-									player.closeInventory();
+										Location spawnLocation = player.getTargetBlock(null, 5).getLocation();
+										Location destination = memory.getLocation(false);
+										Direction direction = Utility.getDirection(yaw);
+										new Portal(spawnLocation, destination,  player.getLocation(), direction);
+										player.closeInventory();
+										event.setCancelled(true);
+									}
 								}
 							}
 						}
+
+						if( meta.hasDisplayName() ){
+							String itemName = meta.getDisplayName();
+
+							if(itemName.equals(Strings.A_DAM_PUNISH_BUTTON ) ){
+								Damane damane = TheOnePower.database.getSuldam(name).getDamane();
+								Player dp = damane.getPlayer();
+								double health = dp.getHealth();
+								health = health - 1;
+
+								if(health < 0){
+									health = 0;
+								}
+
+								dp.playEffect(EntityEffect.HURT);
+								dp.setHealth(health);
+								event.setCancelled(true);
+							}
+
+						}
 					}
-					event.setCancelled(true);
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -233,10 +258,14 @@ public class EventListener implements Listener {
 
 			if (TheOnePower.database.isSuldam(name) ){
 				Damane damane = TheOnePower.database.getSuldam(name).getDamane();
+				System.out.println("Player is suldam!");
+
 
 				if(damane != null){
 					Player damanePlayer = Bukkit.getPlayer( damane.getName() );
 					double health = damanePlayer.getHealth() - event.getDamage();
+
+					System.out.println("Damane not null!");
 
 					if(health < 0){
 						health = 0;
@@ -245,6 +274,7 @@ public class EventListener implements Listener {
 					if( ! damanePlayer.isDead() ){
 						damanePlayer.setHealth( health );
 						damanePlayer.playEffect(EntityEffect.HURT);
+						System.out.println("Hurt a damane!");
 					}
 				}
 
@@ -269,17 +299,17 @@ public class EventListener implements Listener {
 					inventory.addItem(new Angreal().asItem());
 					System.out.println("Added an angreal");
 				}
-				
+
 				if( Utility.chance(20)){
 					inventory.addItem( new Adam().asItem() );
 					System.out.println("Added an a'dam");
 				}
-				
+
 				if( Utility.chance(15)){
 					inventory.addItem(new SaAngreal().asItem() );
 					System.out.println("Added a sa'angreal");
 				}
-								
+
 				if( Utility.chance(5) ){
 					inventory.addItem(new Callandor().asItem() );
 					System.out.println("Added Callandor");

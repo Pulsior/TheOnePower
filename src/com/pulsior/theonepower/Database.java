@@ -47,6 +47,14 @@ public class Database implements Serializable{
 
 		return null;
 	}
+	
+	public void removeDamane(String name){
+		damaneList.remove( getDamane(name) );
+	}
+	
+	public void removeDamane(Damane damane){
+		damaneList.remove( damane );
+	}
 
 	public void addSuldam(Suldam suldam){
 		if(! isSuldam(suldam.getName() ) ){
@@ -75,7 +83,15 @@ public class Database implements Serializable{
 
 		return null;
 	}
-
+	
+	public void removeSuldam(String name){
+		suldamList.remove( getSuldam(name) );
+	}
+	
+	public void removeDamane(Suldam suldam){
+		suldamList.remove( suldam );
+	}
+	
 	public void addWarder(Warder warder){
 		if(! isWarder(warder.getName() ) ){
 			warderList.add(warder);

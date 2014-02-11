@@ -38,7 +38,12 @@ commands:
        description: Retrieve stats about your level progress and your memories
        usage: /<command>
        permission: theonepower.stats
-       permission-message: You don't have permission to do this 
+       permission-message: You don't have permission to do this
+     unleash:
+       description: Unleash a leashed player
+       usage: /<command>
+       permission: theonepower.leash
+       permission-message: You don't have permission to do this  
 permissions:
      theonepower.channel:
        description: Allow players to embrace, use and release saidar
@@ -55,4 +60,7 @@ permissions:
      theonepower.dream:
        description: Allow players to cheat themselves to the Unseen Land
        default: op
+     theonepower.leash:
+       description: Allow players to use an adam
+       default: true
      

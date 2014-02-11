@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -32,10 +33,13 @@ public class Healing implements Weave{
 			double playerHealth = clickedPlayer.getHealth();
 			double healthDifference = 20-playerHealth;
 			clickedPlayer.setFoodLevel(player.getFoodLevel()- (int) healthDifference);
+			
 			if(clickedPlayer.getFoodLevel() < 2){
 				clickedPlayer.setFoodLevel(2);
 			}
+			
 			clickedPlayer.setHealth(20);
+			clickedPlayer.playEffect(EntityEffect.WOLF_HEARTS);
 			world.playEffect(player.getLocation(), Effect.SMOKE, 0);
 			return true;
 		}

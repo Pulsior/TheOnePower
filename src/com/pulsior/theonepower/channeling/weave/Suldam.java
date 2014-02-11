@@ -2,6 +2,7 @@ package com.pulsior.theonepower.channeling.weave;
 
 import java.io.Serializable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Suldam implements Serializable{
@@ -17,6 +18,14 @@ public class Suldam implements Serializable{
 	
 	public String getName(){
 		return name;
+	}
+	
+	public Player getPlayer(){
+		return Bukkit.getPlayer(name);
+	}
+	
+	public boolean hasDamane(){
+		return getDamane() != null;
 	}
 	
 	public void setDamane(Damane damane){

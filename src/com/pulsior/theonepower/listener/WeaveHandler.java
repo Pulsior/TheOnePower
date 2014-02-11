@@ -126,6 +126,7 @@ public class WeaveHandler implements Listener{
 				}
 			}
 			
+						
 			/*
 			 * Check if the item is bound to saidar embracing 
 			 */

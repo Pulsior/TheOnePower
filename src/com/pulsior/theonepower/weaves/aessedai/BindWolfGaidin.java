@@ -3,7 +3,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -39,7 +39,7 @@ public class BindWolfGaidin implements Weave {
 			wolf.setAngry(false);
 			wolf.setTamed(true);
 			wolf.setOwner(player);
-			world.playEffect(wolf.getLocation(), Effect.SMOKE, 0);
+			wolf.playEffect(EntityEffect.WOLF_HEARTS);
 			player.playSound(player.getLocation(), Sound.WOLF_BARK, 1, 0);
 			return true;
 		}

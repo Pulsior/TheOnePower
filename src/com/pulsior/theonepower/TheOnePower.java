@@ -26,8 +26,10 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.channeling.weave.Shield;
+import com.pulsior.theonepower.channeling.weave.Suldam;
 import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
@@ -110,21 +112,21 @@ public final class TheOnePower extends JavaPlugin{
 	@Override
 	public void onDisable(){
 		Player[] players = server.getOnlinePlayers();
-		
+
 		for(Player p : players){
-			
+
 			String name = p.getName();
 			Channel channel = channelMap.get(name);
-			
+
 			if (channel != null){
 				channel.close();
 				channelMap.remove(name);
 			}
 		}
-		
+
 		save();
 		saveUnseenLand();
-		
+
 		for(Portal p : portals){
 			p.clear();
 		}
@@ -161,7 +163,7 @@ public final class TheOnePower extends JavaPlugin{
 				}
 
 				else{
-					
+
 					SaidarEmbraceEvent event = new SaidarEmbraceEvent( (Player) sender);
 					Bukkit.getServer().getPluginManager().callEvent(event);
 					if(! event.isCancelled() ){
@@ -224,7 +226,7 @@ public final class TheOnePower extends JavaPlugin{
 					else if (arg.equalsIgnoreCase("firestaff") ){
 						inventory.addItem( new StaffOfFire().asItem() );
 					}
-					
+
 					else if (arg.equalsIgnoreCase("meteorstaff") ){
 						inventory.addItem( new StaffOfMeteor().asItem() );
 					}
@@ -356,6 +358,31 @@ public final class TheOnePower extends JavaPlugin{
 				}
 				return true;
 			}
+		}
+
+		if(cmd.getName().equalsIgnoreCase("unleash")){
+
+			if(sender instanceof Player){
+
+				String name = sender.getName();
+
+				if( database.isSuldam(name) ){
+					Suldam suldam = database.getSuldam(name);
+					Damane damane = suldam.getDamane();
+					
+					if(damane != null){
+					
+					sender.sendMessage(ChatColor.GRAY+"Unleashed "+ damane.getName() );
+					Bukkit.getPlayer( damane.getName() ).sendMessage(ChatColor.GREEN+"You were unleashed");
+					suldam.setDamane(null);
+					database.removeDamane( damane );
+					}
+				}
+				
+			}
+			
+			return true;
+
 		}
 
 
