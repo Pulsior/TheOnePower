@@ -36,11 +36,11 @@ import com.pulsior.theonepower.util.Strings;
 public class WeaveHandler implements Listener{
 
 
-	String earth = ChatColor.DARK_GREEN + "Earth";
-	String air = ChatColor.BLUE + "Air";
-	String fire = ChatColor.RED + "Fire";
-	String water = ChatColor.AQUA + "Water";
-	String spirit = ChatColor.GRAY + "Spirit";
+	Material earth = Material.DIRT;
+	Material air = Material.FEATHER;
+	Material fire = Material.FIRE;
+	Material water = Material.WATER;
+	Material spirit = (Material.NETHER_STAR);
 
 
 	@SuppressWarnings("deprecation")
@@ -199,17 +199,17 @@ public class WeaveHandler implements Listener{
 			String itemName = item.getItemMeta().getDisplayName();
 			channel = TheOnePower.channelMap.get( name );
 			Action action = event.getAction();
-			if (itemName != null && channel != null && ( action.equals(Action.RIGHT_CLICK_AIR) ||
+			if (item != null && channel != null && ( action.equals(Action.RIGHT_CLICK_AIR) ||
 					event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){			//If the player clicked an element, adds the element to the channel
 
-				if (itemName.equalsIgnoreCase(earth) || itemName.equalsIgnoreCase(air) ||
-						itemName.equalsIgnoreCase(water) || itemName.equalsIgnoreCase(fire) || 
-						itemName.equalsIgnoreCase(spirit) ){
+				if (item.getType().equals(earth) || item.getType().equals(air) ||
+						item.getType().equals(water) || item.getType().equals(fire) || 
+						item.getType().equals(spirit) ){
 
-					Element element = getElementByString(itemName);
+					Element element = getElement(item);
 
 					if(element != null){
-						channel.addElement(element);
+						channel.addElement(element, element.toString() );
 					}
 
 				}
@@ -275,49 +275,26 @@ public class WeaveHandler implements Listener{
 	 * @param element
 	 * @return
 	 */
-	public Element getElementByString(String element){
+	public Element getElement(ItemStack element){
 
-		if(element.equalsIgnoreCase(earth)){
+		if(element.getType().equals(earth)){
 			return Element.EARTH;
 		}
-		if(element.equalsIgnoreCase(air)){
+		if(element.getType().equals(air)){
 			return Element.AIR;
 		}
-		if(element.equalsIgnoreCase(fire)){
+		if(element.getType().equals(fire)){
 			return Element.FIRE;
 		}
-		if(element.equalsIgnoreCase(water)){
+		if(element.getType().equals(water)){
 			return Element.WATER;
 		}
-		if(element.equalsIgnoreCase(spirit)){
+		if(element.getType().equals(spirit)){
 			return Element.SPIRIT;
 		}
 		return null;
 	}
 
-	/**
-	 * If the block is a portal, remove it
-
-
-	public void clearSurroundingPortalBlocks(Block block){
-
-		List<Block> list = new ArrayList<Block>();
-		list.add( block.getLocation().add(0, 1, 0).getBlock() );
-		list.add( block.getLocation().add(0, -1, 0).getBlock() );
-		list.add( block.getLocation().add(1, 0, 0).getBlock() );
-		list.add( block.getLocation().add(-1, 0, 0).getBlock() );
-		list.add( block.getLocation().add(0, 0, 1).getBlock() );
-		list.add( block.getLocation().add(0, 0, -1).getBlock() );
-
-		for(Block block2: list){
-			if(block2.getType().equals(Material.PORTAL)){
-				block2.setType(Material.AIR);
-				clearSurroundingPortalBlocks(block2);
-			}
-		}
-	}
-
-	 */
 
 
 

@@ -165,16 +165,18 @@ public class EventListener implements Listener {
 
 							if(itemName.equals(Strings.A_DAM_PUNISH_BUTTON ) ){
 								Damane damane = TheOnePower.database.getSuldam(name).getDamane();
-								Player dp = damane.getPlayer();
-								double health = dp.getHealth();
-								health = health - 1;
+								if(damane != null){
+									Player dp = damane.getPlayer();
+									double health = dp.getHealth();
+									health = health - 1;
 
-								if(health < 0){
-									health = 0;
+									if(health < 0){
+										health = 0;
+									}
+
+									dp.playEffect(EntityEffect.HURT);
+									dp.setHealth(health);
 								}
-
-								dp.playEffect(EntityEffect.HURT);
-								dp.setHealth(health);
 								event.setCancelled(true);
 							}
 
@@ -244,7 +246,7 @@ public class EventListener implements Listener {
 		}
 
 		if (TheOnePower.database.isDamane(name) ){
-			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10, 3) );
+			player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 3) );
 			event.setCancelled(true);
 		}
 	}
@@ -258,14 +260,10 @@ public class EventListener implements Listener {
 
 			if (TheOnePower.database.isSuldam(name) ){
 				Damane damane = TheOnePower.database.getSuldam(name).getDamane();
-				System.out.println("Player is suldam!");
-
 
 				if(damane != null){
 					Player damanePlayer = Bukkit.getPlayer( damane.getName() );
 					double health = damanePlayer.getHealth() - event.getDamage();
-
-					System.out.println("Damane not null!");
 
 					if(health < 0){
 						health = 0;
@@ -274,7 +272,6 @@ public class EventListener implements Listener {
 					if( ! damanePlayer.isDead() ){
 						damanePlayer.setHealth( health );
 						damanePlayer.playEffect(EntityEffect.HURT);
-						System.out.println("Hurt a damane!");
 					}
 				}
 

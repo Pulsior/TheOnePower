@@ -15,15 +15,17 @@ public class PunishButton extends AdamButton{
 		super(Material.WOOD_SWORD);
 		setDisplayName(Strings.A_DAM_PUNISH_BUTTON);
 		addLore(ChatColor.GOLD+"Punish your damane");
-		
+
 	}
 
 	@Override
 	public void use(Suldam suldam, Damane damane) {
 		Player player = damane.getPlayer();
-		double health = player.getHealth();
-		player.setHealth( health-1 );
-		player.playEffect(EntityEffect.HURT);
+		if(! player.isDead() ){
+			double health = player.getHealth();
+			player.setHealth( health-1 );
+			player.playEffect(EntityEffect.HURT);
+		}
 	}
 
 }

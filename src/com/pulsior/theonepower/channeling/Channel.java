@@ -41,6 +41,7 @@ public class Channel {
 	public int taskId;
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 	BukkitRunnable regenerationTask;
+	String elementString;
 
 	WeaveEffect lastWeave = null;
 
@@ -169,6 +170,8 @@ public class Channel {
 		regenerationTask = new PlayerRegenerationTask(player, maxLevel);
 		regenerationTask.runTaskTimer(plugin, 0, taskDuration);
 
+		resetElements();
+		
 		player.updateInventory();
 	}
 
@@ -176,18 +179,57 @@ public class Channel {
 	 * Add an element to a weave
 	 * @param element
 	 */
-	public void addElement(Element element){
+	@SuppressWarnings("deprecation")
+	public void addElement(Element element, String elementName){
 
 		if(player.getLevel() != 0){
 			weave.add(element);
+			
 			Location location = player.getLocation();
 			location.setX(location.getX()+14);
 			player.playSound(location, Sound.CLICK, 1, 0);
+			
+			if(elementString == null){
+				elementString = elementName;
+			}
+			
+			else{
+				elementString += ", " + elementName;
+			}
+			
+			PlayerInventory inv = player.getInventory();
+			
+			for(int x = 4; x < 9; x++){
+				ItemStack item = inv.getItem(x);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(elementString);
+				item.setItemMeta(meta);
+				
+				player.updateInventory();
+			
+			}
 		}
 
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean(true) );
 	}
-
+	
+	@SuppressWarnings("deprecation")
+	public void resetElements(){
+		PlayerInventory inv = player.getInventory();
+		
+		for(int x = 4; x < 9; x++){
+			ItemStack item = inv.getItem(x);
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName("  ");
+			item.setItemMeta(meta);
+			
+			player.updateInventory();
+		
+		}
+		
+		elementString = null;
+	}
+	
 	/**
 	 * Execute a weave
 	 * @param clickedBlock
@@ -220,6 +262,7 @@ public class Channel {
 		}
 
 		weave.clear();
+		resetElements();
 
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
@@ -259,6 +302,7 @@ public class Channel {
 	public void disband(){
 		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 		weave.clear();
+		resetElements();
 		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
 	}
 

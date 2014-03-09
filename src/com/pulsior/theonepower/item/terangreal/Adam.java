@@ -16,15 +16,20 @@ import com.pulsior.theonepower.util.Strings;
 public class Adam extends TerAngreal{
 
 	public Adam() {
-		super(Material.INK_SACK);
-		setDurability( (short) 15);
+		super(Material.LEASH);
 		setDisplayName(Strings.A_DAM_NAME);
 
 	}
 
 	@Override
 	public void use(Player player, Block block, BlockFace face, Entity entity) {
-
+		
+		String name = player.getName();
+		
+		if(TheOnePower.database.isDamane( name ) ){
+			return;
+		}
+		
 		if(TheOnePower.database.isSuldam(player.getName() ) && player.isSneaking() ){
 			player.openInventory( Menu.getAdamMenu(player) );
 		}

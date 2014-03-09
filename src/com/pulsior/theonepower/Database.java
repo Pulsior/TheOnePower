@@ -54,6 +54,7 @@ public class Database implements Serializable{
 	
 	public void removeDamane(Damane damane){
 		damaneList.remove( damane );
+		suldamList.remove( damane.getSuldam() );
 	}
 
 	public void addSuldam(Suldam suldam){
