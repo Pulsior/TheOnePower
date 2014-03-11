@@ -19,6 +19,7 @@ import com.pulsior.theonepower.weaves.aessedai.ClearSky;
 import com.pulsior.theonepower.weaves.aessedai.FoldedLight;
 import com.pulsior.theonepower.weaves.aessedai.Healing;
 import com.pulsior.theonepower.weaves.aessedai.Lightning;
+import com.pulsior.theonepower.weaves.aessedai.Manipulate;
 import com.pulsior.theonepower.weaves.aessedai.Rain;
 import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
 import com.pulsior.theonepower.weaves.aessedai.Shielding;
@@ -56,6 +57,7 @@ public enum WeaveEffect {
 	SHIELDING(new Shielding(), Level.AES_SEDAI),
 	REMOVE_SHIELDING(new RemoveShield(), Level.AES_SEDAI),
 	BIND_WARDER(new BindWarder(), Level.AES_SEDAI),
+	MANIPULATE(new Manipulate(), Level.AES_SEDAI),
 	METEOR(new Meteor(), Level.FORSAKEN),
 	TELEPORT(new Teleport(), Level.FORSAKEN),
 	STRIKE(new Strike(), Level.FORSAKEN),
