@@ -19,7 +19,7 @@ public class Database implements Serializable{
 	private List<Warder> warderList = new ArrayList<Warder>();
 
 	private HashMap<String, Shield> shieldMap = new HashMap<String, Shield>();
-
+	
 	public void addDamane(Damane damane){
 		if(! isDamane(damane.getName() ) ){
 			damaneList.add(damane);

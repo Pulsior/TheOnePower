@@ -39,10 +39,16 @@ public class Channel {
 	public String playerName;
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
+	
 	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 	BukkitRunnable regenerationTask;
 	String elementString;
+	boolean isCasting;
 
+	int normalExpLevel;
+	float normalExpProgress;
+	ItemStack[] normalInventory;
+	
 	WeaveEffect lastWeave = null;
 
 	TheOnePower plugin;
@@ -55,9 +61,7 @@ public class Channel {
 
 
 	@SuppressWarnings("deprecation")
-	public Channel(String playerName){
-		
-		
+	public Channel(String playerName){	
 		
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
@@ -65,7 +69,7 @@ public class Channel {
 		player.updateInventory();
 
 
-		TheOnePower.castingPlayersMap.put(playerName, new Boolean(false));
+		isCasting = false;
 
 		/*
 		 * Set up the data in PowerMap
@@ -75,22 +79,19 @@ public class Channel {
 			TheOnePower.power.addPlayer( playerName );
 		}
 
-		TheOnePower.expLevelProgressMap.put(playerName, player.getExp());
+		normalExpProgress = player.getExp();
 
 		/*
 		 * Store the inventory in a HashMap
 		 */
 
 		PlayerInventory inventory = player.getInventory();
-		ItemStack[] inventoryArray = new ItemStack[36];
-		for (int x = 0; x < 36; x++){
-			inventoryArray[x] = inventory.getItem(x);
-		}
-		TheOnePower.embraceInventoryMap.put(playerName, inventoryArray);
+		normalInventory = inventory.getContents();
+		
 		TheOnePower.channelMap.put(playerName, this);
 
 
-		TheOnePower.currentLevelMap.put(playerName, player.getLevel()); //Add the correct levels to the player
+		normalExpLevel = player.getLevel(); //Add the correct levels to the player
 		maxLevel = TheOnePower.power.levelMap.get(playerName);
 		maxLevel = maxLevel + getAngrealLevels(player);
 		player.setLevel(maxLevel);
@@ -210,7 +211,7 @@ public class Channel {
 			}
 		}
 
-		TheOnePower.castingPlayersMap.put(playerName, new Boolean(true) );
+		isCasting = true;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -264,7 +265,7 @@ public class Channel {
 		weave.clear();
 		resetElements();
 
-		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
+		isCasting = false;
 	}
 
 
@@ -276,23 +277,12 @@ public class Channel {
 
 		String name = player.getName();
 		PlayerInventory inventory = player.getInventory();
-		ItemStack[] savedInventory = TheOnePower.embraceInventoryMap.get(name);
-
-		for(int y = 0; y < 36; y++){
-			ItemStack item = savedInventory[y];
-			if (item != null){
-				inventory.setItem(y, item);
-			}
-			else{
-				inventory.setItem(y, new ItemStack(Material.AIR));
-			}
-		}
+		inventory.setContents(normalInventory);
 
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.removePotionEffect(PotionEffectType.ABSORPTION);
-		player.setLevel(TheOnePower.currentLevelMap.get( playerName ) );
-		player.setExp(TheOnePower.expLevelProgressMap.get(playerName));
-		TheOnePower.currentLevelMap.remove( playerName );
+		player.setLevel( normalExpLevel );
+		player.setExp( normalExpProgress );
 
 		regenerationTask.cancel();
 		TheOnePower.channelMap.remove(name);
@@ -303,7 +293,7 @@ public class Channel {
 		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 		weave.clear();
 		resetElements();
-		TheOnePower.castingPlayersMap.put(playerName, new Boolean (false) );
+		isCasting = false;
 	}
 
 	/**
@@ -329,6 +319,12 @@ public class Channel {
 		return level;
 	}
 	
+	/**
+	 * Get the correct weave
+	 * @param list
+	 * @return
+	 */
+	
 	public WeaveEffect compare(List<Element> list){ 
 		WeaveEffect[] effects = WeaveEffect.values();
 		for(WeaveEffect effect : effects){
@@ -349,5 +345,15 @@ public class Channel {
 		}
 		return WeaveEffect.INVALID;
 	};
+	
+	/**
+	 * Get if the player is casting a weave
+	 */
+	
+	public boolean isCasting(){
+		return isCasting;
+	}
+	
+	
 
 }

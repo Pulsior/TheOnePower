@@ -28,7 +28,6 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Portal;
-import com.pulsior.theonepower.channeling.weave.Shield;
 import com.pulsior.theonepower.channeling.weave.Suldam;
 import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.item.angreal.Angreal;
@@ -56,11 +55,6 @@ import com.pulsior.theonepower.util.Strings;
 public final class TheOnePower extends JavaPlugin{
 
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
-	public static HashMap<String, ItemStack[]> embraceInventoryMap = new HashMap<String, ItemStack[]>();
-	public static HashMap<String, Integer> currentLevelMap = new HashMap<String, Integer>();
-	public static HashMap<String, Float> expLevelProgressMap = new HashMap<String, Float>();
-	public static HashMap<String, Boolean> castingPlayersMap = new HashMap<String, Boolean>();
-	public static HashMap<String, Shield> shieldedPlayersMapz = new HashMap<String, Shield>();
 
 	public static List<Portal> portals = new ArrayList<Portal>();
 	public static List<Warder> warders = new ArrayList<Warder>();

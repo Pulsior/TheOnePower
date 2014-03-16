@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.Channel;
 
 public class PlayerRegenerationTask extends BukkitRunnable{
 	
@@ -19,9 +20,12 @@ public class PlayerRegenerationTask extends BukkitRunnable{
 	public void run() {
 		String playerName = player.getName();
 		if( ! (player.getLevel() >= maxLevel) ) {
-
-			if(TheOnePower.castingPlayersMap.get( playerName ).equals (new Boolean( false) ) ){
-				player.setLevel( player.getLevel()+1 );;
+			
+			Channel channel = TheOnePower.channelMap.get(playerName);
+			if(channel != null){
+				if( ! channel.isCasting() ){
+					player.setLevel( player.getLevel()+1 );
+				}
 			}
 
 		}

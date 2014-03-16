@@ -76,19 +76,7 @@ public class WeaveHandler implements Listener{
 			}
 
 			if(item.getType().equals(Material.STICK)){
-				Channel channel = TheOnePower.channelMap.get(name);
-				if(channel != null){
-					System.out.println("The max level is "+channel.maxLevel+", the current level is "+player.getLevel());
-					System.out.println("Is the task running? "+Bukkit.getScheduler().isCurrentlyRunning(channel.taskId) );
-					System.out.println("Is it queued? "+Bukkit.getScheduler().isQueued(channel.taskId) );
-					
-					try{
-						System.out.println("Is the player casting, according to the castingPlayerMap? "+TheOnePower.castingPlayersMap.get(name));
-					}
-					catch(NullPointerException ex){
-						System.out.println("A NullPointerException was thrown when trying to access TheOnePower.castingPlayersMap");
-					}
-				}
+				
 			}
 
 			/*
