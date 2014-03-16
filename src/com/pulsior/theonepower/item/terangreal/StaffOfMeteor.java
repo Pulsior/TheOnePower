@@ -19,10 +19,9 @@ import com.pulsior.theonepower.util.Utility;
 public class StaffOfMeteor extends TerAngreal{
 
 	public StaffOfMeteor() {
-		
 		super(Material.BLAZE_ROD);
 		setDisplayName(Strings.METEOR_STAFF_NAME);
-
+		setSpawnChance(5);
 	}
 
 	@Override

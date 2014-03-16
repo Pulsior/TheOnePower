@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class CustomItem {
 	
 	ItemStack item;
+	int spawnChance;
 	
 	public CustomItem(Material type){
 		item = new ItemStack(type);
@@ -49,6 +50,14 @@ public class CustomItem {
 	
 	public void setEnchantment(Enchantment ench, int level){
 		item.addEnchantment(ench, level);
+	}
+	
+	public void setSpawnChance(int chance){
+		this.spawnChance = chance;
+	}
+	
+	public int getSpawnChance(){
+		return spawnChance;
 	}
 	
 	public ItemStack asItem(){

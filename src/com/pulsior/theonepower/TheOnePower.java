@@ -87,6 +87,7 @@ public final class TheOnePower extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(), this);
+		getServer().getPluginManager().registerEvents(new ItemGenerator(), this);
 
 		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire() );
 		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor() );
@@ -116,12 +117,13 @@ public final class TheOnePower extends JavaPlugin{
 		for(Player p : players){
 
 			String name = p.getName();
-			Channel channel = channelMap.get(name);
-
+			Channel channel = channelMap.get(name);			
+			
 			if (channel != null){
 				channel.close();
 				channelMap.remove(name);
 			}
+			
 		}
 
 		save();
