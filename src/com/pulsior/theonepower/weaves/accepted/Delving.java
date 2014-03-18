@@ -13,11 +13,11 @@ import org.bukkit.entity.Player;
 import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.weaves.Weave;
 
-public class Checking implements Weave{
+public class Delving implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 
-	public Checking(){
+	public Delving(){
 		elements.add(Element.SPIRIT);
 		elements.add(Element.AIR);
 		elements.add(Element.SPIRIT);
