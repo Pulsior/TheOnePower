@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.pulsior.theonepower.weaves.Invalid;
 import com.pulsior.theonepower.weaves.Weave;
 import com.pulsior.theonepower.weaves.accepted.BindingAir;
+import com.pulsior.theonepower.weaves.accepted.Checking;
 import com.pulsior.theonepower.weaves.accepted.QuickGrowth;
 import com.pulsior.theonepower.weaves.accepted.ShootFireball;
 import com.pulsior.theonepower.weaves.aessedai.BindWarder;
@@ -49,6 +50,7 @@ public enum WeaveEffect {
 	FIREBALL(new ShootFireball(), Level.ACCEPTED),
 	BINDING_AIR(new BindingAir(), Level.ACCEPTED),
 	QUICK_GROWTH(new QuickGrowth(), Level.ACCEPTED),
+	CHECKING(new Checking(), Level.ACCEPTED),
 	LIGHTNING(new Lightning(), Level.AES_SEDAI ),
 	RAIN(new Rain(), Level.AES_SEDAI),
 	CLEAR_SKY(new ClearSky(), Level.AES_SEDAI ),
