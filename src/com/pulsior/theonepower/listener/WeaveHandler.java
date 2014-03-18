@@ -199,13 +199,19 @@ public class WeaveHandler implements Listener{
 					if(element != null){
 						channel.addElement(element, element.toString() );
 					}
-
+					
 				}
+				
+				if(itemName == null){
+					return;
+				}
+				
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Cast Weave")){ //Casts and executes the weave
 					channel.cast( event.getClickedBlock(), event.getBlockFace(), null );
 
 
 				}
+				
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Disband Weave")){ //Clears the weave
 			
 					channel.disband();

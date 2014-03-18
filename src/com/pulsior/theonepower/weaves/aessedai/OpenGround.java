@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.task.OpenGroundTask;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class OpenGround implements Weave{
@@ -47,18 +50,31 @@ public class OpenGround implements Weave{
 		}
 
 		
+		List<Block> blocks2 = new ArrayList<Block>();
+		blocks2.addAll(blocks);
 		
 		for(Block b : blocks){
 			
 			Location loc = b.getLocation();
-			b.breakNaturally();
 			
 			for(int x = -1; x > -25; x--){
-				loc.add(0, -1, 0).getBlock().breakNaturally();
+				blocks2.add( loc.add(0, -1, 0).getBlock() );
 			}
-			
-			b.breakNaturally();
 		}
+		
+		List<Material> materials = new ArrayList<Material>();
+		
+		for(Block b : blocks2){
+			materials.add( b.getType() );
+			b.setType(Material.AIR);
+		}
+		
+		OpenGroundTask task = new OpenGroundTask(blocks2, materials);
+		task.runTaskLater(TheOnePower.plugin, 100);
+		
+		
+		
+		
 
 		return true;
 	}
