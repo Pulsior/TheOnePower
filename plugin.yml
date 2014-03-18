@@ -43,7 +43,11 @@ commands:
        description: Unleash a leashed player
        usage: /<command>
        permission: theonepower.leash
-       permission-message: You don't have permission to do this  
+       permission-message: You don't have permission to do this 
+     stedding:
+       description: Create a stedding, in which players cannot channel
+       usage: /<command>
+       permission: op
 permissions:
      theonepower.channel:
        description: Allow players to embrace, use and release saidar

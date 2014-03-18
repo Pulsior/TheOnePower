@@ -39,6 +39,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.SaidarEmbraceEvent;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
@@ -235,6 +236,11 @@ public class EventListener implements Listener {
 
 		if (TheOnePower.database.hasShield(name) ) {
 			player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
+			event.setCancelled(true);
+		}
+		
+		if ( Stedding.isInStedding( player.getLocation() ) ){
+			player.sendMessage(ChatColor.RED+"You can't feel the True Source, you must be in a stedding");
 			event.setCancelled(true);
 		}
 

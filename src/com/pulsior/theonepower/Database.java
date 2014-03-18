@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Shield;
 import com.pulsior.theonepower.channeling.weave.Suldam;
@@ -17,6 +18,7 @@ public class Database implements Serializable{
 	private List<Damane> damaneList = new ArrayList<Damane>();
 	private List<Suldam> suldamList = new ArrayList<Suldam>();
 	private List<Warder> warderList = new ArrayList<Warder>();
+	private List<Stedding> steddingList = new ArrayList<Stedding>();
 
 	private HashMap<String, Shield> shieldMap = new HashMap<String, Shield>();
 	
@@ -138,6 +140,14 @@ public class Database implements Serializable{
 
 	public void removeShield(String name){
 		shieldMap.remove(name);
+	}
+	
+	public void addStedding(Stedding stedding){
+		steddingList.add(stedding);
+	}
+	
+	public List<Stedding> getSteddings(){
+		return steddingList;
 	}
 
 }

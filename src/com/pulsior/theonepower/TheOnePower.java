@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.channeling.weave.Suldam;
@@ -112,12 +114,12 @@ public final class TheOnePower extends JavaPlugin{
 
 			String name = p.getName();
 			Channel channel = channelMap.get(name);			
-			
+
 			if (channel != null){
 				channel.close();
 				channelMap.remove(name);
 			}
-			
+
 		}
 
 		save();
@@ -365,20 +367,31 @@ public final class TheOnePower extends JavaPlugin{
 				if( database.isSuldam(name) ){
 					Suldam suldam = database.getSuldam(name);
 					Damane damane = suldam.getDamane();
-					
+
 					if(damane != null){
-					
-					sender.sendMessage(ChatColor.GRAY+"Unleashed "+ damane.getName() );
-					Bukkit.getPlayer( damane.getName() ).sendMessage(ChatColor.GREEN+"You were unleashed");
-					suldam.setDamane(null);
-					database.removeDamane( damane );
+
+						sender.sendMessage(ChatColor.GRAY+"Unleashed "+ damane.getName() );
+						Bukkit.getPlayer( damane.getName() ).sendMessage(ChatColor.GREEN+"You were unleashed");
+						suldam.setDamane(null);
+						database.removeDamane( damane );
 					}
 				}
-				
+
 			}
-			
+
 			return true;
 
+		}
+
+		if(cmd.getName().equalsIgnoreCase("stedding") ){
+			if(sender instanceof Player){
+				Player player = (Player) sender;
+				Location loc1 = player.getLocation().add(10, 0, 0);
+				Location loc2 = player.getLocation().add(0, 0, 10);
+				
+				Stedding.createStedding(player.getWorld().getName(), loc1, loc2);
+				
+			}
 		}
 
 
