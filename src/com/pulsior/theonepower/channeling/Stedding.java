@@ -2,7 +2,9 @@ package com.pulsior.theonepower.channeling;
 
 import java.io.Serializable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import com.pulsior.theonepower.TheOnePower;
 
@@ -11,45 +13,42 @@ public class Stedding implements Serializable{
 	private static final long serialVersionUID = -8848145313185619L;
 
 	String worldName;
-	public double[] location1 = new double[2];
-	public double[] location2 = new double[2];
+	double radius;
+	public double[] location = new double[3];
 
-	public Stedding(String worldName, Location location1, Location location2){
+	public Stedding(String worldName, Location location, double radius){
 		this.worldName = worldName;
-
-		this.location1[0] = location1.getX();
-		this.location1[1] = location1.getZ();
-
-		this.location2[0] = location2.getX();
-		this.location2[1] = location2.getZ();
+		this.radius = radius;
+		
+		this.location[0] = location.getX();
+		this.location[1] = location.getY();
+		this.location[2] = location.getZ();
 	}
 
 	public static boolean isInStedding(Location location){
-
-		double x = location.getX();
-		double z = location.getZ();
 		
 		for(Stedding stedding : TheOnePower.database.getSteddings() ){
-			
-			double[] loc1 = stedding.location1;
-			double[] loc2 = stedding.location2;
-			
-			if(  (x < loc1[0] && x > loc2[0] ) || ( x > loc1[0] && x < loc2[0] ) ) {
-
-				if( (z < loc1[1] && z > loc2[1] ) || ( z > loc1[1] && z < loc2[1] ) ){
-					return true;
-				}
-
+			double distance = location.distance( stedding.asLocation() );
+			if(distance < stedding.getRadius() ){
+				return true;
 			}
-
 		}
 
 		return false;
 	}
 	
-	public static void createStedding(String worldName, Location location1, Location location2){
-		Stedding s = new Stedding( worldName, location1, location2);
+	public static void createStedding(String worldName, Location location1, int radius){
+		Stedding s = new Stedding( worldName, location1, radius);
 		TheOnePower.database.addStedding(s);
+	}
+	
+	public double getRadius(){
+		return radius;
+	}
+	
+	public Location asLocation(){
+		World world = Bukkit.getWorld(worldName);
+		return new Location(world, location[0], location[1], location[2]);
 	}
 
 }

@@ -46,8 +46,10 @@ commands:
        permission-message: You don't have permission to do this 
      stedding:
        description: Create a stedding, in which players cannot channel
-       usage: /<command>
+       usage: /<command> [radius]
        permission: op
+       permission-message: You don't have permission to do this 
+       
 permissions:
      theonepower.channel:
        description: Allow players to embrace, use and release saidar
@@ -67,4 +69,7 @@ permissions:
      theonepower.leash:
        description: Allow players to use an adam
        default: true
+     theonepower.stedding:
+       description: Allow players to create a stedding
+       default: op
      

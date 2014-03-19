@@ -384,13 +384,35 @@ public final class TheOnePower extends JavaPlugin{
 		}
 
 		if(cmd.getName().equalsIgnoreCase("stedding") ){
+
 			if(sender instanceof Player){
-				Player player = (Player) sender;
-				Location loc1 = player.getLocation().add(10, 0, 0);
-				Location loc2 = player.getLocation().add(0, 0, 10);
-				
-				Stedding.createStedding(player.getWorld().getName(), loc1, loc2);
-				
+
+				if(args.length == 1){
+					
+					int radius;
+					
+					try{
+						radius = Integer.parseInt(args[0]);
+					}
+					catch(NumberFormatException exception){
+						return false;
+					}
+					
+					
+					Player player = (Player) sender;
+					Location loc1 = player.getLocation();
+
+					Stedding.createStedding(player.getWorld().getName(), loc1, radius);
+					sender.sendMessage(ChatColor.GREEN+"Stedding created with a radius of "+radius);
+					
+					return true;
+
+				}
+
+			}
+
+			else{
+				sender.sendMessage("This command cannot be executed by the console");
 			}
 		}
 
@@ -504,7 +526,6 @@ public final class TheOnePower extends JavaPlugin{
 		}
 		catch(IOException ex){
 			log.info("[The One Power] No save found for the Unseen Land, creating a new one");
-			log.info("IOException!");
 		} 
 		catch (ClassNotFoundException e) {
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading the Unseen Land");
