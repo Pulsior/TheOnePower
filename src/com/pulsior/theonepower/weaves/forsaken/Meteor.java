@@ -41,7 +41,7 @@ public class Meteor implements Weave{
 
 			@Override
 			public void run() {
-				if(ball.isDead() == false){
+				if( ! ball.isDead() ){
 					Utility.spawnFireworkEffect(ball.getLocation(), Color.YELLOW, Color.RED, Type.BURST, true, true, 0);
 				}
 			}

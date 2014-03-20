@@ -55,9 +55,19 @@ public class Manipulate implements Weave{
 					org.bukkit.inventory.ItemStack helmetStack = new ItemStack(Material.DIAMOND_HELMET);
 					net.minecraft.server.v1_7_R1.ItemStack helmetNMSStack = CraftItemStack.asNMSCopy(helmetStack);
 					PacketPlayOutEntityEquipment helmetPacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 4, helmetNMSStack);
+					
+					org.bukkit.inventory.ItemStack legsStack = new ItemStack(Material.DIAMOND_LEGGINGS);
+					net.minecraft.server.v1_7_R1.ItemStack legsNMSStack = CraftItemStack.asNMSCopy(legsStack);
+					PacketPlayOutEntityEquipment legsPacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 2, legsNMSStack);
+					
+					org.bukkit.inventory.ItemStack bootsStack = new ItemStack(Material.DIAMOND_BOOTS);
+					net.minecraft.server.v1_7_R1.ItemStack bootsNMSStack = CraftItemStack.asNMSCopy(bootsStack);
+					PacketPlayOutEntityEquipment bootsPacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 1, bootsNMSStack);
 
 					link.sendPacket(chestplatePacket);
 					link.sendPacket(helmetPacket);
+					link.sendPacket(legsPacket);
+					link.sendPacket(bootsPacket);
 				}
 				
 			}

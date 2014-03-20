@@ -30,7 +30,7 @@ public class Delving implements Weave{
 		if(clickedEntity instanceof Player){
 			Player clickedPlayer = (Player) clickedEntity;
 			double health = clickedPlayer.getHealth();
-			player.sendMessage(ChatColor.YELLOW+"The other player has " + ChatColor.RED + health + ChatColor.YELLOW + " out of 10 hearts");
+			player.sendMessage(ChatColor.YELLOW+"The other player has " + ChatColor.RED + Math.floor(health) / 2 + ChatColor.YELLOW + " out of 10 hearts");
 
 			return true;
 		}

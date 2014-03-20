@@ -239,7 +239,7 @@ public class EventListener implements Listener {
 			event.setCancelled(true);
 		}
 		
-		if ( Stedding.isInStedding( player.getLocation() ) ){
+		if ( Stedding.getStedding( player.getLocation() ) != null ){
 			player.sendMessage(ChatColor.RED+"You can't feel the True Source, you must be in a stedding");
 			event.setCancelled(true);
 		}

@@ -61,7 +61,7 @@ public class Channel {
 
 
 	@SuppressWarnings("deprecation")
-	public Channel(String playerName){	
+	public Channel(String playerName, int extraLevels){	
 		
 		player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
@@ -93,7 +93,7 @@ public class Channel {
 
 		normalExpLevel = player.getLevel(); //Add the correct levels to the player
 		maxLevel = TheOnePower.power.levelMap.get(playerName);
-		maxLevel = maxLevel + getAngrealLevels(player);
+		maxLevel = maxLevel + extraLevels;
 		player.setLevel(maxLevel);
 		player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(playerName)  ) * TheOnePower.power.weaveProgressMap.get(playerName) );
 
@@ -354,6 +354,11 @@ public class Channel {
 		return isCasting;
 	}
 	
+	public SerializableChannel serialize(){
+		SerializableChannel sc = new SerializableChannel(playerName, maxLevel, taskDuration, weave);
+		return sc;
+	
+	}
 	
 
 }

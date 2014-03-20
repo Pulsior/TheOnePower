@@ -18,7 +18,7 @@ public class ForceEmbraceButton extends AdamButton{
 
 	@Override
 	public void use(Suldam suldam, Damane damane) {
-		new Channel( damane.getName() );
+		new Channel( damane.getName(), 0 );
 	}
 
 }

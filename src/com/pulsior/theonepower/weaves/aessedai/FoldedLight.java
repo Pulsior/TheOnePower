@@ -23,7 +23,6 @@ public class FoldedLight implements Weave {
 		elements.add(Element.SPIRIT);
 		elements.add(Element.AIR);
 		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
 		elements.add(Element.AIR);
 		elements.add(Element.SPIRIT);
 	}

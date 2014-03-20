@@ -149,5 +149,9 @@ public class Database implements Serializable{
 	public List<Stedding> getSteddings(){
 		return steddingList;
 	}
+	
+	public void removeStedding(Stedding stedding){
+		steddingList.remove(stedding);
+	}
 
 }

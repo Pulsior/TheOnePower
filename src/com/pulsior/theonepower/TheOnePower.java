@@ -88,6 +88,10 @@ public final class TheOnePower extends JavaPlugin{
 		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire() );
 		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor() );
 		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam() );
+		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal() );
+		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal() );
+		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor() );
+		
 
 		if (power == null){
 			power = new PowerMap();
@@ -149,7 +153,7 @@ public final class TheOnePower extends JavaPlugin{
 						if(stack != null){
 							ItemMeta meta = stack.getItemMeta();
 							List<String> lore = new ArrayList<String>();
-							lore.add(ChatColor.GOLD+"Click to embrace saidar");
+							lore.add(ChatColor.GOLD+"Saidar-bound item");
 							meta.setLore(lore);
 							stack.setItemMeta(meta);
 						}
@@ -165,14 +169,14 @@ public final class TheOnePower extends JavaPlugin{
 					SaidarEmbraceEvent event = new SaidarEmbraceEvent( (Player) sender);
 					Bukkit.getServer().getPluginManager().callEvent(event);
 					if(! event.isCancelled() ){
-						new Channel ( name );
+						new Channel ( name, 0 );
 					}
 
 				}
 			}
 
 			else{
-				sender.sendMessage("This command cannot be excecuted from the console!");
+				sender.sendMessage("This command cannot be executed from the console!");
 			}
 			return true;
 		}
@@ -395,6 +399,19 @@ public final class TheOnePower extends JavaPlugin{
 						radius = Integer.parseInt(args[0]);
 					}
 					catch(NumberFormatException exception){
+						if(args[0].equalsIgnoreCase("remove")){
+							Stedding stedding = Stedding.getStedding( ( (Player) sender).getLocation() );
+							
+							if(stedding != null){
+							sender.sendMessage(ChatColor.GREEN+"Stedding removed");
+							TheOnePower.database.removeStedding(stedding);
+							}
+							
+							else{
+								sender.sendMessage(ChatColor.RED+"You are not in a stedding");
+							}
+							
+						}
 						return false;
 					}
 					

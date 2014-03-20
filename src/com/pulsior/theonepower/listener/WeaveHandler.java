@@ -121,13 +121,13 @@ public class WeaveHandler implements Listener{
 			
 			List<String> lore = item.getItemMeta().getLore();
 			if(lore != null){
-				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Click to embrace saidar") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR)  || event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){
+				if(lore.get(0).equalsIgnoreCase(ChatColor.GOLD+"Saidar-bound item") && ( event.getAction().equals(Action.RIGHT_CLICK_AIR)  || event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){
 					
 					SaidarEmbraceEvent saidarEvent = new SaidarEmbraceEvent( player );
 					Bukkit.getServer().getPluginManager().callEvent(saidarEvent);
 					if(! saidarEvent.isCancelled() ){
 						event.setCancelled(true);
-						new Channel ( name );
+						new Channel ( name, 0);
 					}
 				}
 			}
@@ -139,8 +139,10 @@ public class WeaveHandler implements Listener{
 			if( meta.hasDisplayName() ){
 				TerAngreal terAngreal = TerAngreal.toTerAngreal(item);
 				
-				if(terAngreal != null){
+				Action action = event.getAction();
+				if(terAngreal != null && (action.equals(Action.RIGHT_CLICK_AIR ) || action.equals(Action.RIGHT_CLICK_BLOCK) ) ){
 					terAngreal.use(player, event.getClickedBlock(), event.getBlockFace(), null);
+					event.setCancelled(true);
 				}
 			}
 

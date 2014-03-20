@@ -25,16 +25,16 @@ public class Stedding implements Serializable{
 		this.location[2] = location.getZ();
 	}
 
-	public static boolean isInStedding(Location location){
+	public static Stedding getStedding(Location location){
 		
 		for(Stedding stedding : TheOnePower.database.getSteddings() ){
 			double distance = location.distance( stedding.asLocation() );
 			if(distance < stedding.getRadius() ){
-				return true;
+				return stedding;
 			}
 		}
 
-		return false;
+		return null;
 	}
 	
 	public static void createStedding(String worldName, Location location1, int radius){
