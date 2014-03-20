@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -76,7 +79,9 @@ public class WeaveHandler implements Listener{
 			}
 
 			if(item.getType().equals(Material.STICK)){
-				
+				CraftWorld w = (CraftWorld) player.getWorld();
+				Location l = player.getLocation();
+				w.setBiome(l.getBlockX(), l.getBlockY(), Biome.DESERT);
 			}
 
 			/*

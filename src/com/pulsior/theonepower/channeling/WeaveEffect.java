@@ -35,6 +35,7 @@ import com.pulsior.theonepower.weaves.novice.LightFire;
 import com.pulsior.theonepower.weaves.novice.OpenDoor;
 import com.pulsior.theonepower.weaves.novice.Waterbreathing;
 import com.pulsior.theonepower.weaves.saangreal.HeavenFire;
+import com.pulsior.theonepower.weaves.saangreal.LightningBall;
 
 /**
  * Enum for all the possible weaves
@@ -67,6 +68,7 @@ public enum WeaveEffect {
 	STRIKE(new Strike(), Level.FORSAKEN),
 	TRAVEL(new Travel(), Level.FORSAKEN),
 	FIRE_SWORD(new FireSword(), Level.FORSAKEN),
+	LIGHTNING_BALL(new LightningBall(), Level.SA_ANGREAL),
 	HEAVEN_FIRE(new HeavenFire(), Level.SA_ANGREAL);
 	
 	Weave weave;
