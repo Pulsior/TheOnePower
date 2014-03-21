@@ -11,13 +11,16 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
@@ -94,6 +97,20 @@ public class EventListener implements Listener {
 		int taskId = scheduler.scheduleSyncDelayedTask(plugin, task, 100L);
 		map.put(player.getName(),taskId);
 
+	}
+
+	@EventHandler
+	public void onProjectileHit(EntityDamageByEntityEvent event){
+		Entity projectile = event.getDamager();
+		if(projectile instanceof Fireball){
+			List<MetadataValue> meta = projectile.getMetadata("isLethal");
+			if( meta.get(0).asBoolean() ){
+				Entity entity = event.getEntity();
+				if(entity instanceof Creature ){
+					( (Creature) entity).damage(10000);
+				}
+			}
+		}
 	}
 
 	@EventHandler
@@ -238,7 +255,7 @@ public class EventListener implements Listener {
 			player.sendMessage(ChatColor.RED+"You can feel the True Source, but you can't touch it");
 			event.setCancelled(true);
 		}
-		
+
 		if ( Stedding.getStedding( player.getLocation() ) != null ){
 			player.sendMessage(ChatColor.RED+"You can't feel the True Source, you must be in a stedding");
 			event.setCancelled(true);

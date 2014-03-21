@@ -12,7 +12,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
+import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.weaves.Weave;
 
@@ -35,7 +37,8 @@ public class ShootFireball implements Weave{
 			createFire(clickedBlock, true);
 		}
 		else{
-			player.launchProjectile(Fireball.class);
+			Fireball f = player.launchProjectile(Fireball.class);
+			f.setMetadata("isLethal", new FixedMetadataValue(TheOnePower.plugin, true) );
 			world.playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 1, 0);
 		}
 		
