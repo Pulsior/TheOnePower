@@ -1,5 +1,6 @@
 package com.pulsior.theonepower.channeling;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.item.AngrealType;
@@ -32,16 +32,16 @@ import com.pulsior.theonepower.task.PlayerRegenerationTask;
  *
  */
 
-public class Channel {
+public class Channel implements Serializable{
 
-	public Player player;
+	private static final long serialVersionUID = 5639217340010068020L;
+	
 	public boolean pickUpItems = false;
 	public String playerName;
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
 	
-	BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-	BukkitRunnable regenerationTask;
+	BukkitRunnable regenerationTaskz;
 	String elementString;
 	boolean isCasting;
 
@@ -51,11 +51,6 @@ public class Channel {
 	
 	WeaveEffect lastWeave = null;
 
-	TheOnePower plugin;
-
-	PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1);
-	PotionEffect absorptionEffect = new PotionEffect(PotionEffectType.ABSORPTION, 1000000, 1);
-
 	public int maxLevel;
 	long taskDuration;
 
@@ -63,7 +58,7 @@ public class Channel {
 	@SuppressWarnings("deprecation")
 	public Channel(String playerName, int extraLevels){	
 		
-		player = Bukkit.getPlayer(playerName);
+		Player player = Bukkit.getPlayer(playerName);
 		this.playerName = playerName;
 		
 		player.updateInventory();
@@ -88,7 +83,7 @@ public class Channel {
 		PlayerInventory inventory = player.getInventory();
 		normalInventory = inventory.getContents();
 		
-		TheOnePower.channelMap.put(playerName, this);
+		TheOnePower.database.addChannel(playerName, this);
 
 
 		normalExpLevel = player.getLevel(); //Add the correct levels to the player
@@ -97,7 +92,6 @@ public class Channel {
 		player.setLevel(maxLevel);
 		player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(playerName)  ) * TheOnePower.power.weaveProgressMap.get(playerName) );
 
-		this.plugin = TheOnePower.plugin;
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
 		
@@ -165,11 +159,12 @@ public class Channel {
 		inv.setItem(2, rose);
 
 
-		player.addPotionEffect(nightVisionEffect);
-		player.addPotionEffect(absorptionEffect);
+		player.addPotionEffect( new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1) );
+		player.addPotionEffect( new PotionEffect(PotionEffectType.ABSORPTION, 1000000, 1));
 		
-		regenerationTask = new PlayerRegenerationTask(player, maxLevel);
-		regenerationTask.runTaskTimer(plugin, 0, taskDuration);
+		BukkitRunnable regenerationTask = new PlayerRegenerationTask(player, maxLevel);
+		regenerationTask.runTaskTimer(TheOnePower.plugin, 0, taskDuration);
+		TheOnePower.taskHolder.put(playerName, regenerationTask);
 
 		resetElements();
 		
@@ -182,7 +177,9 @@ public class Channel {
 	 */
 	@SuppressWarnings("deprecation")
 	public void addElement(Element element, String elementName){
-
+		
+		Player player = Bukkit.getPlayer(playerName);
+		
 		if(player.getLevel() != 0){
 			weave.add(element);
 			
@@ -216,6 +213,9 @@ public class Channel {
 	
 	@SuppressWarnings("deprecation")
 	public void resetElements(){
+		
+		Player player = Bukkit.getPlayer(playerName);
+		
 		PlayerInventory inv = player.getInventory();
 		
 		for(int x = 4; x < 9; x++){
@@ -237,7 +237,15 @@ public class Channel {
 	 */
 
 	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity){
-
+		
+		Player player = Bukkit.getPlayer(playerName);
+		
+		if(Stedding.getStedding( player.getLocation() ) != null ){
+			player.sendMessage(ChatColor.RED+"The One Power slipped away, you must be in a stedding");
+			close();
+			return;
+		}
+		
 		WeaveEffect effect = compare(weave);
 		String name = player.getName();
 
@@ -274,8 +282,8 @@ public class Channel {
 	 */
 
 	public void close(){
-
-		String name = player.getName();
+		
+		Player player = Bukkit.getPlayer(playerName);
 		PlayerInventory inventory = player.getInventory();
 		inventory.setContents(normalInventory);
 
@@ -284,12 +292,20 @@ public class Channel {
 		player.setLevel( normalExpLevel );
 		player.setExp( normalExpProgress );
 
-		regenerationTask.cancel();
-		TheOnePower.channelMap.remove(name);
+		BukkitRunnable task = TheOnePower.taskHolder.get(playerName);
+		
+		if(task != null){
+			task.cancel();
+		}
+		
+		TheOnePower.taskHolder.remove(playerName);
+		TheOnePower.database.removeChannel(playerName);
 
 	}
 
 	public void disband(){
+		
+		Player player = Bukkit.getPlayer(playerName);
 		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 		weave.clear();
 		resetElements();

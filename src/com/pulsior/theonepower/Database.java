@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.entity.Player;
+
+import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Shield;
@@ -15,6 +18,8 @@ public class Database implements Serializable{
 
 	private static final long serialVersionUID = -1169318961339172944L;
 
+	private HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
+	
 	private List<Damane> damaneList = new ArrayList<Damane>();
 	private List<Suldam> suldamList = new ArrayList<Suldam>();
 	private List<Warder> warderList = new ArrayList<Warder>();
@@ -153,5 +158,26 @@ public class Database implements Serializable{
 	public void removeStedding(Stedding stedding){
 		steddingList.remove(stedding);
 	}
+	
+	public void addChannel(String name, Channel channel){
+		channelMap.put(name, channel);
+	}
+	
+	public Channel getChannel(String name){
+		return channelMap.get(name);
+	}
+	
+	public Channel getChannel(Player player){
+		return channelMap.get( player.getName() );
+	}
+	
+	public void removeChannel(String name){
+		channelMap.remove(name);
+	}
+	
+	public void removeChannel(Player player){
+		channelMap.remove( player.getName() );
+	}
+	
 
 }

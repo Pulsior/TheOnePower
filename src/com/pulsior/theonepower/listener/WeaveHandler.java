@@ -192,7 +192,7 @@ public class WeaveHandler implements Listener{
 			 */
 			Channel channel;
 			String itemName = item.getItemMeta().getDisplayName();
-			channel = TheOnePower.channelMap.get( name );
+			channel = TheOnePower.database.getChannel(player);
 			Action action = event.getAction();
 			if (item != null && channel != null && ( action.equals(Action.RIGHT_CLICK_AIR) ||
 					event.getAction().equals(Action.RIGHT_CLICK_BLOCK) ) ){			//If the player clicked an element, adds the element to the channel
@@ -250,7 +250,7 @@ public class WeaveHandler implements Listener{
 	public void onEntityInteract(PlayerInteractEntityEvent event){
 		Entity entity = event.getRightClicked();
 		Player player = event.getPlayer();
-		Channel channel = TheOnePower.channelMap.get(player.getName());
+		Channel channel = TheOnePower.database.getChannel(player);
 		ItemStack stack = event.getPlayer().getItemInHand();
 		
 		if (channel != null && !(stack.getType().equals(Material.AIR) ) ){ 

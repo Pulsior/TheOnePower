@@ -40,7 +40,7 @@ public class RemoveShield implements Weave{
 			Shield shield = TheOnePower.database.getShield(targetName);
 			if( shield != null ){
 				String casterName = player.getName();
-				int level = TheOnePower.channelMap.get(player.getName() ).maxLevel;
+				int level = TheOnePower.database.getChannel(player).maxLevel;
 				boolean removed = shield.remove(level, casterName);
 
 				if(removed){

@@ -33,8 +33,8 @@ public class OpenGround implements Weave{
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
 		Block target = player.getTargetBlock(null, 50);
 		Location location = target.getLocation();
-		world.strikeLightning(location);
 		location.add(4, 0, 4);
+		world.strikeLightning(location);
 		List<Block> blocks = new ArrayList<Block>();
 		
 		

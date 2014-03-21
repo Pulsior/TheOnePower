@@ -40,7 +40,7 @@ public class Shielding implements Weave {
 		if(clickedEntity instanceof Player){
 			Player targetPlayer = (Player) clickedEntity;
 			String targetName = targetPlayer.getName();
-			Channel channel = TheOnePower.channelMap.get(targetName);
+			Channel channel = TheOnePower.database.getChannel(targetPlayer);
 			if(channel != null){
 				channel.close();
 			}
@@ -58,7 +58,7 @@ public class Shielding implements Weave {
 
 			int casterLevel;
 			String casterName = player.getName();
-			Channel casterChannel = TheOnePower.channelMap.get( casterName );
+			Channel casterChannel = TheOnePower.database.getChannel( player );
 			casterLevel = casterChannel.maxLevel;
 
 

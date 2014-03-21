@@ -7,9 +7,12 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftFirework;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.util.Vector;
 
 public class Utility {
 
@@ -57,6 +60,33 @@ public class Utility {
 		
 		return false;
 	}
+	
+	/**
+	 * Credit for the getTarget methods goes to Njol
+	 * @param player
+	 * @return
+	 */
+	
+	public static Player getTargetPlayer(Player player) {
+        return getTarget(player, player.getWorld().getPlayers());
+    }
+ 
+    public static Entity getTargetEntity(Entity entity) {
+        return getTarget(entity, entity.getWorld().getEntities());
+    }
+ 
+    static <T extends Entity> T getTarget(Entity entity, Iterable<T> entities) {
+        T target = null;
+        double threshold = 1;
+        for (T other:entities) {
+            Vector n = other.getLocation().toVector().subtract(entity.getLocation().toVector());
+            if (entity.getLocation().getDirection().normalize().crossProduct(n).lengthSquared() < threshold && n.normalize().dot(entity.getLocation().getDirection().normalize()) >= 0) {
+                if (target == null || target.getLocation().distanceSquared(entity.getLocation()) > other.getLocation().distanceSquared(entity.getLocation()))
+                    target = other;
+            }
+        }
+        return target;
+    }
 
 }
 

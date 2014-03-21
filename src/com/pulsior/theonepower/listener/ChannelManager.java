@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.util.Utility;
 
 /**
  * Seperate listener to prevent saidar-embracing players from
@@ -31,7 +33,7 @@ public class ChannelManager implements Listener {
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
-		if (TheOnePower.channelMap.get(player.getName()) != null){
+		if (TheOnePower.database.getChannel(player) != null){
 			Material material = event.getBlock().getType();			
 			switch(material){
 			case DIRT:
@@ -58,14 +60,14 @@ public class ChannelManager implements Listener {
 
 	@EventHandler
 	public void onExpGet(PlayerExpChangeEvent event){
-		if(TheOnePower.channelMap.get(event.getPlayer().getName()) != null){
+		if( TheOnePower.database.getChannel(event.getPlayer() ) != null){
 			event.setAmount(0);
 		}
 	}
-
+	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
-		Channel channel = TheOnePower.channelMap.get(event.getPlayer().getName());
+		Channel channel = TheOnePower.database.getChannel(event.getPlayer() );
 		if (channel != null){
 			channel.close();
 		}
@@ -75,7 +77,7 @@ public class ChannelManager implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event){
 		Player player = (Player) event.getEntity();
 		String name = player.getName();
-		Channel channel = TheOnePower.channelMap.get(player.getName());
+		Channel channel = TheOnePower.database.getChannel( player ) ;
 		if (channel != null){
 			channel.close();
 			event.getDrops().clear();
@@ -97,7 +99,7 @@ public class ChannelManager implements Listener {
 	public void onItemDrop(PlayerDropItemEvent event){
 		Player player = event.getPlayer();
 		String name = player.getName();
-		Channel channel = TheOnePower.channelMap.get(name);
+		Channel channel = TheOnePower.database.getChannel(player);
 		if(channel != null ){
 
 			Item item = event.getItemDrop();
@@ -113,16 +115,22 @@ public class ChannelManager implements Listener {
 			}
 
 			Block block = player.getTargetBlock(null, 5);
-			
+			Entity entity = Utility.getTargetEntity(player);
+			if(entity != null){
+				if( player.getLocation().distance(entity.getLocation()  ) > 5 ) {
+					entity = null;
+				}
+			}
+
 			if(block.getType() == Material.AIR){
-				channel.cast(null, null, null);
-			
+				channel.cast(null, null, entity);
+
 			}
 			else{
-				channel.cast(block, null, null);
+				channel.cast(block, null, entity);
 			}
 		}
-		
+
 		else if(TheOnePower.unseenLand.players.contains(name) ){
 			event.setCancelled(true);
 		}
@@ -135,7 +143,7 @@ public class ChannelManager implements Listener {
 	public void onItemPickup(PlayerPickupItemEvent event){
 		String name = event.getPlayer().getName();
 
-		if(TheOnePower.channelMap.containsKey(name ) ){
+		if( TheOnePower.database.getChannel(event.getPlayer() ) != null) {
 			event.setCancelled(true);
 		}
 		else if(TheOnePower.unseenLand.players.contains(name) ){

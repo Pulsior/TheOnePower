@@ -45,7 +45,7 @@ public class SpotHostileMobs implements Weave{
 			}
 			
 			if(e instanceof Creeper){
-				Utility.spawnFireworkEffect(e.getLocation(), Color.LIME, Color.LIME, Type.BALL, true, false, 20);
+				Utility.spawnFireworkEffect(e.getLocation(), Color.LIME, Color.LIME, Type.CREEPER, true, false, 20);
 			}
 			
 			if(e instanceof Spider){

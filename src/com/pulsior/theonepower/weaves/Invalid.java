@@ -23,7 +23,7 @@ public class Invalid implements Weave {
 	@SuppressWarnings("deprecation")
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
-		double weaveLength = (double) TheOnePower.channelMap.get(player.getName()).weave.size();
+		double weaveLength = (double) TheOnePower.database.getChannel(player).weave.size();
 		double playerHealth = player.getHealth() - weaveLength;
 		if(playerHealth < 0){
 			playerHealth = 0;

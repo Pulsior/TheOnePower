@@ -66,7 +66,7 @@ public class UnseenLand {
 	public void addPlayer(String playerName){
 		Player player = Bukkit.getPlayer(playerName);
 		players.add(player.getName());
-		Channel channel = TheOnePower.channelMap.get(playerName);
+		Channel channel = TheOnePower.database.getChannel(player);
 		if (channel != null){
 			channel.close();
 		}

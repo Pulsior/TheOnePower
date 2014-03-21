@@ -18,10 +18,9 @@ public class PlayerRegenerationTask extends BukkitRunnable{
 
 	@Override
 	public void run() {
-		String playerName = player.getName();
 		if( ! (player.getLevel() >= maxLevel) ) {
 			
-			Channel channel = TheOnePower.channelMap.get(playerName);
+			Channel channel = TheOnePower.database.getChannel(player);
 			if(channel != null){
 				if( ! channel.isCasting() ){
 					player.setLevel( player.getLevel()+1 );

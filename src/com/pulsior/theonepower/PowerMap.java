@@ -44,7 +44,7 @@ public class PowerMap implements Serializable{
 		int amtOfLevels = levelMap.get(name);
 		amtOfLevels = amtOfLevels + 1;
 		levelMap.put(name, amtOfLevels);
-		TheOnePower.channelMap.get(name).maxLevel = amtOfLevels;
+		TheOnePower.database.getChannel(name).maxLevel = amtOfLevels;
 		Player player = Bukkit.getPlayer(name);
 		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 0);
 	}

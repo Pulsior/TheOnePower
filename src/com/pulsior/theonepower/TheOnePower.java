@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -56,7 +57,7 @@ import com.pulsior.theonepower.util.Strings;
  */
 public final class TheOnePower extends JavaPlugin{
 
-	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
+	public static HashMap<String, BukkitRunnable> taskHolder = new HashMap<String, BukkitRunnable>();
 
 	public static List<Portal> portals = new ArrayList<Portal>();
 	public static List<Warder> warders = new ArrayList<Warder>();
@@ -91,7 +92,7 @@ public final class TheOnePower extends JavaPlugin{
 		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal() );
 		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal() );
 		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor() );
-		
+
 
 		if (power == null){
 			power = new PowerMap();
@@ -112,19 +113,6 @@ public final class TheOnePower extends JavaPlugin{
 	 */
 	@Override
 	public void onDisable(){
-		Player[] players = server.getOnlinePlayers();
-
-		for(Player p : players){
-
-			String name = p.getName();
-			Channel channel = channelMap.get(name);			
-
-			if (channel != null){
-				channel.close();
-				channelMap.remove(name);
-			}
-
-		}
 
 		save();
 		saveUnseenLand();
@@ -183,7 +171,7 @@ public final class TheOnePower extends JavaPlugin{
 
 		if(cmd.getName().equalsIgnoreCase("release")){
 			if(sender instanceof Player){
-				Channel channel = channelMap.get(sender.getName()); 
+				Channel channel = TheOnePower.database.getChannel( sender.getName() );
 
 				if (channel != null){
 					channel.close();
@@ -392,36 +380,37 @@ public final class TheOnePower extends JavaPlugin{
 			if(sender instanceof Player){
 
 				if(args.length == 1){
-					
+
 					int radius;
-					
+
 					try{
 						radius = Integer.parseInt(args[0]);
 					}
 					catch(NumberFormatException exception){
 						if(args[0].equalsIgnoreCase("remove")){
 							Stedding stedding = Stedding.getStedding( ( (Player) sender).getLocation() );
-							
+
 							if(stedding != null){
-							sender.sendMessage(ChatColor.GREEN+"Stedding removed");
-							TheOnePower.database.removeStedding(stedding);
+								sender.sendMessage(ChatColor.GREEN+"Stedding removed");
+								TheOnePower.database.removeStedding(stedding);
+								return true;
 							}
-							
+
 							else{
 								sender.sendMessage(ChatColor.RED+"You are not in a stedding");
 							}
-							
+
 						}
 						return false;
 					}
-					
-					
+
+
 					Player player = (Player) sender;
 					Location loc1 = player.getLocation();
 
 					Stedding.createStedding(player.getWorld().getName(), loc1, radius);
 					sender.sendMessage(ChatColor.GREEN+"Stedding created with a radius of "+radius);
-					
+
 					return true;
 
 				}

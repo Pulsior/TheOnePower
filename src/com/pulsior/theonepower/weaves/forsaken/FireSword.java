@@ -42,7 +42,7 @@ public class FireSword implements Weave{
 		meta.setDisplayName(ChatColor.RED+"Fire-Wrought Sword");
 		meta.setLore(lore);
 		sword.setItemMeta(meta);
-		Channel channel = TheOnePower.channelMap.get(player.getName() );
+		Channel channel = TheOnePower.database.getChannel(player);
 		channel.pickUpItems = true;
 		player.getInventory().setItem(3, sword);
 		player.updateInventory();
