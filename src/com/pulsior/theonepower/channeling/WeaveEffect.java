@@ -12,6 +12,7 @@ import com.pulsior.theonepower.weaves.Invalid;
 import com.pulsior.theonepower.weaves.Weave;
 import com.pulsior.theonepower.weaves.accepted.BindingAir;
 import com.pulsior.theonepower.weaves.accepted.Delving;
+import com.pulsior.theonepower.weaves.accepted.MiningBlast;
 import com.pulsior.theonepower.weaves.accepted.QuickGrowth;
 import com.pulsior.theonepower.weaves.accepted.ShootFireball;
 import com.pulsior.theonepower.weaves.aessedai.BindWarder;
@@ -25,6 +26,7 @@ import com.pulsior.theonepower.weaves.aessedai.OpenGround;
 import com.pulsior.theonepower.weaves.aessedai.Rain;
 import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
 import com.pulsior.theonepower.weaves.aessedai.Shielding;
+import com.pulsior.theonepower.weaves.aessedai.Sparks;
 import com.pulsior.theonepower.weaves.aessedai.SpotHostileMobs;
 import com.pulsior.theonepower.weaves.forsaken.FireSword;
 import com.pulsior.theonepower.weaves.forsaken.Meteor;
@@ -53,6 +55,7 @@ public enum WeaveEffect {
 	BINDING_AIR(new BindingAir(), Level.ACCEPTED),
 	QUICK_GROWTH(new QuickGrowth(), Level.ACCEPTED),
 	DELVING(new Delving(), Level.ACCEPTED),
+	MINING_BLAST(new MiningBlast(), Level.ACCEPTED),
 	LIGHTNING(new Lightning(), Level.AES_SEDAI ),
 	RAIN(new Rain(), Level.AES_SEDAI),
 	CLEAR_SKY(new ClearSky(), Level.AES_SEDAI ),
@@ -65,6 +68,7 @@ public enum WeaveEffect {
 	MANIPULATE(new Manipulate(), Level.AES_SEDAI),
 	OPEN_GROUND(new OpenGround(), Level.AES_SEDAI),
 	SPOT_HOSTILE(new SpotHostileMobs(), Level.AES_SEDAI),
+	SPARKS(new Sparks(), Level.AES_SEDAI),
 	METEOR(new Meteor(), Level.FORSAKEN),
 	TELEPORT(new Teleport(), Level.FORSAKEN),
 	STRIKE(new Strike(), Level.FORSAKEN),

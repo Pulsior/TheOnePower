@@ -170,7 +170,7 @@ public class Database implements Serializable{
 	public Channel getChannel(Player player){
 		return channelMap.get( player.getName() );
 	}
-	
+
 	public void removeChannel(String name){
 		channelMap.remove(name);
 	}

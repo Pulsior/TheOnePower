@@ -80,7 +80,8 @@ public final class TheOnePower extends JavaPlugin{
 	public void onEnable(){
 		plugin = this;
 		makeDir();
-
+		
+		
 		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
 		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager().registerEvents(new EventListener(), this);
@@ -105,11 +106,17 @@ public final class TheOnePower extends JavaPlugin{
 			UnseenLandData data = loadUnseenLand();
 			unseenLand = new UnseenLand(data);
 		}
-
-
+		
+		for ( Player player : Bukkit.getServer().getOnlinePlayers() ){
+			Channel channel = database.getChannel(player);
+			if(channel != null){
+				channel.update();
+			}
+		}
+		
 	}
 	/**
-	 * Closes all channels and saves data when the plugin is disabled
+	 * Saves data when the plugin is disabled
 	 */
 	@Override
 	public void onDisable(){

@@ -4,12 +4,9 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -79,9 +76,20 @@ public class WeaveHandler implements Listener{
 			}
 
 			if(item.getType().equals(Material.STICK)){
-				CraftWorld w = (CraftWorld) player.getWorld();
-				Location l = player.getLocation();
-				w.setBiome(l.getBlockX(), l.getBlockY(), Biome.DESERT);
+				Channel channel = TheOnePower.database.getChannel(player);
+				
+				if(channel != null){
+					System.out.println("The max level is "+channel.maxLevel+", the current level is "+player.getLevel());
+					System.out.println("Is the task running? "+Bukkit.getScheduler().isCurrentlyRunning(channel.taskId) );
+					System.out.println("Is it queued? "+Bukkit.getScheduler().isQueued(channel.taskId) );
+
+					try{
+						System.out.println("Is the player casting, according to the castingPlayerMap? "+channel.isCasting());
+					}
+					catch(NullPointerException ex){
+						System.out.println("A NullPointerException was thrown when trying to access TheOnePower.castingPlayersMap");
+					}
+				}
 			}
 
 			/*

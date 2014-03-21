@@ -41,7 +41,6 @@ public class Channel implements Serializable{
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
 	
-	BukkitRunnable regenerationTaskz;
 	String elementString;
 	boolean isCasting;
 
@@ -275,7 +274,13 @@ public class Channel implements Serializable{
 
 		isCasting = false;
 	}
-
+	
+	
+	public void update(){
+		BukkitRunnable regenerationTask = new PlayerRegenerationTask( Bukkit.getPlayer(playerName), maxLevel );
+		regenerationTask.runTaskTimer(TheOnePower.plugin, 0, taskDuration);
+		TheOnePower.taskHolder.put(playerName, regenerationTask);
+	}
 
 	/**
 	 * Close and remove the channel
