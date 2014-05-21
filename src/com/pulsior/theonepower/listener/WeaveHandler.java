@@ -74,6 +74,7 @@ public class WeaveHandler implements Listener{
 					event.setCancelled(true);
 				}
 			}
+			
 
 			if(item.getType().equals(Material.STICK)){
 				Channel channel = TheOnePower.database.getChannel(player);
@@ -90,6 +91,8 @@ public class WeaveHandler implements Listener{
 						System.out.println("A NullPointerException was thrown when trying to access TheOnePower.castingPlayersMap");
 					}
 				}
+				
+			
 			}
 
 			/*

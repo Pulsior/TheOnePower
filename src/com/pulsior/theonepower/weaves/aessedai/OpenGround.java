@@ -66,6 +66,7 @@ public class OpenGround implements Weave{
 		
 		for(Block b : blocks2){
 			materials.add( b.getType() );
+			if( ! b.getType().equals (Material.BEDROCK) );
 			b.setType(Material.AIR);
 		}
 		

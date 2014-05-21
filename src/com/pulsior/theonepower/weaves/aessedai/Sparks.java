@@ -41,8 +41,7 @@ public class Sparks implements Weave{
 			public void run() {
 				Block block = player.getTargetBlock(null, 150);
 				Location location = block.getLocation().add(0, 1, 0);
-				location.getWorld().createExplosion(location, 2F);
-				Utility.spawnFireworkEffect(location, Color.RED, Color.BLACK, Type.BALL_LARGE, false, false, 0);
+				Utility.spawnFireworkEffect(location, Color.RED, Color.BLACK, Type.BURST, false, false, 0);
 				
 			}
 

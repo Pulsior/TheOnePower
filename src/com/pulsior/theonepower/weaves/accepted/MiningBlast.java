@@ -41,8 +41,8 @@ public class MiningBlast implements Weave{
 					location.add(1, 0, 0);
 
 				}
-				location.add(-1, 0, 0);
-				location.add(0, -2, 0);
+				location.add(-2, 0, 0);
+				location.add(0, -1, 0);
 			}
 
 			return true;

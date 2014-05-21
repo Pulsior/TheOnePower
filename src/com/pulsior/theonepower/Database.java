@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Stedding;
@@ -24,6 +25,8 @@ public class Database implements Serializable{
 	private List<Suldam> suldamList = new ArrayList<Suldam>();
 	private List<Warder> warderList = new ArrayList<Warder>();
 	private List<Stedding> steddingList = new ArrayList<Stedding>();
+	
+	private ItemStack[] choedanKal = new ItemStack[7*4*8];
 
 	private HashMap<String, Shield> shieldMap = new HashMap<String, Shield>();
 	
@@ -177,6 +180,14 @@ public class Database implements Serializable{
 	
 	public void removeChannel(Player player){
 		channelMap.remove( player.getName() );
+	}
+	
+	public void setChoedanKal(ItemStack[] stack){
+		this.choedanKal = stack;
+	}
+	
+	public ItemStack[] getChoedanKal(){
+		return choedanKal;
 	}
 	
 
