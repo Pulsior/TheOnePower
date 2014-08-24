@@ -26,14 +26,14 @@ public class Database implements Serializable
 
 	private HashMap<UUID, Shield> shieldMap = new HashMap<UUID, Shield>();
 
-	public boolean hasShield(String name)
+	public boolean hasShield(UUID id)
 	{
-		return shieldMap.containsKey(name);
+		return shieldMap.containsKey(id);
 	}
 
-	public Shield getShield(String name)
+	public Shield getShield(UUID id)
 	{
-		return shieldMap.get(name);
+		return shieldMap.get(id);
 	}
 
 	public void addShield(UUID id, Shield shield)
@@ -41,9 +41,9 @@ public class Database implements Serializable
 		shieldMap.put(id, shield);
 	}
 
-	public void removeShield(String name)
+	public void removeShield(UUID id)
 	{
-		shieldMap.remove(name);
+		shieldMap.remove(id);
 	}
 
 	public void addStedding(Stedding stedding)

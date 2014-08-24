@@ -2,6 +2,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -36,12 +37,12 @@ public class RemoveShield implements Weave{
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		if(clickedEntity instanceof Player){
 			Player targetPlayer = (Player) clickedEntity;
-			String targetName = targetPlayer.getName();
-			Shield shield = TheOnePower.database.getShield(targetName);
+			UUID targetId = targetPlayer.getUniqueId();
+			Shield shield = TheOnePower.database.getShield(targetId);
 			if( shield != null ){
-				String casterName = player.getName();
+				UUID casterId = player.getUniqueId();
 				int level = TheOnePower.database.getChannel(player).maxLevel;
-				boolean removed = shield.remove(level, casterName);
+				boolean removed = shield.remove(level, casterId);
 
 				if(removed){
 
@@ -52,7 +53,7 @@ public class RemoveShield implements Weave{
 					meta.setPower(1);
 					firework.setFireworkMeta(meta);			
 					( (CraftFirework) firework).getHandle().expectedLifespan = 4;
-					TheOnePower.database.removeShield(targetName);
+					TheOnePower.database.removeShield(targetId);
 
 				}
 				else{

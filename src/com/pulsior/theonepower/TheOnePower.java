@@ -15,14 +15,12 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -36,7 +34,6 @@ import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
-import com.pulsior.theonepower.item.angreal.ChoedanKalKey;
 import com.pulsior.theonepower.item.angreal.SaAngreal;
 import com.pulsior.theonepower.item.terangreal.StaffOfFire;
 import com.pulsior.theonepower.item.terangreal.StaffOfMeteor;
@@ -91,15 +88,6 @@ public final class TheOnePower extends JavaPlugin
 		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal());
 		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal());
 		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor());
-
-		ShapedRecipe recipe = new ShapedRecipe(new ChoedanKalKey().asItem());
-		recipe.shape("XGX", "DSD", "XEX");
-		recipe.setIngredient('X', Material.STONE);
-		recipe.setIngredient('G', Material.GOLD_INGOT);
-		recipe.setIngredient('D', Material.DIAMOND);
-		recipe.setIngredient('S', Material.STICK);
-		recipe.setIngredient('E', Material.ENDER_PEARL);
-		getServer().addRecipe(recipe);
 
 		if (power == null)
 		{

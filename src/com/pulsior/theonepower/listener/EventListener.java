@@ -3,6 +3,7 @@ package com.pulsior.theonepower.listener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -182,7 +183,7 @@ public class EventListener implements Listener
 	{
 
 		Player player = event.getPlayer();
-		String name = player.getName();
+		UUID id = player.getUniqueId();
 
 		if (!player.hasPermission("theonepower.channel"))
 		{
@@ -191,7 +192,7 @@ public class EventListener implements Listener
 			event.setCancelled(true);
 		}
 
-		if (TheOnePower.database.hasShield(name))
+		if (TheOnePower.database.hasShield(id) )
 		{
 			player.sendMessage(ChatColor.RED +
 					"You can feel the True Source, but you can't touch it");

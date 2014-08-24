@@ -58,12 +58,12 @@ public class Shielding implements Weave {
 			( (CraftFirework) firework).getHandle().expectedLifespan = 4;
 
 			int casterLevel;
-			String casterName = player.getName();
+			UUID casterId = player.getUniqueId();
 			Channel casterChannel = TheOnePower.database.getChannel( player );
 			casterLevel = casterChannel.maxLevel;
 
 
-			TheOnePower.database.addShield(targetId, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetId), casterName) );
+			TheOnePower.database.addShield(targetId, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetId), casterId) );
 
 		}
 		return false;

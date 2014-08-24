@@ -263,7 +263,7 @@ public class Channel implements Serializable
 		}
 
 		WeaveEffect effect = compare(weave);
-		String name = player.getName();
+		UUID id = player.getUniqueId();
 
 		if (effect != null)
 		{
@@ -286,8 +286,8 @@ public class Channel implements Serializable
 			{
 				TheOnePower.power.addWeave(id);
 				player.setExp((1F / (float) TheOnePower.power.requiredWeavesMap
-						.get(name)) *
-						TheOnePower.power.weaveProgressMap.get(name));
+						.get(id)) *
+						TheOnePower.power.weaveProgressMap.get(id));
 			}
 
 			lastWeave = effect;

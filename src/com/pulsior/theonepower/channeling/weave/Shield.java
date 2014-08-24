@@ -2,30 +2,31 @@ package com.pulsior.theonepower.channeling.weave;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
-public class Shield implements Serializable{
+public class Shield implements Serializable
+{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -100093208885579522L;
-	public int casterLevel; 
+	public int casterLevel;
 	public int targetLevel;
-	
-	public String casterName;
-	
-	public Shield(int casterLevel, int targetLevel, String casterName){
+
+	public UUID casterId;
+
+	public Shield(int casterLevel, int targetLevel, UUID casterId)
+	{
 		this.casterLevel = casterLevel;
 		this.targetLevel = targetLevel;
-		this.casterName = casterName;
-		
+		this.casterId = casterId;
+
 	}
-	
-	public boolean remove(int level, String releaseName){
+
+	public boolean remove(int level, UUID releaseId){
 		
-		if(casterName.equalsIgnoreCase(releaseName)){
+		if( casterId.equals(releaseId) )
+		{
 			return true;
 		}
 		
@@ -44,5 +45,4 @@ public class Shield implements Serializable{
 		
 		
 	}
-	
 }
