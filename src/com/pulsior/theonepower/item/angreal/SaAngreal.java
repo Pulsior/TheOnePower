@@ -29,7 +29,7 @@ public class SaAngreal extends TerAngreal{
 		SaidarEmbraceEvent event = new SaidarEmbraceEvent( player);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if(! event.isCancelled() ){
-			new Channel ( player.getName(), 50 );
+			new Channel ( player.getUniqueId(), 50 );
 		}
 		
 	}

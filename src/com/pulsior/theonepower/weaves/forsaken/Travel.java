@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
-import com.pulsior.theonepower.unseenland.Memory;
+import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class Travel implements Weave {
@@ -34,11 +34,6 @@ public class Travel implements Weave {
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
 		
-		if(TheOnePower.unseenLand.players.contains( player.getName() ) ){
-			player.sendMessage(ChatColor.RED+"You cannot create a portal in the Unseen Land!");
-			return false;
-		}
-		
 		if(clickedBlock != null){
 			openMenu(player);
 			return true;
@@ -54,7 +49,7 @@ public class Travel implements Weave {
 
 	public void openMenu(Player player){
 		Inventory gui = Bukkit.createInventory(player, 9);
-		List<Memory> memories = TheOnePower.unseenLand.memoryMap.get( player.getName() );
+		List<Memory> memories = TheOnePower.database.getMemories( player.getUniqueId() );
 		if(memories != null){
 			int counter = 0;
 			for(Memory mem : memories){

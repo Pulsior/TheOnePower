@@ -1,4 +1,4 @@
-package com.pulsior.theonepower.unseenland;
+package com.pulsior.theonepower.channeling;
 
 import java.io.Serializable;
 

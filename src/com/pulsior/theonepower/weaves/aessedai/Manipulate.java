@@ -3,15 +3,15 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_7_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_7_R1.PlayerConnection;
+import net.minecraft.server.v1_7_R3.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_7_R3.PlayerConnection;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
@@ -49,19 +49,19 @@ public class Manipulate implements Weave{
 
 				if(e instanceof Zombie || e instanceof Skeleton){
 					org.bukkit.inventory.ItemStack chestplateStack = new ItemStack(Material.DIAMOND_CHESTPLATE);
-					net.minecraft.server.v1_7_R1.ItemStack chestplateNMSStack = CraftItemStack.asNMSCopy(chestplateStack);
+					net.minecraft.server.v1_7_R3.ItemStack chestplateNMSStack = CraftItemStack.asNMSCopy(chestplateStack);
 					PacketPlayOutEntityEquipment chestplatePacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 3, chestplateNMSStack);
 
 					org.bukkit.inventory.ItemStack helmetStack = new ItemStack(Material.DIAMOND_HELMET);
-					net.minecraft.server.v1_7_R1.ItemStack helmetNMSStack = CraftItemStack.asNMSCopy(helmetStack);
+					net.minecraft.server.v1_7_R3.ItemStack helmetNMSStack = CraftItemStack.asNMSCopy(helmetStack);
 					PacketPlayOutEntityEquipment helmetPacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 4, helmetNMSStack);
 					
 					org.bukkit.inventory.ItemStack legsStack = new ItemStack(Material.DIAMOND_LEGGINGS);
-					net.minecraft.server.v1_7_R1.ItemStack legsNMSStack = CraftItemStack.asNMSCopy(legsStack);
+					net.minecraft.server.v1_7_R3.ItemStack legsNMSStack = CraftItemStack.asNMSCopy(legsStack);
 					PacketPlayOutEntityEquipment legsPacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 2, legsNMSStack);
 					
 					org.bukkit.inventory.ItemStack bootsStack = new ItemStack(Material.DIAMOND_BOOTS);
-					net.minecraft.server.v1_7_R1.ItemStack bootsNMSStack = CraftItemStack.asNMSCopy(bootsStack);
+					net.minecraft.server.v1_7_R3.ItemStack bootsNMSStack = CraftItemStack.asNMSCopy(bootsStack);
 					PacketPlayOutEntityEquipment bootsPacket = new PacketPlayOutEntityEquipment(e.getEntityId(), 1, bootsNMSStack);
 
 					link.sendPacket(chestplatePacket);

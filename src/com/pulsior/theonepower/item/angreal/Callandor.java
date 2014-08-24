@@ -32,7 +32,7 @@ public class Callandor extends TerAngreal{
 		SaidarEmbraceEvent event = new SaidarEmbraceEvent( player);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if(! event.isCancelled() ){
-			new Channel ( player.getName(), 150 );
+			new Channel ( player.getUniqueId(), 150 );
 		}
 		
 	}

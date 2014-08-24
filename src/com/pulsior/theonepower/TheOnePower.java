@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -30,16 +31,13 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.channeling.Stedding;
-import com.pulsior.theonepower.channeling.weave.Damane;
 import com.pulsior.theonepower.channeling.weave.Portal;
-import com.pulsior.theonepower.channeling.weave.Suldam;
-import com.pulsior.theonepower.channeling.weave.Warder;
 import com.pulsior.theonepower.item.angreal.Angreal;
 import com.pulsior.theonepower.item.angreal.Callandor;
 import com.pulsior.theonepower.item.angreal.ChoedanKalKey;
 import com.pulsior.theonepower.item.angreal.SaAngreal;
-import com.pulsior.theonepower.item.terangreal.Adam;
 import com.pulsior.theonepower.item.terangreal.StaffOfFire;
 import com.pulsior.theonepower.item.terangreal.StaffOfMeteor;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
@@ -47,26 +45,22 @@ import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
-import com.pulsior.theonepower.task.UnseenGenTask;
-import com.pulsior.theonepower.unseenland.Memory;
-import com.pulsior.theonepower.unseenland.UnseenLand;
-import com.pulsior.theonepower.unseenland.UnseenLandData;
 import com.pulsior.theonepower.util.Strings;
 
 /**
  * Plugin main class
+ * 
  * @author Pulsior
- *
+ * 
  */
-public final class TheOnePower extends JavaPlugin{
+public final class TheOnePower extends JavaPlugin
+{
 
-	public static HashMap<String, BukkitRunnable> taskHolder = new HashMap<String, BukkitRunnable>();
+	public static HashMap<UUID, BukkitRunnable> taskHolder = new HashMap<UUID, BukkitRunnable>();
 
 	public static List<Portal> portals = new ArrayList<Portal>();
-	public static List<Warder> warders = new ArrayList<Warder>();
 
 	public static PowerMap power;
-	public static UnseenLand unseenLand;
 	public static TheOnePower plugin;
 
 	public static Database database = new Database();
@@ -75,27 +69,28 @@ public final class TheOnePower extends JavaPlugin{
 	Server server = Bukkit.getServer();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
 
-
 	/**
 	 * Registers listeners and creates tel'aran'rhiod when the plugin is enabled
 	 */
 	@Override
-	public void onEnable(){
+	public void onEnable()
+	{
 		plugin = this;
 		makeDir();
-		
-		
-		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
-		getServer().getPluginManager().registerEvents(new ChannelManager(), this);
-		getServer().getPluginManager().registerEvents(new EventListener(), this);
-		getServer().getPluginManager().registerEvents(new ItemGenerator(), this);
 
-		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire() );
-		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor() );
-		TerAngreal.registerItem(Strings.A_DAM_NAME, new Adam() );
-		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal() );
-		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal() );
-		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor() );
+		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
+		getServer().getPluginManager()
+		.registerEvents(new ChannelManager(), this);
+		getServer().getPluginManager()
+		.registerEvents(new EventListener(), this);
+		getServer().getPluginManager()
+		.registerEvents(new ItemGenerator(), this);
+
+		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire());
+		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor());
+		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal());
+		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal());
+		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor());
 
 		ShapedRecipe recipe = new ShapedRecipe(new ChoedanKalKey().asItem());
 		recipe.shape("XGX", "DSD", "XEX");
@@ -105,220 +100,242 @@ public final class TheOnePower extends JavaPlugin{
 		recipe.setIngredient('S', Material.STICK);
 		recipe.setIngredient('E', Material.ENDER_PEARL);
 		getServer().addRecipe(recipe);
-		
-		if (power == null){
+
+		if (power == null)
+		{
 			power = new PowerMap();
 		}
 
 		loadExp();
 		loadData();
 
-		if(Bukkit.getWorld("world") != null){
-			UnseenLandData data = loadUnseenLand();
-			unseenLand = new UnseenLand(data);
-		}
-		
-		for ( Player player : Bukkit.getServer().getOnlinePlayers() ){
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
+		{
 			Channel channel = database.getChannel(player);
-			if(channel != null){
+			if (channel != null)
+			{
 				channel.update();
 			}
 		}
-		
+
 	}
+
 	/**
 	 * Saves data when the plugin is disabled
 	 */
 	@Override
-	public void onDisable(){
-
+	public void onDisable()
+	{
 		save();
-		saveUnseenLand();
 
-		for(Portal p : portals){
+		for (Portal p : portals)
+		{
 			p.clear();
 		}
 	}
 
 	/**
-	 * Open Saidar to a player with /embrace and closes it with /release. Get an angreal with /angreal, 
-	 * cheat yourself into tel'aran'rhiod with /dream and store a memory with /remember
+	 * Open Saidar to a player with /embrace and closes it with /release. Get an
+	 * angreal with /angreal, cheat yourself into tel'aran'rhiod with /dream and
+	 * store a memory with /remember
 	 */
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		if(cmd.getName().equalsIgnoreCase("embrace")){
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if (cmd.getName().equalsIgnoreCase("embrace"))
+		{
 
-			if(sender instanceof Player){
-				String name = sender.getName();
+			if (sender instanceof Player)
+			{
+				UUID id = ((Player) sender).getUniqueId();
 
-				if(args.length == 1){
+				if (args.length == 1)
+				{
 
-					if(args[0].equalsIgnoreCase("bind")){					
+					if (args[0].equalsIgnoreCase("bind"))
+					{
 						Player player = (Player) sender;
 						ItemStack stack = player.getItemInHand();
 
-						if(stack != null){
+						if (stack != null)
+						{
 							ItemMeta meta = stack.getItemMeta();
 							List<String> lore = new ArrayList<String>();
-							lore.add(ChatColor.GOLD+"Saidar-bound item");
+							lore.add(ChatColor.GOLD + "Saidar-bound item");
 							meta.setLore(lore);
 							stack.setItemMeta(meta);
 						}
 
-						else{
-							sender.sendMessage(ChatColor.RED+"You don't have an item in your hand!");
+						else
+						{
+							sender.sendMessage(ChatColor.RED +
+									"You don't have an item in your hand!");
 						}
 					}
 				}
 
-				else{
+				else
+				{
 
-					SaidarEmbraceEvent event = new SaidarEmbraceEvent( (Player) sender);
+					SaidarEmbraceEvent event = new SaidarEmbraceEvent((Player) sender);
 					Bukkit.getServer().getPluginManager().callEvent(event);
-					if(! event.isCancelled() ){
-						new Channel ( name, 0 );
+					if (!event.isCancelled())
+					{
+						new Channel(id, 0);
 					}
 
 				}
 			}
 
-			else{
+			else
+			{
 				sender.sendMessage("This command cannot be executed from the console!");
 			}
 			return true;
 		}
 
-		if(cmd.getName().equalsIgnoreCase("release")){
-			if(sender instanceof Player){
-				Channel channel = TheOnePower.database.getChannel( sender.getName() );
+		if (cmd.getName().equalsIgnoreCase("release"))
+		{
+			if (sender instanceof Player)
+			{
+				Channel channel = TheOnePower.database
+						.getChannel(((Player) sender).getUniqueId());
 
-				if (channel != null){
+				if (channel != null)
+				{
 					channel.close();
 				}
 
-				else{
+				else
+				{
 					sender.sendMessage("You have not embraced saidar!");
 				}
 			}
 
-			else{
+			else
+			{
 				sender.sendMessage("This command cannot be excecuted from the console!");
 			}
 			return true;
 		}
 
-		if(cmd.getName().equalsIgnoreCase("angreal")){
+		if (cmd.getName().equalsIgnoreCase("angreal"))
+		{
 
-			if (args.length == 1){
+			if (args.length == 1)
+			{
 
-				if(sender instanceof Player){
+				if (sender instanceof Player)
+				{
 					String arg = args[0];
 					Player player = (Player) sender;
 					PlayerInventory inventory = player.getInventory();
 
-					if(arg.equalsIgnoreCase("angreal") ){
-						inventory.addItem( new Angreal().asItem() );
+					if (arg.equalsIgnoreCase("angreal"))
+					{
+						inventory.addItem(new Angreal().asItem());
 					}
 
-					else if (arg.equalsIgnoreCase("dream") ){						
-						inventory.addItem( new UnseenLandStone().asItem() );
+					else if (arg.equalsIgnoreCase("dream"))
+					{
+						inventory.addItem(new UnseenLandStone().asItem());
 					}
 
-					else if(arg.equalsIgnoreCase("sa'angreal")){
-						inventory.addItem( new SaAngreal().asItem() );
+					else if (arg.equalsIgnoreCase("sa'angreal"))
+					{
+						inventory.addItem(new SaAngreal().asItem());
 					}
 
-					else if(arg.equalsIgnoreCase("callandor")){
-						inventory.addItem( new Callandor().asItem() );
+					else if (arg.equalsIgnoreCase("callandor"))
+					{
+						inventory.addItem(new Callandor().asItem());
 					}
 
-					else if (arg.equalsIgnoreCase("firestaff") ){
-						inventory.addItem( new StaffOfFire().asItem() );
+					else if (arg.equalsIgnoreCase("firestaff"))
+					{
+						inventory.addItem(new StaffOfFire().asItem());
 					}
 
-					else if (arg.equalsIgnoreCase("meteorstaff") ){
-						inventory.addItem( new StaffOfMeteor().asItem() );
+					else if (arg.equalsIgnoreCase("meteorstaff"))
+					{
+						inventory.addItem(new StaffOfMeteor().asItem());
 					}
 
-					else if (arg.equalsIgnoreCase("adam") ){
-						inventory.addItem( new Adam().asItem() );
+					else
+					{
+						sender.sendMessage(ChatColor.RED +
+								"You can choose between angreal, dream, Callandor and sa'angreal");
 					}
-
-					else{
-						sender.sendMessage(ChatColor.RED+"You can choose between angreal, dream, Callandor and sa'angreal");
-					}	
 
 					return true;
 				}
 			}
-			else{
-				sender.sendMessage(ChatColor.RED+"You can choose between angreal, dream, Callandor and sa'angreal");
+			else
+			{
+				sender.sendMessage(ChatColor.RED +
+						"You can choose between angreal, dream, Callandor and sa'angreal");
 				return true;
 			}
 		}
 
-		if(cmd.getName().equalsIgnoreCase("dream")){
+		if (cmd.getName().equalsIgnoreCase("remember"))
+		{
 
-			if(sender instanceof Player){
-				String name = sender.getName();
-				if( unseenLand.players.contains( name ) ){
-					unseenLand.removePlayer(name);
-				}
-
-				else{
-					unseenLand.addPlayer(name);
-				}
-
-				return true;
-			}
-		}
-
-		if(cmd.getName().equalsIgnoreCase("remember")){
-
-			if(sender instanceof Player && args.length == 1){
-				String playerName = sender.getName();
+			if (sender instanceof Player && args.length == 1)
+			{
 				String memoryName = args[0];
 
-				if(! (unseenLand.memoryMap.containsKey(playerName) ) ) {
-					unseenLand.memoryMap.put(playerName, new ArrayList<Memory>() );
-				}
-
 				Player player = (Player) sender;
-				if(unseenLand.addMemory(playerName, new Memory(memoryName, player.getLocation() ) ) ){
-					player.sendMessage(ChatColor.GREEN+"Remembered this place as '"+memoryName+"'");
+				if (database
+						.addMemory(player.getUniqueId(), new Memory(memoryName, player
+								.getLocation() ) ) )
+				{
+					player.sendMessage(ChatColor.GREEN +
+							"Remembered this place as '" + memoryName + "'");
 					return true;
 				}
 
-				else{
-					player.sendMessage(ChatColor.RED+"You cannot remember any more places, forget a location first");
+				else
+				{
+					player.sendMessage(ChatColor.RED +
+							"You cannot remember any more places, forget a location first");
 					return true;
 				}
 			}
 		}
 
-		if(cmd.getName().equalsIgnoreCase("forget")){
+		if (cmd.getName().equalsIgnoreCase("forget"))
+		{
 
-			if(sender instanceof Player && args.length == 1){
-				String playerName = sender.getName();
+			if (sender instanceof Player && args.length == 1)
+			{
+				UUID id = ( (Player) sender).getUniqueId();
 				String memoryName = ChatColor.RESET + args[0];
-				List<Memory> list = unseenLand.memoryMap.get(playerName);
+				List<Memory> list = database.getMemories(id);
 
-				if(list != null){
+				if (list != null)
+				{
 					Memory removedMemory = null;
 
-					for(Memory mem : list){
+					for (Memory mem : list)
+					{
 
-						if(mem.name.equalsIgnoreCase(memoryName) ){
+						if (mem.name.equalsIgnoreCase(memoryName))
+						{
 							removedMemory = mem;
 						}
 					}
 
-					if(removedMemory != null){
+					if (removedMemory != null)
+					{
 						list.remove(removedMemory);
-						sender.sendMessage(ChatColor.GREEN+"You forgot the memory '"+args[0]+"'");
+						sender.sendMessage(ChatColor.GREEN +
+								"You forgot the memory '" + args[0] + "'");
 					}
 
-					else{
-						sender.sendMessage(ChatColor.RED+"You didn't know the memory '"+args[0]+"'");
+					else
+					{
+						sender.sendMessage(ChatColor.RED +
+								"You didn't know the memory '" + args[0] + "'");
 					}
 
 					return true;
@@ -326,108 +343,121 @@ public final class TheOnePower extends JavaPlugin{
 			}
 		}
 
-		if(cmd.getName().equalsIgnoreCase("stats")){
-			String name = sender.getName();
-			if(power.levelMap.containsKey(name)){
-				sender.sendMessage("Your current saidar level is "+ChatColor.GREEN+Integer.toString( power.levelMap.get(name) ) );
-				sender.sendMessage("You have to do "+ChatColor.GREEN+Integer.toString( power.requiredWeavesMap.get(name) - power.weaveProgressMap.get (name) )+ChatColor.RESET+" weaves to reach the next level" );
-				List<Memory> memories = unseenLand.memoryMap.get(name);
-				if(memories != null){
+		if (cmd.getName().equalsIgnoreCase("stats"))
+		{
+			UUID id = ( (Player) sender).getUniqueId();
+
+			if (power.levelMap.containsKey(id))
+			{
+				sender.sendMessage("Your current saidar level is " +
+						ChatColor.GREEN +
+						Integer.toString(power.levelMap.get(id)));
+				sender.sendMessage("You have to do " +
+						ChatColor.GREEN +
+						Integer.toString(power.requiredWeavesMap.get(id) -
+								power.weaveProgressMap.get(id)) +
+								ChatColor.RESET + " weaves to reach the next level");
+				List<Memory> memories = database.getMemories(id);
+				if (memories != null)
+				{
 					int size = memories.size();
-					if(size == 1){
-						sender.sendMessage("You have "+ChatColor.GREEN+Integer.toString(size) + ChatColor.RESET+ " memory:" );
+					if (size == 1)
+					{
+						sender.sendMessage("You have " + ChatColor.GREEN +
+								Integer.toString(size) + ChatColor.RESET +
+								" memory:");
 					}
 
-					else{
-						sender.sendMessage("You have "+ChatColor.GREEN+Integer.toString(size) + ChatColor.RESET+ " memories:" );
+					else
+					{
+						sender.sendMessage("You have " + ChatColor.GREEN +
+								Integer.toString(size) + ChatColor.RESET +
+								" memories:");
 					}
-					if(size > 0){
+					if (size > 0)
+					{
 						String message = "";
-						for(int x = 0; x < size; x++){
+						for (int x = 0; x < size; x++)
+						{
 							message += memories.get(x).rawName;
-							if(size == x+2){
-								message += ChatColor.RESET+" and "+ChatColor.GREEN;
+							if (size == x + 2)
+							{
+								message += ChatColor.RESET + " and " +
+										ChatColor.GREEN;
 							}
-							else if(size != x+1){
-								message += ChatColor.RESET+", "+ChatColor.GREEN;
+							else if (size != x + 1)
+							{
+								message += ChatColor.RESET + ", " +
+										ChatColor.GREEN;
 							}
 						}
-						sender.sendMessage(ChatColor.GREEN+ (Character.toUpperCase(message.charAt(0)) + message.substring(1) ) );
+						sender.sendMessage(ChatColor.GREEN +
+								(Character.toUpperCase(message.charAt(0)) + message
+										.substring(1)));
 					}
 				}
 				return true;
 			}
-			else{
-				if(sender instanceof Player){
+			else
+			{
+				if (sender instanceof Player)
+				{
 					sender.sendMessage("You don't have stats yet, embrace saidar first!");
 				}
-				else{
+				else
+				{
 					sender.sendMessage("A console can't have stats...");
 				}
 				return true;
 			}
 		}
 
-		if(cmd.getName().equalsIgnoreCase("unleash")){
+		if (cmd.getName().equalsIgnoreCase("stedding"))
+		{
 
-			if(sender instanceof Player){
+			if (sender instanceof Player)
+			{
 
-				String name = sender.getName();
-
-				if( database.isSuldam(name) ){
-					Suldam suldam = database.getSuldam(name);
-					Damane damane = suldam.getDamane();
-
-					if(damane != null){
-
-						sender.sendMessage(ChatColor.GRAY+"Unleashed "+ damane.getName() );
-						Bukkit.getPlayer( damane.getName() ).sendMessage(ChatColor.GREEN+"You were unleashed");
-						suldam.setDamane(null);
-						database.removeDamane( damane );
-					}
-				}
-
-			}
-
-			return true;
-
-		}
-
-		if(cmd.getName().equalsIgnoreCase("stedding") ){
-
-			if(sender instanceof Player){
-
-				if(args.length == 1){
+				if (args.length == 1)
+				{
 
 					int radius;
 
-					try{
+					try
+					{
 						radius = Integer.parseInt(args[0]);
-					}
-					catch(NumberFormatException exception){
-						if(args[0].equalsIgnoreCase("remove")){
-							Stedding stedding = Stedding.getStedding( ( (Player) sender).getLocation() );
+					} catch (NumberFormatException exception)
+					{
+						if (args[0].equalsIgnoreCase("remove"))
+						{
+							Stedding stedding = Stedding
+									.getStedding(((Player) sender)
+											.getLocation());
 
-							if(stedding != null){
-								sender.sendMessage(ChatColor.GREEN+"Stedding removed");
+							if (stedding != null)
+							{
+								sender.sendMessage(ChatColor.GREEN +
+										"Stedding removed");
 								TheOnePower.database.removeStedding(stedding);
 								return true;
 							}
 
-							else{
-								sender.sendMessage(ChatColor.RED+"You are not in a stedding");
+							else
+							{
+								sender.sendMessage(ChatColor.RED +
+										"You are not in a stedding");
 							}
 
 						}
 						return false;
 					}
 
-
 					Player player = (Player) sender;
 					Location loc1 = player.getLocation();
 
 					Stedding.createStedding(player.getWorld().getName(), loc1, radius);
-					sender.sendMessage(ChatColor.GREEN+"Stedding created with a radius of "+radius);
+					sender.sendMessage(ChatColor.GREEN +
+							"Stedding created with a radius of " + radius);
 
 					return true;
 
@@ -435,154 +465,114 @@ public final class TheOnePower extends JavaPlugin{
 
 			}
 
-			else{
+			else
+			{
 				sender.sendMessage("This command cannot be executed by the console");
 			}
 		}
 
-
-
-		return false; 
+		return false;
 	}
 
 	/**
 	 * Saves all level data
 	 */
-	public void save(){
-		try{
+	public void save()
+	{
+		try
+		{
 			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_levels");
 			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
 			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
-			bukkitOutput.writeObject( TheOnePower.power );
+			bukkitOutput.writeObject(TheOnePower.power);
 			bukkitOutput.close();
 			log.info("[The One Power] Saving level data");
 
-		}
-		catch(IOException ex){
+		} catch (IOException ex)
+		{
 			log.info("[The One Power] Saving problem!");
 		}
 
-		try{
+		try
+		{
 			File file = new File("plugins/The One Power/data_global");
-			if(file.exists()){
+			if (file.exists())
+			{
 				file.delete();
 			}
 			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_global");
 			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
 			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
-			bukkitOutput.writeObject( database );
+			bukkitOutput.writeObject(database);
 			bukkitOutput.close();
 
-		}
-		catch(IOException ex){
+		} catch (IOException ex)
+		{
 			ex.printStackTrace();
 		}
 
 	}
 
-	public static void saveUnseenLand(){
-		Logger log = Bukkit.getLogger();
-		try{
-			UnseenLandData data = new UnseenLandData(unseenLand);
-			File file = new File("plugins/The One Power/data_unseenLand");
-			if(file.exists()){
-				file.delete();
-			}
-			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_unseenLand");
-			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
-			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
-			bukkitOutput.writeObject( data );
-			bukkitOutput.close();
-			log.info("[The One Power] Saving Unseen Land data");
-
-		}
-		catch(IOException ex){
-			log.info("[The One Power] [WARNING] The Unseen Land data could not be saved!");
-			ex.printStackTrace();
-		}
-	}
-
-	public boolean loadExp(){
-		try{
+	public boolean loadExp()
+	{
+		try
+		{
 			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_levels");
 			ObjectInputStream input = new ObjectInputStream(fileInput);
-			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(input); 
+			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(input);
 			Object obj = bukkitInput.readObject();
-			if(obj instanceof PowerMap){
+			if (obj instanceof PowerMap)
+			{
 				power = (PowerMap) obj;
 				bukkitInput.close();
 				log.info("[The One Power] Loaded level data");
 				return true;
 			}
-			else{
+			else
+			{
 				log.info("[The One Power] Loading problem, the level progress save is corrupt!");
 				log.info("[The One Power] (The save is not an instance of PowerMap.java)");
 			}
 			bukkitInput.close();
-		}
-		catch(IOException ex){
+		} catch (IOException ex)
+		{
 			log.info("[The One Power] No save found for the level progress data, creating a new one");
-		} 
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e)
+		{
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occurred while loading the level progress data");
 		}
 		return false;
 	}
 
-	public UnseenLandData loadUnseenLand(){
-		try{
-			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_unseenLand");
-			ObjectInputStream objInput = new ObjectInputStream(fileInput);
-			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(objInput);
-			Object obj = bukkitInput.readObject();
-			if(obj instanceof UnseenLandData){
-				UnseenLandData dat = (UnseenLandData) obj;
-				bukkitInput.close();
-				log.info("[The One Power] Loaded Unseen Land data");
-				return dat;
-			}
-			else{
-				log.info("[The One Power] Loading problem, the Unseen Land save is corrupt!");
-				log.info("[The One Power] (The save is not an instance of UnseenLandData.java)");
-			}
-			bukkitInput.close();
-
-		}
-		catch(IOException ex){
-			log.info("[The One Power] No save found for the Unseen Land, creating a new one");
-		} 
-		catch (ClassNotFoundException e) {
-			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading the Unseen Land");
-		}
-		return null;
-	}
-
-
-	public void loadData(){
-		try{
+	public void loadData()
+	{
+		try
+		{
 			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_global");
 			ObjectInputStream objInput = new ObjectInputStream(fileInput);
 			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(objInput);
 			Object obj = bukkitInput.readObject();
-			if(obj instanceof Database){
+			if (obj instanceof Database)
+			{
 				Database db = (Database) obj;
 				bukkitInput.close();
 				database = db;
 				log.info("[The One Power] Loaded global data");
 				return;
 			}
-			else{
+			else
+			{
 				log.info("[The One Power] Loading problem, the global save is corrupt!");
 				log.info("[The One Power] (The save is not an instance of Data.java)");
 			}
 			bukkitInput.close();
 
-		}
-		catch(IOException ex){
+		} catch (IOException ex)
+		{
 			log.info("[The One Power] No save found for the global data, creating a new one");
 			log.info("IOException!");
-		} 
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e)
+		{
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading global data");
 		}
 	}
@@ -590,30 +580,14 @@ public final class TheOnePower extends JavaPlugin{
 	/**
 	 * Makes a new /The One Power folder, to store data files
 	 */
-	public void makeDir(){
+	public void makeDir()
+	{
 		File dataFolder = new File("plugins/The One Power");
-		if(! (dataFolder.exists() ) ){
+		if (!(dataFolder.exists()))
+		{
 			dataFolder.mkdir();
 		}
 	}
-
-	public void createUnseenLand(){
-		if(Bukkit.getWorld("tel'aran'rhiod") == null){
-			log.info("[The One Power] Initializing Tel'aran'rhiod");
-			UnseenGenTask task = new UnseenGenTask();
-			task.run();
-		}
-
-		UnseenLandData data = loadUnseenLand();
-		if (data != null){
-			log.info("[The One Power] Loading Unseen Land data");
-			unseenLand = new UnseenLand(data);
-
-		}
-		else{
-			unseenLand = new UnseenLand();
-			log.info("[The One Power] Creating new Unseen Land");
-		}
-	}
-
 }
+
+

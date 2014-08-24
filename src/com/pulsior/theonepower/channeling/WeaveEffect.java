@@ -15,7 +15,6 @@ import com.pulsior.theonepower.weaves.accepted.Delving;
 import com.pulsior.theonepower.weaves.accepted.MiningBlast;
 import com.pulsior.theonepower.weaves.accepted.QuickGrowth;
 import com.pulsior.theonepower.weaves.accepted.ShootFireball;
-import com.pulsior.theonepower.weaves.aessedai.BindWarder;
 import com.pulsior.theonepower.weaves.aessedai.BindWolfGaidin;
 import com.pulsior.theonepower.weaves.aessedai.ClearSky;
 import com.pulsior.theonepower.weaves.aessedai.FoldedLight;
@@ -42,61 +41,57 @@ import com.pulsior.theonepower.weaves.saangreal.LightningStorm;
 
 /**
  * Enum for all the possible weaves
+ * 
  * @author Pulsior
- *
+ * 
  */
-public enum WeaveEffect {
-	INVALID(new Invalid(), Level.NOVICE ),
-	LIGHT_FIRE(new LightFire(), Level.NOVICE),
-	OPEN_DOOR(new OpenDoor(), Level.NOVICE),
-	WATERBREATHING(new Waterbreathing(), Level.NOVICE ),
-	EXTINGUISH_FIRE(new ExtinguishFire(), Level.NOVICE ),
-	FIREBALL(new ShootFireball(), Level.ACCEPTED),
-	BINDING_AIR(new BindingAir(), Level.ACCEPTED),
-	QUICK_GROWTH(new QuickGrowth(), Level.ACCEPTED),
-	DELVING(new Delving(), Level.ACCEPTED),
-	MINING_BLAST(new MiningBlast(), Level.ACCEPTED),
-	LIGHTNING(new Lightning(), Level.AES_SEDAI ),
-	RAIN(new Rain(), Level.AES_SEDAI),
-	CLEAR_SKY(new ClearSky(), Level.AES_SEDAI ),
-	BIND_WOLF_GAIDIN(new BindWolfGaidin(), Level.AES_SEDAI ),
-	HEALING(new Healing(), Level.AES_SEDAI),
-	FOLDED_LIGHT(new FoldedLight(), Level.AES_SEDAI),
-	SHIELDING(new Shielding(), Level.AES_SEDAI),
-	REMOVE_SHIELDING(new RemoveShield(), Level.AES_SEDAI),
-	BIND_WARDER(new BindWarder(), Level.AES_SEDAI),
-	MANIPULATE(new Manipulate(), Level.AES_SEDAI),
-	OPEN_GROUND(new OpenGround(), Level.AES_SEDAI),
-	SPOT_HOSTILE(new SpotHostileMobs(), Level.AES_SEDAI),
-	SPARKS(new Sparks(), Level.AES_SEDAI),
-	METEOR(new Meteor(), Level.FORSAKEN),
-	TELEPORT(new Teleport(), Level.FORSAKEN),
-	STRIKE(new Strike(), Level.FORSAKEN),
-	TRAVEL(new Travel(), Level.FORSAKEN),
-	FIRE_SWORD(new FireSword(), Level.FORSAKEN),
-	LIGHTNING_STORM(new LightningStorm(), Level.SA_ANGREAL),
-	HEAVEN_FIRE(new HeavenFire(), Level.SA_ANGREAL);
-	
+public enum WeaveEffect
+{
+	INVALID(new Invalid(), Level.NOVICE), LIGHT_FIRE(new LightFire(),
+			Level.NOVICE), OPEN_DOOR(new OpenDoor(), Level.NOVICE), WATERBREATHING(
+			new Waterbreathing(), Level.NOVICE), EXTINGUISH_FIRE(
+			new ExtinguishFire(), Level.NOVICE), FIREBALL(new ShootFireball(),
+			Level.ACCEPTED), BINDING_AIR(new BindingAir(), Level.ACCEPTED), QUICK_GROWTH(
+			new QuickGrowth(), Level.ACCEPTED), DELVING(new Delving(),
+			Level.ACCEPTED), MINING_BLAST(new MiningBlast(), Level.ACCEPTED), LIGHTNING(
+			new Lightning(), Level.AES_SEDAI), RAIN(new Rain(), Level.AES_SEDAI), CLEAR_SKY(
+			new ClearSky(), Level.AES_SEDAI), BIND_WOLF_GAIDIN(
+			new BindWolfGaidin(), Level.AES_SEDAI), HEALING(new Healing(),
+			Level.AES_SEDAI), FOLDED_LIGHT(new FoldedLight(), Level.AES_SEDAI), SHIELDING(
+			new Shielding(), Level.AES_SEDAI), REMOVE_SHIELDING(
+			new RemoveShield(), Level.AES_SEDAI), MANIPULATE(new Manipulate(),
+			Level.AES_SEDAI), OPEN_GROUND(new OpenGround(), Level.AES_SEDAI), SPOT_HOSTILE(
+			new SpotHostileMobs(), Level.AES_SEDAI), SPARKS(new Sparks(),
+			Level.AES_SEDAI), METEOR(new Meteor(), Level.FORSAKEN), TELEPORT(
+			new Teleport(), Level.FORSAKEN), STRIKE(new Strike(),
+			Level.FORSAKEN), TRAVEL(new Travel(), Level.FORSAKEN), FIRE_SWORD(
+			new FireSword(), Level.FORSAKEN), LIGHTNING_STORM(
+			new LightningStorm(), Level.SA_ANGREAL), HEAVEN_FIRE(
+			new HeavenFire(), Level.SA_ANGREAL);
+
 	Weave weave;
 	Level level;
-	
-	WeaveEffect(Weave weave, Level level){
+
+	WeaveEffect(Weave weave, Level level)
+	{
 		this.weave = weave;
 		this.level = level;
 	}
-	
-	boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity){
-		return weave.cast(player, world, clickedBlock, clickedFace, clickedEntity);
+
+	boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity)
+	{
+		return weave
+				.cast(player, world, clickedBlock, clickedFace, clickedEntity);
 	}
-	
-	int getLevel(){
-		return level.getLevel(); 
+
+	int getLevel()
+	{
+		return level.getLevel();
 	}
-	
-	List<Element> getElements(){
+
+	List<Element> getElements()
+	{
 		return weave.getElements();
 	}
-	
+
 }
-
-

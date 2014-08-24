@@ -3,6 +3,7 @@ package com.pulsior.theonepower.channeling;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,43 +26,44 @@ import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.item.AngrealType;
 import com.pulsior.theonepower.task.PlayerRegenerationTask;
 
-
 /**
- * Class with one instance for every saidar-embracing player, stored in TheOnePower.channelMap
+ * Class with one instance for every saidar-embracing player, stored in
+ * TheOnePower.channelMap
+ * 
  * @author Pulsior
- *
+ * 
  */
 
-public class Channel implements Serializable{
+public class Channel implements Serializable
+{
 
 	private static final long serialVersionUID = 5639217340010068020L;
-	
+
 	public boolean pickUpItems = false;
-	public String playerName;
+	public UUID id;
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
-	
+
 	String elementString;
 	boolean isCasting;
 
 	int normalExpLevel;
 	float normalExpProgress;
 	ItemStack[] normalInventory;
-	
+
 	WeaveEffect lastWeave = null;
 
 	public int maxLevel;
 	long taskDuration;
 
-
 	@SuppressWarnings("deprecation")
-	public Channel(String playerName, int extraLevels){	
-		
-		Player player = Bukkit.getPlayer(playerName);
-		this.playerName = playerName;
-		
-		player.updateInventory();
+	public Channel(UUID id, int extraLevels)
+	{
 
+		Player player = Bukkit.getPlayer(id);
+		this.id = id;
+
+		player.updateInventory();
 
 		isCasting = false;
 
@@ -69,8 +71,9 @@ public class Channel implements Serializable{
 		 * Set up the data in PowerMap
 		 */
 
-		if(TheOnePower.power.levelMap.get(playerName ) == null){
-			TheOnePower.power.addPlayer( playerName );
+		if (TheOnePower.power.levelMap.get(id) == null)
+		{
+			TheOnePower.power.addPlayer(id);
 		}
 
 		normalExpProgress = player.getExp();
@@ -81,52 +84,55 @@ public class Channel implements Serializable{
 
 		PlayerInventory inventory = player.getInventory();
 		normalInventory = inventory.getContents();
-		
-		TheOnePower.database.addChannel(playerName, this);
 
+		TheOnePower.database.addChannel(id, this);
 
-		normalExpLevel = player.getLevel(); //Add the correct levels to the player
-		maxLevel = TheOnePower.power.levelMap.get(playerName);
+		normalExpLevel = player.getLevel(); // Add the correct levels to the
+											// player
+		maxLevel = TheOnePower.power.levelMap.get(id);
 		maxLevel = maxLevel + extraLevels;
 		player.setLevel(maxLevel);
-		player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(playerName)  ) * TheOnePower.power.weaveProgressMap.get(playerName) );
+		player.setExp((1F / (float) TheOnePower.power.requiredWeavesMap
+				.get(id)) *
+				TheOnePower.power.weaveProgressMap.get(id));
 
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
-		
-		taskDuration = (long) 120/maxLevel; //Fully regenerating your levels will always take 120 ticks 
+
+		taskDuration = (long) 120 / maxLevel; // Fully regenerating your levels
+												// will always take 120 ticks
 
 		/*
-		 * Add items to the inventory 
+		 * Add items to the inventory
 		 */
 
 		ItemStack spirit = new ItemStack(Material.NETHER_STAR);
 		ItemMeta meta = spirit.getItemMeta();
-		meta.setDisplayName(ChatColor.GRAY+"Spirit");
+		meta.setDisplayName(ChatColor.GRAY + "Spirit");
 		spirit.setItemMeta(meta);
 		inv.setItem(8, spirit);
 
 		ItemStack earth = new ItemStack(Material.DIRT);
 		meta = earth.getItemMeta();
-		meta.setDisplayName(ChatColor.DARK_GREEN +"Earth");
+		meta.setDisplayName(ChatColor.DARK_GREEN + "Earth");
 		earth.setItemMeta(meta);
 		inv.setItem(4, earth);
 
 		ItemStack air = new ItemStack(Material.FEATHER);
 		meta = air.getItemMeta();
-		meta.setDisplayName(ChatColor.BLUE+"Air");
+		meta.setDisplayName(ChatColor.BLUE + "Air");
 		air.setItemMeta(meta);
 		inv.setItem(5, air);
 
 		ItemStack fire = new ItemStack(Material.FIRE);
 		meta = fire.getItemMeta();
-		meta.setDisplayName(ChatColor.RED+"Fire");
+		meta.setDisplayName(ChatColor.RED + "Fire");
 		fire.setItemMeta(meta);
 		inv.setItem(6, fire);
 
 		ItemStack water = new ItemStack(Material.WATER);
 		meta = water.getItemMeta();
-		meta.setDisplayName(ChatColor.AQUA+"Water");
+		meta.setDisplayName(ChatColor.AQUA + "Water");
 		water.setItemMeta(meta);
 		inv.setItem(7, water);
 
@@ -134,7 +140,7 @@ public class Channel implements Serializable{
 		meta = cast.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Cast Weave");
 		List<String> castLore = new ArrayList<String>();
-		castLore.add(ChatColor.GOLD+"Use your prepared weave");
+		castLore.add(ChatColor.GOLD + "Use your prepared weave");
 		meta.setLore(castLore);
 		cast.setItemMeta(meta);
 		inv.setItem(0, cast);
@@ -143,7 +149,7 @@ public class Channel implements Serializable{
 		meta = disband.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Disband Weave");
 		List<String> disbandLore = new ArrayList<String>();
-		disbandLore.add(ChatColor.GOLD+"Stop weaving and start a new weave");
+		disbandLore.add(ChatColor.GOLD + "Stop weaving and start a new weave");
 		meta.setLore(disbandLore);
 		disband.setItemMeta(meta);
 		inv.setItem(1, disband);
@@ -152,117 +158,136 @@ public class Channel implements Serializable{
 		meta = rose.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + "Release Saidar");
 		List<String> releaseLore = new ArrayList<String>();
-		releaseLore.add(ChatColor.GOLD+"Let go of saidar");
+		releaseLore.add(ChatColor.GOLD + "Let go of saidar");
 		meta.setLore(releaseLore);
 		rose.setItemMeta(meta);
 		inv.setItem(2, rose);
 
+		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 1000000, 1));
 
-		player.addPotionEffect( new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1) );
-		player.addPotionEffect( new PotionEffect(PotionEffectType.ABSORPTION, 1000000, 1));
-		
 		BukkitRunnable regenerationTask = new PlayerRegenerationTask(player, maxLevel);
 		regenerationTask.runTaskTimer(TheOnePower.plugin, 0, taskDuration);
-		TheOnePower.taskHolder.put(playerName, regenerationTask);
+		TheOnePower.taskHolder.put(id, regenerationTask);
 
 		resetElements();
-		
+
 		player.updateInventory();
 	}
 
 	/**
 	 * Add an element to a weave
+	 * 
 	 * @param element
 	 */
 	@SuppressWarnings("deprecation")
-	public void addElement(Element element, String elementName){
-		
-		Player player = Bukkit.getPlayer(playerName);
-		
-		if(player.getLevel() != 0){
+	public void addElement(Element element, String elementName)
+	{
+
+		Player player = Bukkit.getPlayer(id);
+
+		if (player.getLevel() != 0)
+		{
 			weave.add(element);
-			
+
 			Location location = player.getLocation();
-			location.setX(location.getX()+14);
+			location.setX(location.getX() + 14);
 			player.playSound(location, Sound.CLICK, 1, 0);
-			
-			if(elementString == null){
+
+			if (elementString == null)
+			{
 				elementString = elementName;
 			}
-			
-			else{
+
+			else
+			{
 				elementString += ", " + elementName;
 			}
-			
+
 			PlayerInventory inv = player.getInventory();
-			
-			for(int x = 4; x < 9; x++){
+
+			for (int x = 4; x < 9; x++)
+			{
 				ItemStack item = inv.getItem(x);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(elementString);
 				item.setItemMeta(meta);
-				
+
 				player.updateInventory();
-			
+
 			}
 		}
 
 		isCasting = true;
 	}
-	
+
 	@SuppressWarnings("deprecation")
-	public void resetElements(){
-		
-		Player player = Bukkit.getPlayer(playerName);
-		
+	public void resetElements()
+	{
+
+		Player player = Bukkit.getPlayer(id);
+
 		PlayerInventory inv = player.getInventory();
-		
-		for(int x = 4; x < 9; x++){
+
+		for (int x = 4; x < 9; x++)
+		{
 			ItemStack item = inv.getItem(x);
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName("  ");
 			item.setItemMeta(meta);
-			
+
 			player.updateInventory();
-		
+
 		}
-		
+
 		elementString = null;
 	}
-	
+
 	/**
 	 * Execute a weave
+	 * 
 	 * @param clickedBlock
 	 */
 
-	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity){
-		
-		Player player = Bukkit.getPlayer(playerName);
-		
-		if(Stedding.getStedding( player.getLocation() ) != null ){
-			player.sendMessage(ChatColor.RED+"The One Power slipped away, you must be in a stedding");
+	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity)
+	{
+
+		Player player = Bukkit.getPlayer(id);
+
+		if (Stedding.getStedding(player.getLocation()) != null)
+		{
+			player.sendMessage(ChatColor.RED +
+					"The One Power slipped away, you must be in a stedding");
 			close();
 			return;
 		}
-		
+
 		WeaveEffect effect = compare(weave);
 		String name = player.getName();
 
-		if(effect != null){
+		if (effect != null)
+		{
 			World world = player.getWorld();
 			int xpLevel = player.getLevel();
-			int levelCost = weave.size()*effect.getLevel();
-			int difference = xpLevel-levelCost;
+			int levelCost = weave.size() * effect.getLevel();
+			int difference = xpLevel - levelCost;
 			boolean casted = false;
 
-			if(difference >= 0){
-				casted = effect.cast(player, world, clickedBlock, clickedFace, clickedEntity);
-				player.setLevel(xpLevel-levelCost);
+			if (difference >= 0)
+			{
+				casted = effect
+						.cast(player, world, clickedBlock, clickedFace, clickedEntity);
+				player.setLevel(xpLevel - levelCost);
 			}
 
-			if( effect.equals(lastWeave) == false &&  effect.equals(WeaveEffect.INVALID) == false && casted == true){
-				TheOnePower.power.addWeave(player.getName());
-				player.setExp( ( 1F / (float) TheOnePower.power.requiredWeavesMap.get(name)  ) * TheOnePower.power.weaveProgressMap.get(name) );
+			if (effect.equals(lastWeave) == false &&
+					effect.equals(WeaveEffect.INVALID) == false &&
+					casted == true)
+			{
+				TheOnePower.power.addWeave(id);
+				player.setExp((1F / (float) TheOnePower.power.requiredWeavesMap
+						.get(name)) *
+						TheOnePower.power.weaveProgressMap.get(name));
 			}
 
 			lastWeave = effect;
@@ -274,43 +299,47 @@ public class Channel implements Serializable{
 
 		isCasting = false;
 	}
-	
-	
-	public void update(){
-		BukkitRunnable regenerationTask = new PlayerRegenerationTask( Bukkit.getPlayer(playerName), maxLevel );
+
+	public void update()
+	{
+		BukkitRunnable regenerationTask = new PlayerRegenerationTask(Bukkit
+				.getPlayer(id), maxLevel);
 		regenerationTask.runTaskTimer(TheOnePower.plugin, 0, taskDuration);
-		TheOnePower.taskHolder.put(playerName, regenerationTask);
+		TheOnePower.taskHolder.put(id, regenerationTask);
 	}
 
 	/**
 	 * Close and remove the channel
 	 */
 
-	public void close(){
-		
-		Player player = Bukkit.getPlayer(playerName);
+	public void close()
+	{
+
+		Player player = Bukkit.getPlayer(id);
 		PlayerInventory inventory = player.getInventory();
 		inventory.setContents(normalInventory);
 
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.removePotionEffect(PotionEffectType.ABSORPTION);
-		player.setLevel( normalExpLevel );
-		player.setExp( normalExpProgress );
+		player.setLevel(normalExpLevel);
+		player.setExp(normalExpProgress);
 
-		BukkitRunnable task = TheOnePower.taskHolder.get(playerName);
-		
-		if(task != null){
+		BukkitRunnable task = TheOnePower.taskHolder.get(id);
+
+		if (task != null)
+		{
 			task.cancel();
 		}
-		
-		TheOnePower.taskHolder.remove(playerName);
-		TheOnePower.database.removeChannel(playerName);
+
+		TheOnePower.taskHolder.remove(id);
+		TheOnePower.database.removeChannel(id);
 
 	}
 
-	public void disband(){
-		
-		Player player = Bukkit.getPlayer(playerName);
+	public void disband()
+	{
+
+		Player player = Bukkit.getPlayer(id);
 		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 		weave.clear();
 		resetElements();
@@ -319,19 +348,24 @@ public class Channel implements Serializable{
 
 	/**
 	 * Returns the amount of extra levels an angreal yields a player
+	 * 
 	 * @param player
 	 * @return
 	 */
 
-	public int getAngrealLevels(Player player){
+	public int getAngrealLevels(Player player)
+	{
 		PlayerInventory inventory = player.getInventory();
 
 		int level = 0;
 
-		for(AngrealType type : AngrealType.values()){
-			if(inventory.contains(type.getItem() ) ) {
+		for (AngrealType type : AngrealType.values())
+		{
+			if (inventory.contains(type.getItem()))
+			{
 				int typeLevel = type.getLevel();
-				if(typeLevel > level){
+				if (typeLevel > level)
+				{
 					level = typeLevel;
 				}
 			}
@@ -339,26 +373,32 @@ public class Channel implements Serializable{
 
 		return level;
 	}
-	
+
 	/**
 	 * Get the correct weave
+	 * 
 	 * @param list
 	 * @return
 	 */
-	
-	public WeaveEffect compare(List<Element> list){ 
-		WeaveEffect[] effects = WeaveEffect.values();
-		for(WeaveEffect effect : effects){
 
-			if(! (effect.equals(WeaveEffect.INVALID) ) ) {
-				
+	public WeaveEffect compare(List<Element> list)
+	{
+		WeaveEffect[] effects = WeaveEffect.values();
+		for (WeaveEffect effect : effects)
+		{
+
+			if (!(effect.equals(WeaveEffect.INVALID)))
+			{
+
 				List<Element> weaveElements = effect.getElements();
-				
-				if(weaveElements == null){
+
+				if (weaveElements == null)
+				{
 					throw new IllegalArgumentException("The elements of a weave cannot be null");
 				}
-				
-				if(weaveElements.equals(list)){
+
+				if (weaveElements.equals(list))
+				{
 					return effect;
 				}
 			}
@@ -366,20 +406,21 @@ public class Channel implements Serializable{
 		}
 		return WeaveEffect.INVALID;
 	};
-	
+
 	/**
 	 * Get if the player is casting a weave
 	 */
-	
-	public boolean isCasting(){
+
+	public boolean isCasting()
+	{
 		return isCasting;
 	}
-	
-	public SerializableChannel serialize(){
-		SerializableChannel sc = new SerializableChannel(playerName, maxLevel, taskDuration, weave);
+
+	public SerializableChannel serialize()
+	{
+		SerializableChannel sc = new SerializableChannel(id, maxLevel, taskDuration, weave);
 		return sc;
-	
+
 	}
-	
 
 }

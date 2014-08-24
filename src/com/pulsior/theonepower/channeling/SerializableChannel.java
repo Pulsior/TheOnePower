@@ -1,19 +1,23 @@
 package com.pulsior.theonepower.channeling;
 
 import java.util.List;
+import java.util.UUID;
 
-public class SerializableChannel {
+public class SerializableChannel
+{
 
-	String name;
+	UUID id;
 	int maxLevel;
 	long taskDuration;
 	List<Element> weave;
-	
-	public SerializableChannel(String name, int maxLevel, long taskDuration, List<Element> weave){
-		this.name = name;
+
+	public SerializableChannel(UUID id, int maxLevel, long taskDuration,
+			List<Element> weave)
+	{
+		this.id = id;
 		this.maxLevel = maxLevel;
 		this.taskDuration = taskDuration;
 		this.weave = weave;
 	}
-	
+
 }

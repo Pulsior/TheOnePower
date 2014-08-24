@@ -76,7 +76,6 @@ public class ChannelManager implements Listener {
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event){
 		Player player = (Player) event.getEntity();
-		String name = player.getName();
 		Channel channel = TheOnePower.database.getChannel( player ) ;
 		if (channel != null){
 			channel.close();
@@ -88,17 +87,12 @@ public class ChannelManager implements Listener {
 			player.sendMessage("<Ba'alzamon> I have won again, Lews Therin."); //Wheel of Time fans will understand
 
 		}
-
-		if( TheOnePower.unseenLand.players.contains(name ) ){
-			//TheOnePower.unseenLand.removePlayer(name);
-		}
 	}
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onItemDrop(PlayerDropItemEvent event){
 		Player player = event.getPlayer();
-		String name = player.getName();
 		Channel channel = TheOnePower.database.getChannel(player);
 		if(channel != null ){
 
@@ -130,10 +124,6 @@ public class ChannelManager implements Listener {
 				channel.cast(block, null, entity);
 			}
 		}
-
-		else if(TheOnePower.unseenLand.players.contains(name) ){
-			event.setCancelled(true);
-		}
 	}
 
 
@@ -141,12 +131,8 @@ public class ChannelManager implements Listener {
 
 	@EventHandler
 	public void onItemPickup(PlayerPickupItemEvent event){
-		String name = event.getPlayer().getName();
 
 		if( TheOnePower.database.getChannel(event.getPlayer() ) != null) {
-			event.setCancelled(true);
-		}
-		else if(TheOnePower.unseenLand.players.contains(name) ){
 			event.setCancelled(true);
 		}
 	}

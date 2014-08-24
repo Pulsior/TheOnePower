@@ -2,6 +2,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -10,7 +11,7 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftFirework;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftFirework;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -39,7 +40,7 @@ public class Shielding implements Weave {
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
 		if(clickedEntity instanceof Player){
 			Player targetPlayer = (Player) clickedEntity;
-			String targetName = targetPlayer.getName();
+			UUID targetId = targetPlayer.getUniqueId();
 			Channel channel = TheOnePower.database.getChannel(targetPlayer);
 			if(channel != null){
 				channel.close();
@@ -62,7 +63,7 @@ public class Shielding implements Weave {
 			casterLevel = casterChannel.maxLevel;
 
 
-			TheOnePower.database.addShield(targetName, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetName), casterName) );
+			TheOnePower.database.addShield(targetId, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetId), casterName) );
 
 		}
 		return false;
