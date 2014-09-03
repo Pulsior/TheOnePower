@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class ExtinguishFire implements Weave {
@@ -50,5 +51,11 @@ public class ExtinguishFire implements Weave {
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+
+	@Override
+	public Level getLevel()
+	{
+		return Level.NOVICE;
 	}
 }

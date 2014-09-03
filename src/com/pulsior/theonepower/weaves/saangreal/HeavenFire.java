@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class HeavenFire implements Weave{
@@ -79,6 +80,12 @@ public class HeavenFire implements Weave{
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+
+	@Override
+	public Level getLevel()
+	{
+		return Level.SA_ANGREAL;
 	}
 
 }

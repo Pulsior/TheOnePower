@@ -16,6 +16,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.material.Openable;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class OpenDoor implements Weave {
@@ -66,6 +67,12 @@ public class OpenDoor implements Weave {
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+	
+	@Override
+	public Level getLevel()
+	{
+		return Level.NOVICE;
 	}
 
 }

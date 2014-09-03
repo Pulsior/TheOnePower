@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.weaves.Weave;
 
@@ -65,6 +66,12 @@ public class Travel implements Weave {
 			}
 			player.openInventory(gui);
 		}
+	}
+
+	@Override
+	public Level getLevel()
+	{
+		return Level.FORSAKEN;
 	}
 
 }

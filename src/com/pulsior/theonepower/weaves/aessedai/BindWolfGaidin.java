@@ -13,28 +13,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
-public class BindWolfGaidin implements Weave {
-	
+public class BindWolfGaidin implements Weave
+{
+
 	List<Element> elements = new ArrayList<Element>();
-	
-	public BindWolfGaidin(){
+
+	public BindWolfGaidin()
+	{
 		elements.add(Element.SPIRIT);
 		elements.add(Element.AIR);
 		elements.add(Element.AIR);
 		elements.add(Element.WATER);
 		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.EARTH);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.AIR);
 	}
-	
-	@Override
-	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 
-		if(clickedEntity instanceof Wolf){
+	@Override
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity)
+	{
+
+		if (clickedEntity instanceof Wolf)
+		{
 			Wolf wolf = (Wolf) clickedEntity;
 			wolf.setAngry(false);
 			wolf.setTamed(true);
@@ -47,8 +48,15 @@ public class BindWolfGaidin implements Weave {
 	}
 
 	@Override
-	public List<Element> getElements() {
+	public List<Element> getElements()
+	{
 		return elements;
+	}
+
+	@Override
+	public Level getLevel()
+	{
+		return Level.AES_SEDAI;
 	}
 
 }

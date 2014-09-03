@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class Healing implements Weave{
@@ -50,6 +51,12 @@ public class Healing implements Weave{
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+
+	@Override
+	public Level getLevel()
+	{
+		return Level.AES_SEDAI;
 	}
 
 

@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 
 public interface Weave {
 	
@@ -16,5 +17,6 @@ public interface Weave {
 	
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity);
 	public List<Element> getElements();
+	public Level getLevel();
 	
 }

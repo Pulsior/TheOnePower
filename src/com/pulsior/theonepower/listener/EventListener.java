@@ -2,7 +2,6 @@ package com.pulsior.theonepower.listener;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -11,15 +10,12 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -29,12 +25,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.pulsior.theonepower.SaidarEmbraceEvent;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.api.event.SaidarEmbraceEvent;
 import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Portal;
-import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.util.Direction;
 import com.pulsior.theonepower.util.Utility;
 
@@ -207,30 +202,6 @@ public class EventListener implements Listener
 		}
 	}
 
-
-	/**
-	 * Add mob drops
-	 * 
-	 * @param event
-	 */
-
-	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event)
-	{
-		LivingEntity entity = event.getEntity();
-		EntityType type = entity.getType();
-
-		if (type.equals(EntityType.ZOMBIE) || type.equals(EntityType.SKELETON))
-		{
-
-			if (new Random().nextInt(10) == 0)
-			{
-				event.getDrops().add(new UnseenLandStone().asItem());
-			}
-
-		}
-
-	}
 
 	/**
 	 * Makes sure a gateway does not disappear immediately.

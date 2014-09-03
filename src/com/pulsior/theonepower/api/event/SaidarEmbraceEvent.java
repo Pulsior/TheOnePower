@@ -1,4 +1,4 @@
-package com.pulsior.theonepower;
+package com.pulsior.theonepower.api.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

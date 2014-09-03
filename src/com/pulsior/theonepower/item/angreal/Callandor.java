@@ -10,7 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.pulsior.theonepower.ItemGenerator;
-import com.pulsior.theonepower.SaidarEmbraceEvent;
+import com.pulsior.theonepower.api.event.SaidarEmbraceEvent;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
 

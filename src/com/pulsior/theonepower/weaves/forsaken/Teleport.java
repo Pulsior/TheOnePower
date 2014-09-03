@@ -3,6 +3,8 @@ package com.pulsior.theonepower.weaves.forsaken;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -10,6 +12,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
+import com.pulsior.theonepower.particle.ParticleEffects;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class Teleport implements Weave {
@@ -27,8 +31,14 @@ public class Teleport implements Weave {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {		
-		player.teleport(player.getTargetBlock(null, 200).getLocation());	
+	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
+		Location l = player.getLocation();
+		Location b = player.getTargetBlock(null, 200).getLocation();
+		player.teleport(b);
+		world.playSound(l, Sound.ENDERMAN_TELEPORT, 5, 1);
+		world.playSound(b, Sound.ENDERMAN_TELEPORT, 5, 1);
+		ParticleEffects.EFFECT_TELEPORT.sendTo(l, 50);
+		ParticleEffects.EFFECT_TELEPORT.sendTo(b, 50);
 		return true;
 
 	}
@@ -36,6 +46,12 @@ public class Teleport implements Weave {
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+
+	@Override
+	public Level getLevel()
+	{
+		return Level.FORSAKEN;
 	}
 
 }

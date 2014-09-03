@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 
 public class Invalid implements Weave {
 
@@ -42,5 +43,11 @@ public class Invalid implements Weave {
 	@Override
 	public List<Element> getElements() {
 		return null;
+	}
+	
+	@Override
+	public Level getLevel()
+	{
+		return Level.NOVICE;
 	}
 }

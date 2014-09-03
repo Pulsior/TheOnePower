@@ -14,6 +14,7 @@ import org.bukkit.material.Crops;
 import org.bukkit.material.MaterialData;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class QuickGrowth implements Weave{
@@ -49,6 +50,12 @@ public class QuickGrowth implements Weave{
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+	
+	@Override
+	public Level getLevel()
+	{
+		return Level.ACCEPTED;
 	}
 
 }

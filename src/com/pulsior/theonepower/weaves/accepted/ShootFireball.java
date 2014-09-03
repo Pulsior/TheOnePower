@@ -16,6 +16,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class ShootFireball implements Weave{
@@ -79,5 +80,11 @@ public class ShootFireball implements Weave{
 				}
 			}
 		}
+	}
+	
+	@Override
+	public Level getLevel()
+	{
+		return Level.ACCEPTED;
 	}
 }

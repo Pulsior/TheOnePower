@@ -21,6 +21,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.pulsior.theonepower.channeling.Element;
+import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class Manipulate implements Weave{
@@ -82,6 +83,12 @@ public class Manipulate implements Weave{
 	@Override
 	public List<Element> getElements() {
 		return elements;
+	}
+	
+	@Override
+	public Level getLevel()
+	{
+		return Level.AES_SEDAI;
 	}
 
 

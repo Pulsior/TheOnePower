@@ -20,7 +20,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,6 +27,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
+import com.pulsior.theonepower.api.WeaveRegistry;
+import com.pulsior.theonepower.api.event.SaidarEmbraceEvent;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.channeling.Stedding;
@@ -38,11 +39,38 @@ import com.pulsior.theonepower.item.angreal.SaAngreal;
 import com.pulsior.theonepower.item.terangreal.StaffOfFire;
 import com.pulsior.theonepower.item.terangreal.StaffOfMeteor;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
-import com.pulsior.theonepower.item.terangreal.UnseenLandStone;
 import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
 import com.pulsior.theonepower.util.Strings;
+import com.pulsior.theonepower.weaves.accepted.BindingAir;
+import com.pulsior.theonepower.weaves.accepted.Delving;
+import com.pulsior.theonepower.weaves.accepted.MiningBlast;
+import com.pulsior.theonepower.weaves.accepted.QuickGrowth;
+import com.pulsior.theonepower.weaves.accepted.ShootFireball;
+import com.pulsior.theonepower.weaves.aessedai.BindWolfGaidin;
+import com.pulsior.theonepower.weaves.aessedai.ClearSky;
+import com.pulsior.theonepower.weaves.aessedai.FoldedLight;
+import com.pulsior.theonepower.weaves.aessedai.Healing;
+import com.pulsior.theonepower.weaves.aessedai.Lightning;
+import com.pulsior.theonepower.weaves.aessedai.Manipulate;
+import com.pulsior.theonepower.weaves.aessedai.OpenGround;
+import com.pulsior.theonepower.weaves.aessedai.Rain;
+import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
+import com.pulsior.theonepower.weaves.aessedai.Shielding;
+import com.pulsior.theonepower.weaves.aessedai.Sparks;
+import com.pulsior.theonepower.weaves.aessedai.SpotHostileMobs;
+import com.pulsior.theonepower.weaves.forsaken.FireSword;
+import com.pulsior.theonepower.weaves.forsaken.Meteor;
+import com.pulsior.theonepower.weaves.forsaken.Strike;
+import com.pulsior.theonepower.weaves.forsaken.Teleport;
+import com.pulsior.theonepower.weaves.forsaken.Travel;
+import com.pulsior.theonepower.weaves.novice.ExtinguishFire;
+import com.pulsior.theonepower.weaves.novice.LightFire;
+import com.pulsior.theonepower.weaves.novice.OpenDoor;
+import com.pulsior.theonepower.weaves.novice.Waterbreathing;
+import com.pulsior.theonepower.weaves.saangreal.HeavenFire;
+import com.pulsior.theonepower.weaves.saangreal.LightningStorm;
 
 /**
  * Plugin main class
@@ -67,7 +95,7 @@ public final class TheOnePower extends JavaPlugin
 	BukkitScheduler scheduler = Bukkit.getScheduler();
 
 	/**
-	 * Registers listeners and creates tel'aran'rhiod when the plugin is enabled
+	 * Registers listeners when the plugin is enabled
 	 */
 	@Override
 	public void onEnable()
@@ -77,17 +105,14 @@ public final class TheOnePower extends JavaPlugin
 
 		getServer().getPluginManager().registerEvents(new WeaveHandler(), this);
 		getServer().getPluginManager()
-		.registerEvents(new ChannelManager(), this);
+				.registerEvents(new ChannelManager(), this);
 		getServer().getPluginManager()
-		.registerEvents(new EventListener(), this);
+				.registerEvents(new EventListener(), this);
 		getServer().getPluginManager()
-		.registerEvents(new ItemGenerator(), this);
+				.registerEvents(new ItemGenerator(), this);
 
-		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire());
-		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor());
-		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal());
-		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal());
-		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor());
+		registerItems();
+		registerWeaves();
 
 		if (power == null)
 		{
@@ -124,8 +149,7 @@ public final class TheOnePower extends JavaPlugin
 
 	/**
 	 * Open Saidar to a player with /embrace and closes it with /release. Get an
-	 * angreal with /angreal, cheat yourself into tel'aran'rhiod with /dream and
-	 * store a memory with /remember
+	 * angreal with /angreal and store a memory with /remember
 	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -209,60 +233,19 @@ public final class TheOnePower extends JavaPlugin
 		if (cmd.getName().equalsIgnoreCase("angreal"))
 		{
 
-			if (args.length == 1)
+			if (sender instanceof Player)
 			{
-
-				if (sender instanceof Player)
-				{
-					String arg = args[0];
-					Player player = (Player) sender;
-					PlayerInventory inventory = player.getInventory();
-
-					if (arg.equalsIgnoreCase("angreal"))
-					{
-						inventory.addItem(new Angreal().asItem());
-					}
-
-					else if (arg.equalsIgnoreCase("dream"))
-					{
-						inventory.addItem(new UnseenLandStone().asItem());
-					}
-
-					else if (arg.equalsIgnoreCase("sa'angreal"))
-					{
-						inventory.addItem(new SaAngreal().asItem());
-					}
-
-					else if (arg.equalsIgnoreCase("callandor"))
-					{
-						inventory.addItem(new Callandor().asItem());
-					}
-
-					else if (arg.equalsIgnoreCase("firestaff"))
-					{
-						inventory.addItem(new StaffOfFire().asItem());
-					}
-
-					else if (arg.equalsIgnoreCase("meteorstaff"))
-					{
-						inventory.addItem(new StaffOfMeteor().asItem());
-					}
-
-					else
-					{
-						sender.sendMessage(ChatColor.RED +
-								"You can choose between angreal, dream, Callandor and sa'angreal");
-					}
-
-					return true;
-				}
+				Player p = (Player) sender;
+				p.openInventory(AngrealMenu.getInventory());
 			}
+
 			else
 			{
 				sender.sendMessage(ChatColor.RED +
-						"You can choose between angreal, dream, Callandor and sa'angreal");
-				return true;
+						"This command can only be used by a player");
 			}
+			return true;
+
 		}
 
 		if (cmd.getName().equalsIgnoreCase("remember"))
@@ -275,7 +258,7 @@ public final class TheOnePower extends JavaPlugin
 				Player player = (Player) sender;
 				if (database
 						.addMemory(player.getUniqueId(), new Memory(memoryName, player
-								.getLocation() ) ) )
+								.getLocation())))
 				{
 					player.sendMessage(ChatColor.GREEN +
 							"Remembered this place as '" + memoryName + "'");
@@ -296,7 +279,7 @@ public final class TheOnePower extends JavaPlugin
 
 			if (sender instanceof Player && args.length == 1)
 			{
-				UUID id = ( (Player) sender).getUniqueId();
+				UUID id = ((Player) sender).getUniqueId();
 				String memoryName = ChatColor.RESET + args[0];
 				List<Memory> list = database.getMemories(id);
 
@@ -333,7 +316,7 @@ public final class TheOnePower extends JavaPlugin
 
 		if (cmd.getName().equalsIgnoreCase("stats"))
 		{
-			UUID id = ( (Player) sender).getUniqueId();
+			UUID id = ((Player) sender).getUniqueId();
 
 			if (power.levelMap.containsKey(id))
 			{
@@ -344,7 +327,7 @@ public final class TheOnePower extends JavaPlugin
 						ChatColor.GREEN +
 						Integer.toString(power.requiredWeavesMap.get(id) -
 								power.weaveProgressMap.get(id)) +
-								ChatColor.RESET + " weaves to reach the next level");
+						ChatColor.RESET + " weaves to reach the next level");
 				List<Memory> memories = database.getMemories(id);
 				if (memories != null)
 				{
@@ -565,6 +548,52 @@ public final class TheOnePower extends JavaPlugin
 		}
 	}
 
+	private void registerItems()
+	{
+		TerAngreal.registerItem(Strings.FIRE_STAFF_NAME, new StaffOfFire());
+		TerAngreal.registerItem(Strings.METEOR_STAFF_NAME, new StaffOfMeteor());
+		TerAngreal.registerItem(Strings.ANGREAL_NAME, new Angreal());
+		TerAngreal.registerItem(Strings.SA_ANGREAL_NAME, new SaAngreal());
+		TerAngreal.registerItem(Strings.CALLANDOR_NAME, new Callandor());
+	}
+
+	private void registerWeaves()
+	{
+		WeaveRegistry.registerWeave(new ExtinguishFire());
+		WeaveRegistry.registerWeave(new LightFire());
+		WeaveRegistry.registerWeave(new OpenDoor());
+		WeaveRegistry.registerWeave(new Waterbreathing());
+
+		WeaveRegistry.registerWeave(new BindingAir());
+		WeaveRegistry.registerWeave(new Delving());
+		WeaveRegistry.registerWeave(new MiningBlast());
+		WeaveRegistry.registerWeave(new QuickGrowth());
+		WeaveRegistry.registerWeave(new ShootFireball());
+
+		WeaveRegistry.registerWeave(new BindWolfGaidin());
+		WeaveRegistry.registerWeave(new ClearSky());
+		WeaveRegistry.registerWeave(new FoldedLight());
+		WeaveRegistry.registerWeave(new Healing());
+		WeaveRegistry.registerWeave(new Lightning());
+		WeaveRegistry.registerWeave(new Manipulate());
+		WeaveRegistry.registerWeave(new OpenGround());
+		WeaveRegistry.registerWeave(new Rain());
+		WeaveRegistry.registerWeave(new RemoveShield());
+		WeaveRegistry.registerWeave(new Shielding());
+		WeaveRegistry.registerWeave(new Sparks());
+		WeaveRegistry.registerWeave(new SpotHostileMobs());
+		
+		WeaveRegistry.registerWeave(new FireSword());
+		WeaveRegistry.registerWeave(new Meteor());
+		WeaveRegistry.registerWeave(new Strike());
+		WeaveRegistry.registerWeave(new Teleport());
+		WeaveRegistry.registerWeave(new Travel());
+		
+		WeaveRegistry.registerWeave(new HeavenFire());
+		WeaveRegistry.registerWeave(new LightningStorm());
+
+	}
+
 	/**
 	 * Makes a new /The One Power folder, to store data files
 	 */
@@ -577,5 +606,3 @@ public final class TheOnePower extends JavaPlugin
 		}
 	}
 }
-
-

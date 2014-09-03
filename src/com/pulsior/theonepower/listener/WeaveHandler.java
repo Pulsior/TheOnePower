@@ -17,8 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.pulsior.theonepower.SaidarEmbraceEvent;
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.api.event.SaidarEmbraceEvent;
 import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.channeling.weave.Portal;
