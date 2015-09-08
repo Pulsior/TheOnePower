@@ -39,6 +39,12 @@ public class Channel implements Serializable
 
 	private static final long serialVersionUID = 5639217340010068020L;
 
+	public static final Material EARTH = Material.DIRT;
+	public static final Material AIR = Material.FEATHER;
+	public static final Material FIRE = Material.FIREBALL;
+	public static final Material WATER = Material.WATER_LILY;
+	public static final Material SPIRIT = Material.NETHER_STAR;
+	
 	public boolean pickUpItems = false;
 	public UUID id;
 	public List<Element> weave = new ArrayList<Element>();
@@ -106,31 +112,31 @@ public class Channel implements Serializable
 		 * Add items to the inventory
 		 */
 
-		ItemStack spirit = new ItemStack(Material.NETHER_STAR);
+		ItemStack spirit = new ItemStack(SPIRIT);
 		ItemMeta meta = spirit.getItemMeta();
 		meta.setDisplayName(ChatColor.GRAY + "Spirit");
 		spirit.setItemMeta(meta);
 		inv.setItem(8, spirit);
 
-		ItemStack earth = new ItemStack(Material.DIRT);
+		ItemStack earth = new ItemStack(EARTH);
 		meta = earth.getItemMeta();
 		meta.setDisplayName(ChatColor.DARK_GREEN + "Earth");
 		earth.setItemMeta(meta);
 		inv.setItem(4, earth);
 
-		ItemStack air = new ItemStack(Material.FEATHER);
+		ItemStack air = new ItemStack(AIR);
 		meta = air.getItemMeta();
 		meta.setDisplayName(ChatColor.BLUE + "Air");
 		air.setItemMeta(meta);
 		inv.setItem(5, air);
 
-		ItemStack fire = new ItemStack(Material.FIRE);
+		ItemStack fire = new ItemStack(FIRE);
 		meta = fire.getItemMeta();
 		meta.setDisplayName(ChatColor.RED + "Fire");
 		fire.setItemMeta(meta);
 		inv.setItem(6, fire);
 
-		ItemStack water = new ItemStack(Material.WATER);
+		ItemStack water = new ItemStack(WATER);
 		meta = water.getItemMeta();
 		meta.setDisplayName(ChatColor.AQUA + "Water");
 		water.setItemMeta(meta);

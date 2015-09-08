@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -440,6 +441,26 @@ public final class TheOnePower extends JavaPlugin
 			{
 				sender.sendMessage("This command cannot be executed by the console");
 			}
+		}
+		
+		if (cmd.getName().equalsIgnoreCase("unshield"))
+		{
+
+			if (args.length > 0 ){
+				@SuppressWarnings("deprecation")
+				Player tgt = Bukkit.getPlayer( args[0] );
+				if (tgt != null)
+				{
+					UUID id = tgt.getUniqueId();
+					TheOnePower.database.removeShield(id);
+					sender.sendMessage(Color.GREEN + "Unshielded player " + args[0]);
+				}
+				else
+					sender.sendMessage(Color.RED + "Player " + args[0] + " is not online");
+			}
+			
+			return true;
+
 		}
 
 		return false;

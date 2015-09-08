@@ -34,6 +34,7 @@ public class Meteor implements Weave{
 
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
+		/*
 		final Fireball ball = player.launchProjectile(Fireball.class);
 		
 		ball.setYield(8F);
@@ -54,7 +55,7 @@ public class Meteor implements Weave{
 		for(long x = 0; x < 100; x = x+2){
 			scheduler.scheduleSyncDelayedTask(TheOnePower.plugin, task, x);
 		}
-
+		*/
 		return true;
 
 

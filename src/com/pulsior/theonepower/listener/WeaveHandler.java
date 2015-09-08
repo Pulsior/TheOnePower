@@ -35,11 +35,11 @@ import com.pulsior.theonepower.util.Strings;
 public class WeaveHandler implements Listener
 {
 
-	Material earth = Material.DIRT;
-	Material air = Material.FEATHER;
-	Material fire = Material.FIRE;
-	Material water = Material.WATER;
-	Material spirit = (Material.NETHER_STAR);
+	Material earth = Channel.EARTH;
+	Material air = Channel.AIR;
+	Material fire = Channel.FIRE;
+	Material water = Channel.WATER;
+	Material spirit = Channel.SPIRIT;
 
 	@SuppressWarnings("deprecation")
 	/**

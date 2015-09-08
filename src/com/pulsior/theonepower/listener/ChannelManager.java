@@ -3,6 +3,7 @@ package com.pulsior.theonepower.listener;
 import java.util.HashSet;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -14,6 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,15 +40,19 @@ public class ChannelManager implements Listener {
 			Material material = event.getBlock().getType();			
 			switch(material){
 			case DIRT:
+				Bukkit.getLogger().info("Dirt werkt");
 				event.setCancelled(true);
 				break;
-			case FIRE:
+			case FIREBALL:
+				Bukkit.getLogger().info("Fire werkt");
 				event.setCancelled(true);
 				break;
-			case WATER:
+			case WATER_LILY:
+				Bukkit.getLogger().info("Water werkt");
 				event.setCancelled(true);
 				break;
 			case RED_ROSE:
+				Bukkit.getLogger().info("Redrose werkt");
 				event.setCancelled(true);
 				break;
 			default:
@@ -135,6 +141,17 @@ public class ChannelManager implements Listener {
 
 		if( TheOnePower.database.getChannel(event.getPlayer() ) != null) {
 			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onInteract(PlayerInteractEvent event) {
+		ItemStack i = event.getItem();
+		if (event.getItem() != null)
+		{
+			if (i.getType().equals(Material.FIREBALL) ){
+				event.setCancelled(true);
+			}
 		}
 	}
 
