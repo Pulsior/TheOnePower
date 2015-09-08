@@ -6,7 +6,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftFirework;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFirework;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;

@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.weaves.aessedai;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -40,7 +41,7 @@ public class Sparks implements Weave{
 			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
-				Block block = player.getTargetBlock(null, 150);
+				Block block = player.getTargetBlock((HashSet<Byte>) null, 150);
 				Location location = block.getLocation().add(0, 1, 0);
 				Utility.spawnFireworkEffect(location, Color.RED, Color.BLACK, Type.BURST, false, false, 0);
 				

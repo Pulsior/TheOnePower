@@ -1,5 +1,6 @@
 package com.pulsior.theonepower.listener;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -108,7 +109,7 @@ public class ChannelManager implements Listener {
 				item.remove();
 			}
 
-			Block block = player.getTargetBlock(null, 5);
+			Block block = player.getTargetBlock((HashSet<Byte>) null, 5);
 			Entity entity = Utility.getTargetEntity(player);
 			if(entity != null){
 				if( player.getLocation().distance(entity.getLocation()  ) > 5 ) {

@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.weaves.aessedai;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -32,7 +33,7 @@ public class OpenGround implements Weave{
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
-		Block target = player.getTargetBlock(null, 50);
+		Block target = player.getTargetBlock((HashSet<Byte>) null, 50);
 		Location location = target.getLocation();
 		location.add(4, 0, 4);
 		world.strikeLightning(location);

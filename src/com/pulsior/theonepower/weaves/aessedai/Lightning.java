@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.weaves.aessedai;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.World;
@@ -26,7 +27,7 @@ public class Lightning implements Weave {
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
-		world.strikeLightning(player.getTargetBlock(null, 200).getLocation());
+		world.strikeLightning(player.getTargetBlock((HashSet<Byte>) null, 200).getLocation());
 		return true;
 	}
 	

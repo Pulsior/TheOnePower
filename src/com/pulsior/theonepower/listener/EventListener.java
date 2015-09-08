@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.listener;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -126,7 +127,7 @@ public class EventListener implements Listener
 									{
 
 										Location spawnLocation = player
-												.getTargetBlock(null, 5)
+												.getTargetBlock((HashSet<Byte>) null, 5)
 												.getLocation();
 										Location destination = memory
 												.getLocation(false);

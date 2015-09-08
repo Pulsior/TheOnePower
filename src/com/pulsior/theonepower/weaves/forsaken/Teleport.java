@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.weaves.forsaken;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -33,7 +34,7 @@ public class Teleport implements Weave {
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		Location l = player.getLocation();
-		Location b = player.getTargetBlock(null, 200).getLocation();
+		Location b = player.getTargetBlock((HashSet<Byte>) null, 200).getLocation();
 		player.teleport(b);
 		world.playSound(l, Sound.ENDERMAN_TELEPORT, 5, 1);
 		world.playSound(b, Sound.ENDERMAN_TELEPORT, 5, 1);

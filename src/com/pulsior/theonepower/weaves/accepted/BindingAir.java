@@ -9,7 +9,7 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftFirework;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFirework;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;

@@ -1,6 +1,7 @@
 package com.pulsior.theonepower.weaves.forsaken;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -29,7 +30,7 @@ public class Strike implements Weave {
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
 		
-		Block block2 = player.getTargetBlock(null, 75);
+		Block block2 = player.getTargetBlock((HashSet<Byte>) null, 75);
 		Location location = block2.getLocation();
 		world.strikeLightning(location);
 		world.createExplosion(location, 6F);
