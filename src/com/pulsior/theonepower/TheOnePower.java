@@ -56,11 +56,13 @@ import com.pulsior.theonepower.weaves.aessedai.Healing;
 import com.pulsior.theonepower.weaves.aessedai.Lightning;
 import com.pulsior.theonepower.weaves.aessedai.Manipulate;
 import com.pulsior.theonepower.weaves.aessedai.OpenGround;
+import com.pulsior.theonepower.weaves.aessedai.ProjectileShield;
 import com.pulsior.theonepower.weaves.aessedai.Rain;
 import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
 import com.pulsior.theonepower.weaves.aessedai.Shielding;
 import com.pulsior.theonepower.weaves.aessedai.Sparks;
 import com.pulsior.theonepower.weaves.aessedai.SpotHostileMobs;
+import com.pulsior.theonepower.weaves.aessedai.SpotPlayers;
 import com.pulsior.theonepower.weaves.forsaken.FireSword;
 import com.pulsior.theonepower.weaves.forsaken.Meteor;
 import com.pulsior.theonepower.weaves.forsaken.Strike;
@@ -473,7 +475,7 @@ public final class TheOnePower extends JavaPlugin
 	{
 		try
 		{
-			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_levels");
+			FileOutputStream fileOutput = new FileOutputStream("plugins/TheOnePower/data_levels");
 			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
 			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
 			bukkitOutput.writeObject(TheOnePower.power);
@@ -487,12 +489,12 @@ public final class TheOnePower extends JavaPlugin
 
 		try
 		{
-			File file = new File("plugins/The One Power/data_global");
+			File file = new File("plugins/TheOnePower/data_global");
 			if (file.exists())
 			{
 				file.delete();
 			}
-			FileOutputStream fileOutput = new FileOutputStream("plugins/The One Power/data_global");
+			FileOutputStream fileOutput = new FileOutputStream("plugins/TheOnePower/data_global");
 			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
 			BukkitObjectOutputStream bukkitOutput = new BukkitObjectOutputStream(output);
 			bukkitOutput.writeObject(database);
@@ -509,7 +511,7 @@ public final class TheOnePower extends JavaPlugin
 	{
 		try
 		{
-			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_levels");
+			FileInputStream fileInput = new FileInputStream("plugins/TheOnePower/data_levels");
 			ObjectInputStream input = new ObjectInputStream(fileInput);
 			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(input);
 			Object obj = bukkitInput.readObject();
@@ -540,7 +542,7 @@ public final class TheOnePower extends JavaPlugin
 	{
 		try
 		{
-			FileInputStream fileInput = new FileInputStream("plugins/The One Power/data_global");
+			FileInputStream fileInput = new FileInputStream("plugins/TheOnePower/data_global");
 			ObjectInputStream objInput = new ObjectInputStream(fileInput);
 			BukkitObjectInputStream bukkitInput = new BukkitObjectInputStream(objInput);
 			Object obj = bukkitInput.readObject();
@@ -562,7 +564,6 @@ public final class TheOnePower extends JavaPlugin
 		} catch (IOException ex)
 		{
 			log.info("[The One Power] No save found for the global data, creating a new one");
-			log.info("IOException!");
 		} catch (ClassNotFoundException e)
 		{
 			log.info("[The One Power] Loading problem, a ClassNotFoundException occured while loading global data");
@@ -603,6 +604,8 @@ public final class TheOnePower extends JavaPlugin
 		WeaveRegistry.registerWeave(new Shielding());
 		WeaveRegistry.registerWeave(new Sparks());
 		WeaveRegistry.registerWeave(new SpotHostileMobs());
+		WeaveRegistry.registerWeave(new SpotPlayers());
+		WeaveRegistry.registerWeave(new ProjectileShield());
 		
 		WeaveRegistry.registerWeave(new FireSword());
 		WeaveRegistry.registerWeave(new Meteor());
@@ -616,11 +619,11 @@ public final class TheOnePower extends JavaPlugin
 	}
 
 	/**
-	 * Makes a new /The One Power folder, to store data files
+	 * Makes a new /TheOnePower folder, to store data files
 	 */
 	public void makeDir()
 	{
-		File dataFolder = new File("plugins/The One Power");
+		File dataFolder = new File("plugins/TheOnePower");
 		if (!(dataFolder.exists()))
 		{
 			dataFolder.mkdir();

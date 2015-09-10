@@ -2,8 +2,8 @@ package com.pulsior.theonepower.item.terangreal;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -26,7 +26,7 @@ public class StaffOfMeteor extends TerAngreal{
 
 	@Override
 	public void use(Player player, Block block, BlockFace face, Entity entity){
-		/*
+		
 		final Fireball ball = player.launchProjectile(Fireball.class);
 
 		ball.setYield(8F);
@@ -47,7 +47,7 @@ public class StaffOfMeteor extends TerAngreal{
 		for(long x = 0; x < 100; x = x+2){
 			scheduler.scheduleSyncDelayedTask(TheOnePower.plugin, task, x);
 		}
-		*/
+		
 	}
 
 	@Override

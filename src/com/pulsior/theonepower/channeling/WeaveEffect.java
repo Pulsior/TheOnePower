@@ -22,11 +22,13 @@ import com.pulsior.theonepower.weaves.aessedai.Healing;
 import com.pulsior.theonepower.weaves.aessedai.Lightning;
 import com.pulsior.theonepower.weaves.aessedai.Manipulate;
 import com.pulsior.theonepower.weaves.aessedai.OpenGround;
+import com.pulsior.theonepower.weaves.aessedai.ProjectileShield;
 import com.pulsior.theonepower.weaves.aessedai.Rain;
 import com.pulsior.theonepower.weaves.aessedai.RemoveShield;
 import com.pulsior.theonepower.weaves.aessedai.Shielding;
 import com.pulsior.theonepower.weaves.aessedai.Sparks;
 import com.pulsior.theonepower.weaves.aessedai.SpotHostileMobs;
+import com.pulsior.theonepower.weaves.aessedai.SpotPlayers;
 import com.pulsior.theonepower.weaves.forsaken.FireSword;
 import com.pulsior.theonepower.weaves.forsaken.Meteor;
 import com.pulsior.theonepower.weaves.forsaken.Strike;
@@ -61,8 +63,8 @@ public enum WeaveEffect
 			new Shielding(), Level.AES_SEDAI), REMOVE_SHIELDING(
 			new RemoveShield(), Level.AES_SEDAI), MANIPULATE(new Manipulate(),
 			Level.AES_SEDAI), OPEN_GROUND(new OpenGround(), Level.AES_SEDAI), SPOT_HOSTILE(
-			new SpotHostileMobs(), Level.AES_SEDAI), SPARKS(new Sparks(),
-			Level.AES_SEDAI), METEOR(new Meteor(), Level.FORSAKEN), TELEPORT(
+			new SpotHostileMobs(), Level.AES_SEDAI), SPOT_PLAYER(new SpotPlayers(), Level.AES_SEDAI), SPARKS(new Sparks(),
+			Level.AES_SEDAI), PROJECTILE_SHIELD( new ProjectileShield(), Level.AES_SEDAI), METEOR(new Meteor(), Level.FORSAKEN), TELEPORT(
 			new Teleport(), Level.FORSAKEN), STRIKE(new Strike(),
 			Level.FORSAKEN), TRAVEL(new Travel(), Level.FORSAKEN), FIRE_SWORD(
 			new FireSword(), Level.FORSAKEN), LIGHTNING_STORM(

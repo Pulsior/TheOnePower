@@ -2,6 +2,7 @@ package com.pulsior.theonepower;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -86,6 +87,17 @@ public class Database implements Serializable
 		channelMap.remove(player.getName());
 	}
 
+	public void clearChannels()
+	{
+		Collection<Channel> channels = channelMap.values();
+		
+		for( Channel c : channels)
+		{
+			c.close();
+			channelMap.remove(c.id);
+		}
+	}
+
 	public boolean addMemory(UUID id, Memory mem)
 	{
 		List<Memory> list = memoryMap.get(id);
@@ -122,7 +134,7 @@ public class Database implements Serializable
 		}
 		return false;
 	}
-	
+
 	public List<Memory> getMemories(UUID id)
 	{
 		return memoryMap.get(id);

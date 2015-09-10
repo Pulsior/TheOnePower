@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.pulsior.theonepower.TheOnePower;
@@ -40,19 +41,12 @@ public class ChannelManager implements Listener {
 			Material material = event.getBlock().getType();			
 			switch(material){
 			case DIRT:
-				Bukkit.getLogger().info("Dirt werkt");
-				event.setCancelled(true);
-				break;
-			case FIREBALL:
-				Bukkit.getLogger().info("Fire werkt");
 				event.setCancelled(true);
 				break;
 			case WATER_LILY:
-				Bukkit.getLogger().info("Water werkt");
 				event.setCancelled(true);
 				break;
 			case RED_ROSE:
-				Bukkit.getLogger().info("Redrose werkt");
 				event.setCancelled(true);
 				break;
 			default:
@@ -71,7 +65,7 @@ public class ChannelManager implements Listener {
 			event.setAmount(0);
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		Channel channel = TheOnePower.database.getChannel(event.getPlayer() );
@@ -79,6 +73,8 @@ public class ChannelManager implements Listener {
 			channel.close();
 		}
 	}
+
+
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event){
@@ -138,12 +134,19 @@ public class ChannelManager implements Listener {
 
 	@EventHandler
 	public void onItemPickup(PlayerPickupItemEvent event){
-
-		if( TheOnePower.database.getChannel(event.getPlayer() ) != null) {
+		Channel c = TheOnePower.database.getChannel( event.getPlayer() );
+		if( c != null) {
+			/*
+			Inventory inv = Bukkit.createInventory(event.getPlayer(), 36);
+			inv.setContents(c.normalInventory);
+			boolean isStored = ( inv.addItem( event.getItem().getItemStack() ) == null );
+			c.normalInventory = inv.getContents();
+			if (isStored ) { event.getItem().remove(); }
+			*/
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
 		ItemStack i = event.getItem();

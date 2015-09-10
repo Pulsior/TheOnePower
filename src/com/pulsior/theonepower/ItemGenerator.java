@@ -3,8 +3,6 @@ package com.pulsior.theonepower;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
@@ -34,18 +32,18 @@ public class ItemGenerator implements Listener
 				Chest chest = (Chest) state;
 				Inventory inventory = chest.getBlockInventory();
 
-				System.out.println("Generated a chest!");
-
 				for (CustomItem i : items)
 				{
 
 					if (Utility.chance(i.getSpawnChance()))
 					{
 						inventory.addItem(i.asItem());
-						Location l = chest.getLocation();
+						/*
+						Location l = chest.getLocation();						
 						Bukkit.getLogger().info("Added an item @" +
 								l.getBlockX() + ", " + l.getBlockY() + ", " +
 								l.getBlockZ());
+						 */
 					}
 				}
 

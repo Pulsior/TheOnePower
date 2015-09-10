@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -41,8 +42,9 @@ public class Sparks implements Weave{
 			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
-				Block block = player.getTargetBlock((HashSet<Byte>) null, 150);
+				Block block = player.getTargetBlock((HashSet<Byte>) null, 500);
 				Location location = block.getLocation().add(0, 1, 0);
+				location.getBlock().setType(Material.FIRE);
 				Utility.spawnFireworkEffect(location, Color.RED, Color.BLACK, Type.BURST, false, false, 0);
 				
 			}

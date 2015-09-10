@@ -23,7 +23,6 @@ import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.channeling.weave.Portal;
 import com.pulsior.theonepower.item.terangreal.TerAngreal;
-import com.pulsior.theonepower.util.Strings;
 
 /**
  * Most important event listener that registers weave clicks and makes weaves.
@@ -68,16 +67,6 @@ public class WeaveHandler implements Listener
 				}
 			}
 
-			/*
-			 * Cancel the event if it's an a'dam
-			 */
-			if (meta.hasDisplayName())
-			{
-				if (meta.getDisplayName().equalsIgnoreCase(Strings.A_DAM_NAME))
-				{
-					event.setCancelled(true);
-				}
-			}
 
 			if (item.getType().equals(Material.STICK))
 			{

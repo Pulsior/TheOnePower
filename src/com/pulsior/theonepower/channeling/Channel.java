@@ -49,13 +49,13 @@ public class Channel implements Serializable
 	public UUID id;
 	public List<Element> weave = new ArrayList<Element>();
 	public int taskId;
+	public ItemStack[] normalInventory;
 
 	String elementString;
 	boolean isCasting;
 
 	int normalExpLevel;
 	float normalExpProgress;
-	ItemStack[] normalInventory;
 
 	WeaveEffect lastWeave = null;
 

@@ -13,6 +13,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -23,6 +24,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -55,27 +57,47 @@ public class EventListener implements Listener
 	HashMap<String, Integer> map = new HashMap<String, Integer>();
 	BukkitScheduler scheduler = Bukkit.getScheduler();
 
-	
+
 	@EventHandler
-	public void onProjectileHit(EntityDamageByEntityEvent event)
+	public void onEntityHit(EntityDamageByEntityEvent event)
 	{
-		Entity projectile = event.getDamager();
-		if (projectile instanceof Fireball)
+		Entity entity = event.getDamager();
+		Entity e2 = event.getEntity();
+
+		if (entity instanceof Projectile)
 		{
-			List<MetadataValue> meta = projectile.getMetadata("isLethal");
-			if (meta.size() > 0)
-			{
-				if (meta.get(0).asBoolean())
-				{
-					Entity entity = event.getEntity();
-					if (entity instanceof Creature)
+			List<MetadataValue> list = e2.getMetadata("hasShield");
+			for (MetadataValue value : list) {
+				if (value.getOwningPlugin() == TheOnePower.plugin) {
+					boolean hasShield = (boolean) value.value();
+					if ( hasShield )
 					{
-						((Creature) entity).damage(10000);
+						entity.setVelocity( entity.getVelocity().multiply(-1) );
+						event.setCancelled(true);
+						e2.setMetadata("hasShield", new FixedMetadataValue(TheOnePower.plugin, false) );
 					}
 				}
 			}
 		}
+
+		if (entity instanceof Fireball)
+		{
+			List<MetadataValue> meta = entity.getMetadata("isLethal");
+			if (meta.size() > 0)
+			{
+				if (meta.get(0).asBoolean())
+				{
+					Entity hitEntity = event.getEntity();
+					if (hitEntity instanceof Creature)
+					{
+						((Creature) hitEntity).damage(10000);
+					}
+				}
+			}
+		}
+
 	}
+
 
 	/**
 	 * Select a memory from the GUI with the traveling weave.
@@ -199,6 +221,13 @@ public class EventListener implements Listener
 		{
 			player.sendMessage(ChatColor.RED +
 					"You can't feel the True Source, you must be in a stedding");
+			event.setCancelled(true);
+		}
+
+		if (TheOnePower.database.getChannel(player) != null)
+		{
+			player.sendMessage(ChatColor.GOLD +
+					"You have already embraced saidar!");
 			event.setCancelled(true);
 		}
 	}
