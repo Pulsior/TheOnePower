@@ -18,6 +18,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Healing implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "Healing";
 	
 	public Healing(){
 		elements.add(Element.SPIRIT);
@@ -57,6 +58,11 @@ public class Healing implements Weave{
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 

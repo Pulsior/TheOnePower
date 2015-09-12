@@ -20,6 +20,7 @@ public class BindWolfGaidin implements Weave
 {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "BindWolfGaidin";
 
 	public BindWolfGaidin()
 	{
@@ -57,6 +58,11 @@ public class BindWolfGaidin implements Weave
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

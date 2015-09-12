@@ -19,6 +19,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class LightFire implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "LightFire";
 
 	public LightFire(){
 		elements.add(Element.FIRE);
@@ -82,6 +83,11 @@ public class LightFire implements Weave {
 	public Level getLevel()
 	{
 		return Level.NOVICE;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

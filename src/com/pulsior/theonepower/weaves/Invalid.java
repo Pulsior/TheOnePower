@@ -20,6 +20,7 @@ import com.pulsior.theonepower.channeling.Level;
 public class Invalid implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "Invalid";
 	
 	@Override
 	@SuppressWarnings("deprecation")
@@ -50,5 +51,11 @@ public class Invalid implements Weave {
 	public Level getLevel()
 	{
 		return Level.NOVICE;
+	}
+	
+	@Override
+	public String getID()
+	{
+		return id;
 	}
 }

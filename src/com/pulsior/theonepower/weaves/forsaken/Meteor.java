@@ -24,7 +24,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Meteor implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "Meteor";
+	
 	public Meteor(){
 		elements.add(Element.FIRE);
 		elements.add(Element.EARTH);
@@ -72,6 +73,11 @@ public class Meteor implements Weave{
 	public Level getLevel()
 	{
 		return Level.FORSAKEN;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

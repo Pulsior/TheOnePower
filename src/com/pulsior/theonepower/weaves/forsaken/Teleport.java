@@ -20,6 +20,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Teleport implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "Teleport";
 
 	public Teleport(){
 		elements.add(Element.EARTH);
@@ -53,6 +54,11 @@ public class Teleport implements Weave {
 	public Level getLevel()
 	{
 		return Level.FORSAKEN;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

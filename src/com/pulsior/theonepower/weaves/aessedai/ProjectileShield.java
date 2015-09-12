@@ -18,6 +18,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class ProjectileShield implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "ProjectileShield";
 	
 	public ProjectileShield()
 	{
@@ -41,6 +42,11 @@ public class ProjectileShield implements Weave {
 	@Override
 	public Level getLevel() {
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

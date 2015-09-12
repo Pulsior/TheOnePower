@@ -23,8 +23,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.pulsior.theonepower.TheOnePower;
+import com.pulsior.theonepower.api.WeaveRegistry;
 import com.pulsior.theonepower.item.AngrealType;
 import com.pulsior.theonepower.task.PlayerRegenerationTask;
+import com.pulsior.theonepower.weaves.Weave;
 
 /**
  * Class with one instance for every saidar-embracing player, stored in
@@ -57,7 +59,7 @@ public class Channel implements Serializable
 	int normalExpLevel;
 	float normalExpProgress;
 
-	WeaveEffect lastWeave = null;
+	Weave lastWeave = null;
 
 	public int maxLevel;
 	long taskDuration;
@@ -263,19 +265,19 @@ public class Channel implements Serializable
 		if (Stedding.getStedding(player.getLocation()) != null)
 		{
 			player.sendMessage(ChatColor.RED +
-					"The One Power slipped away, you must be in a stedding");
+					"The One Power slipped away, surely I am in a stedding.");
 			close();
 			return;
 		}
 
-		WeaveEffect effect = compare(weave);
+		Weave effect = WeaveRegistry.compareWeave(weave);
 		UUID id = player.getUniqueId();
 
 		if (effect != null)
 		{
 			World world = player.getWorld();
 			int xpLevel = player.getLevel();
-			int levelCost = weave.size() * effect.getLevel();
+			int levelCost = weave.size() * effect.getLevel().getMultiplier();
 			int difference = xpLevel - levelCost;
 			boolean casted = false;
 
@@ -286,9 +288,9 @@ public class Channel implements Serializable
 				player.setLevel(xpLevel - levelCost);
 			}
 
-			if (effect.equals(lastWeave) == false &&
-					effect.equals(WeaveEffect.INVALID) == false &&
-					casted == true)
+			if ( ! effect.equals(lastWeave) &&
+					! effect.getID().equalsIgnoreCase("Invalid") &&
+					casted)
 			{
 				TheOnePower.power.addWeave(id);
 				player.setExp((1F / (float) TheOnePower.power.requiredWeavesMap
@@ -387,7 +389,8 @@ public class Channel implements Serializable
 	 * @return
 	 */
 
-	public WeaveEffect compare(List<Element> list)
+	/*
+	public WeaveEffect compare(List<Element> elementsList)
 	{
 		WeaveEffect[] effects = WeaveEffect.values();
 		for (WeaveEffect effect : effects)
@@ -403,15 +406,22 @@ public class Channel implements Serializable
 					throw new IllegalArgumentException("The elements of a weave cannot be null");
 				}
 
-				if (weaveElements.equals(list))
+				if (weaveElements.equals(elementsList))
 				{
 					return effect;
 				}
 			}
 
 		}
+		
+	
+		
+		
+		
 		return WeaveEffect.INVALID;
 	};
+	
+	*/
 
 	/**
 	 * Get if the player is casting a weave

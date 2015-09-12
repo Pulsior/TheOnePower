@@ -20,7 +20,9 @@ import com.pulsior.theonepower.weaves.Weave;
 public class QuickGrowth implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "QuickGrowth";
+	
+	
 	public QuickGrowth(){
 		elements.add(Element.EARTH);
 		elements.add(Element.WATER);
@@ -58,4 +60,8 @@ public class QuickGrowth implements Weave{
 		return Level.ACCEPTED;
 	}
 
+	@Override
+	public String getID() {
+		return id;
+	}
 }

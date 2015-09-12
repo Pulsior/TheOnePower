@@ -17,7 +17,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class MiningBlast implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "MiningBlast";
+	
 	public MiningBlast(){
 		elements.add(Element.EARTH);
 		elements.add(Element.FIRE);
@@ -60,6 +61,11 @@ public class MiningBlast implements Weave{
 	public Level getLevel()
 	{
 		return Level.ACCEPTED;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

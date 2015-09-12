@@ -27,7 +27,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class RemoveShield implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "RemoveShield";
+	
 	public RemoveShield(){
 		elements.add(Element.SPIRIT);
 		elements.add(Element.SPIRIT);
@@ -76,6 +77,11 @@ public class RemoveShield implements Weave{
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

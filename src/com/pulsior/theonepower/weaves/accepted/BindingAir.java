@@ -26,6 +26,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class BindingAir implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "BindingAir";
 	
 	public BindingAir(){
 		elements.add(Element.AIR);
@@ -63,6 +64,11 @@ public class BindingAir implements Weave {
 	public Level getLevel()
 	{
 		return Level.ACCEPTED;
+	}
+
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

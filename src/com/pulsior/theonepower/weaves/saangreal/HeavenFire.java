@@ -24,7 +24,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class HeavenFire implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "HeavenFire";
+	
 	public HeavenFire(){
 		elements.add(Element.FIRE);
 		elements.add(Element.EARTH);
@@ -86,6 +87,11 @@ public class HeavenFire implements Weave{
 	public Level getLevel()
 	{
 		return Level.SA_ANGREAL;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

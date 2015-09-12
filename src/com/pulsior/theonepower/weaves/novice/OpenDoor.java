@@ -22,6 +22,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class OpenDoor implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "OpenDoor";
+	
 
 	public OpenDoor(){
 		elements.add(Element.EARTH);
@@ -73,6 +75,11 @@ public class OpenDoor implements Weave {
 	public Level getLevel()
 	{
 		return Level.NOVICE;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

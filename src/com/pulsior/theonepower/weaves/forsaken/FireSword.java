@@ -30,6 +30,8 @@ public class FireSword implements Weave{
 	}
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "FireSword";
+	
 
 	@Override
 	@SuppressWarnings("deprecation")
@@ -60,6 +62,11 @@ public class FireSword implements Weave{
 	public Level getLevel()
 	{
 		return Level.FORSAKEN;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

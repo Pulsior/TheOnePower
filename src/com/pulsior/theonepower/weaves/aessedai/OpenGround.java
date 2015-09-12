@@ -21,7 +21,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class OpenGround implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "OpenGround";
+	
 	public OpenGround(){
 		elements.add(Element.EARTH);
 		elements.add(Element.AIR);
@@ -91,6 +92,11 @@ public class OpenGround implements Weave{
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

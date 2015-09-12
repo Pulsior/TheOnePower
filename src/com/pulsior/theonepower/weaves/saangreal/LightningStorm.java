@@ -25,7 +25,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class LightningStorm implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "LightningStorm";
+	
 	public LightningStorm(){
 		elements.add(Element.FIRE);
 		elements.add(Element.AIR);
@@ -71,6 +72,11 @@ public class LightningStorm implements Weave{
 	public Level getLevel()
 	{
 		return Level.SA_ANGREAL;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

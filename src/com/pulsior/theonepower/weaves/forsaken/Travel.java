@@ -24,6 +24,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Travel implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "Travel";
 
 	public Travel(){
 		elements.add(Element.SPIRIT);
@@ -72,6 +73,11 @@ public class Travel implements Weave {
 	public Level getLevel()
 	{
 		return Level.FORSAKEN;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

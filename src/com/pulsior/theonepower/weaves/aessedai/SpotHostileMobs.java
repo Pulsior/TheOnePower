@@ -24,6 +24,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class SpotHostileMobs implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
+	String id = "SpotHostileMobs";
 	
 	public SpotHostileMobs(){
 		elements.add(Element.SPIRIT);
@@ -70,6 +71,11 @@ public class SpotHostileMobs implements Weave{
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

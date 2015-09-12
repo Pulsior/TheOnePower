@@ -26,7 +26,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Sparks implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "Sparks";
+	
 	public Sparks(){
 		elements.add(Element.FIRE);
 		elements.add(Element.SPIRIT);
@@ -70,6 +71,11 @@ public class Sparks implements Weave{
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

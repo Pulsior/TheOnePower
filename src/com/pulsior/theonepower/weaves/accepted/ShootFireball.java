@@ -23,6 +23,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class ShootFireball implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "ShootFireball";
 	
 	public ShootFireball(){
 		elements.add(Element.FIRE);
@@ -89,5 +90,10 @@ public class ShootFireball implements Weave{
 	public Level getLevel()
 	{
 		return Level.ACCEPTED;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 }

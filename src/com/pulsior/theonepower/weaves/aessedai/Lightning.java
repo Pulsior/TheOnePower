@@ -17,6 +17,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Lightning implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "Lightning";
 	
 	public Lightning(){
 		elements.add(Element.AIR);
@@ -40,5 +41,10 @@ public class Lightning implements Weave {
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+
+	@Override
+	public String getID() {
+		return id;
 	}
 }

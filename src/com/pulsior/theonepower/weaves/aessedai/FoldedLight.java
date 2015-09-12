@@ -19,6 +19,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class FoldedLight implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "FoldedLight";
 	
 	public FoldedLight(){
 		elements.add(Element.SPIRIT);
@@ -45,6 +46,11 @@ public class FoldedLight implements Weave {
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

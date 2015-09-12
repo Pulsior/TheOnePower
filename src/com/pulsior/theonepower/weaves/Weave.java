@@ -18,5 +18,6 @@ public interface Weave {
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity);
 	public List<Element> getElements();
 	public Level getLevel();
+	public String getID();
 	
 }

@@ -17,6 +17,7 @@ import com.pulsior.theonepower.weaves.Weave;
 public class ClearSky implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "ClearSky";
 	
 	public ClearSky(){
 		elements.add(Element.AIR);
@@ -55,6 +56,11 @@ public class ClearSky implements Weave{
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

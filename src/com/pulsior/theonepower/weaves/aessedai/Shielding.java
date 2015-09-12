@@ -28,7 +28,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Shielding implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
-
+	String id = "Shielding";
+	
 	public Shielding(){
 		elements.add(Element.SPIRIT);
 		elements.add(Element.SPIRIT);
@@ -79,6 +80,11 @@ public class Shielding implements Weave {
 	public Level getLevel()
 	{
 		return Level.AES_SEDAI;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }

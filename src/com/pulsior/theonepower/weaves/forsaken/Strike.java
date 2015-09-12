@@ -18,6 +18,8 @@ import com.pulsior.theonepower.weaves.Weave;
 public class Strike implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
+	String id = "Strike";
+	
 	
 	public Strike(){
 		elements.add(Element.AIR);
@@ -47,6 +49,11 @@ public class Strike implements Weave {
 	public Level getLevel()
 	{
 		return Level.FORSAKEN;
+	}
+	
+	@Override
+	public String getID() {
+		return id;
 	}
 
 }
