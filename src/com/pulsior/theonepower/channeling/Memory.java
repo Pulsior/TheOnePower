@@ -32,17 +32,11 @@ public class Memory implements Serializable{
 	}
 
 
-	public Location getLocation(boolean inUnseenLand){
+	public Location getLocation(){
 		Location memoryLocation;
-		
-		if(inUnseenLand){
-			memoryLocation = new Location(Bukkit.getWorld("tel'aran'rhiod"), location[0], location[1], location[2]);
-		}
-		
-		else{
-			memoryLocation = new Location(Bukkit.getWorld("world"), location[0], location[1], location[2]);
-		}
-		
+
+		memoryLocation = new Location(Bukkit.getWorld("world"), location[0], location[1], location[2]);
+
 		memoryLocation.setPitch(pitch);
 		memoryLocation.setYaw(yaw);
 

@@ -139,5 +139,17 @@ public class Database implements Serializable
 	{
 		return memoryMap.get(id);
 	}
+	
+	//Workaround for unserializable field lastWeave in class Channel
+	//TODO permanent solution
+	
+	public void channelFix()
+	{
+		Collection<Channel> collection = channelMap.values();
+		for (Channel channel : collection)
+		{
+			channel.fix();
+		}
+	}
 
 }

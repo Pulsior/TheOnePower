@@ -41,10 +41,10 @@ public class Channel implements Serializable
 
 	private static final long serialVersionUID = 5639217340010068020L;
 
-	public static final Material EARTH = Material.DIRT;
+	public static final Material EARTH = Material.COAL;
 	public static final Material AIR = Material.FEATHER;
 	public static final Material FIRE = Material.FIREBALL;
-	public static final Material WATER = Material.WATER_LILY;
+	public static final Material WATER = Material.WATER_BUCKET;
 	public static final Material SPIRIT = Material.NETHER_STAR;
 	
 	public boolean pickUpItems = false;
@@ -383,47 +383,6 @@ public class Channel implements Serializable
 	}
 
 	/**
-	 * Get the correct weave
-	 * 
-	 * @param list
-	 * @return
-	 */
-
-	/*
-	public WeaveEffect compare(List<Element> elementsList)
-	{
-		WeaveEffect[] effects = WeaveEffect.values();
-		for (WeaveEffect effect : effects)
-		{
-
-			if (!(effect.equals(WeaveEffect.INVALID)))
-			{
-
-				List<Element> weaveElements = effect.getElements();
-
-				if (weaveElements == null)
-				{
-					throw new IllegalArgumentException("The elements of a weave cannot be null");
-				}
-
-				if (weaveElements.equals(elementsList))
-				{
-					return effect;
-				}
-			}
-
-		}
-		
-	
-		
-		
-		
-		return WeaveEffect.INVALID;
-	};
-	
-	*/
-
-	/**
 	 * Get if the player is casting a weave
 	 */
 
@@ -431,12 +390,12 @@ public class Channel implements Serializable
 	{
 		return isCasting;
 	}
-
-	public SerializableChannel serialize()
+	
+	//Workaround for non-serializable field lastWeave
+	//TODO permanent solution
+	public void fix()
 	{
-		SerializableChannel sc = new SerializableChannel(id, maxLevel, taskDuration, weave);
-		return sc;
-
+		lastWeave = null;
 	}
 
 }

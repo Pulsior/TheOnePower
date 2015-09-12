@@ -44,6 +44,11 @@ commands:
        usage: /<command> [player]
        permission: op
        permission-message: You don't have permission to do this
+     check:
+       description: Check if a certain element combination exists
+       usage: /<command> [element1] [element2]...
+       permission: op
+       permission-message: You don't have permission to do this
        
 permissions:
      theonepower.channel:

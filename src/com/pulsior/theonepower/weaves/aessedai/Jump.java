@@ -9,31 +9,33 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
-public class ProjectileShield implements Weave {
+public class Jump implements Weave {
 
-	//WIP
 	List<Element> elements = new ArrayList<Element>();
-	String id = "ProjectileShield";
-	
-	public ProjectileShield()
+	String id = "Jump";
+	public Jump()
 	{
-		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
+		elements.add(Element.AIR);
+		elements.add(Element.AIR);
 	}
-	
+
 	@Override
-	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
-		player.setMetadata("hasShield", new FixedMetadataValue(TheOnePower.plugin, true) );
+	public boolean cast(Player player, World world, Block clickedBlock,
+			BlockFace clickedFace, Entity clickedEntity) {
+		Vector v = player.getVelocity();
+		player.setVelocity( player.getVelocity().setY( v.getY() + 0.5) );
+		player.setVelocity(player.getVelocity().multiply(5));
+		player.setMetadata("hasFeatherFall", new FixedMetadataValue(TheOnePower.plugin, true) );
 		return true;
 	}
+
 
 	@Override
 	public List<Element> getElements() {
@@ -42,9 +44,9 @@ public class ProjectileShield implements Weave {
 
 	@Override
 	public Level getLevel() {
-		return Level.AES_SEDAI;
+		return Level.FORSAKEN;
 	}
-	
+
 	@Override
 	public String getID() {
 		return id;

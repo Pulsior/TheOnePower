@@ -31,6 +31,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import com.pulsior.theonepower.api.WeaveRegistry;
 import com.pulsior.theonepower.api.event.SaidarEmbraceEvent;
 import com.pulsior.theonepower.channeling.Channel;
+import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Portal;
@@ -44,6 +45,7 @@ import com.pulsior.theonepower.listener.ChannelManager;
 import com.pulsior.theonepower.listener.EventListener;
 import com.pulsior.theonepower.listener.WeaveHandler;
 import com.pulsior.theonepower.util.Strings;
+import com.pulsior.theonepower.weaves.Weave;
 import com.pulsior.theonepower.weaves.accepted.BindingAir;
 import com.pulsior.theonepower.weaves.accepted.Delving;
 import com.pulsior.theonepower.weaves.accepted.MiningBlast;
@@ -53,6 +55,8 @@ import com.pulsior.theonepower.weaves.aessedai.BindWolfGaidin;
 import com.pulsior.theonepower.weaves.aessedai.ClearSky;
 import com.pulsior.theonepower.weaves.aessedai.FoldedLight;
 import com.pulsior.theonepower.weaves.aessedai.Healing;
+import com.pulsior.theonepower.weaves.aessedai.Jump;
+import com.pulsior.theonepower.weaves.aessedai.LaunchPlayer;
 import com.pulsior.theonepower.weaves.aessedai.Lightning;
 import com.pulsior.theonepower.weaves.aessedai.Manipulate;
 import com.pulsior.theonepower.weaves.aessedai.OpenGround;
@@ -69,6 +73,7 @@ import com.pulsior.theonepower.weaves.forsaken.Strike;
 import com.pulsior.theonepower.weaves.forsaken.Teleport;
 import com.pulsior.theonepower.weaves.forsaken.Travel;
 import com.pulsior.theonepower.weaves.novice.ExtinguishFire;
+import com.pulsior.theonepower.weaves.novice.FeatherFall;
 import com.pulsior.theonepower.weaves.novice.LightFire;
 import com.pulsior.theonepower.weaves.novice.OpenDoor;
 import com.pulsior.theonepower.weaves.novice.Waterbreathing;
@@ -464,6 +469,21 @@ public final class TheOnePower extends JavaPlugin
 			return true;
 
 		}
+		
+		if (cmd.getName().equalsIgnoreCase("check"))
+		{
+			List<Element> e = new ArrayList<Element>();
+			if (args.length > 0)
+			{
+				for (String s : args){
+					Element el = Element.valueOf( s.toUpperCase() );
+					e.add(el);
+				}
+				
+				Weave w = WeaveRegistry.compareWeave(e);
+				Bukkit.getLogger().info(w.getID());
+			}
+		}
 
 		return false;
 	}
@@ -489,6 +509,7 @@ public final class TheOnePower extends JavaPlugin
 
 		try
 		{
+			database.channelFix();
 			File file = new File("plugins/TheOnePower/data_global");
 			if (file.exists())
 			{
@@ -591,6 +612,7 @@ public final class TheOnePower extends JavaPlugin
 		WeaveRegistry.registerWeave(new MiningBlast());
 		WeaveRegistry.registerWeave(new QuickGrowth());
 		WeaveRegistry.registerWeave(new ShootFireball());
+		WeaveRegistry.registerWeave(new FeatherFall() );
 
 		WeaveRegistry.registerWeave(new BindWolfGaidin());
 		WeaveRegistry.registerWeave(new ClearSky());
@@ -606,6 +628,8 @@ public final class TheOnePower extends JavaPlugin
 		WeaveRegistry.registerWeave(new SpotHostileMobs());
 		WeaveRegistry.registerWeave(new SpotPlayers());
 		WeaveRegistry.registerWeave(new ProjectileShield());
+		WeaveRegistry.registerWeave (new LaunchPlayer() );
+		WeaveRegistry.registerWeave(new Jump( ));
 		
 		WeaveRegistry.registerWeave(new FireSword());
 		WeaveRegistry.registerWeave(new Meteor());

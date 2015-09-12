@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -18,18 +19,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.Vector;
 
 import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.api.event.SaidarEmbraceEvent;
+import com.pulsior.theonepower.channeling.Channel;
 import com.pulsior.theonepower.channeling.Memory;
 import com.pulsior.theonepower.channeling.Stedding;
 import com.pulsior.theonepower.channeling.weave.Portal;
@@ -66,13 +73,21 @@ public class EventListener implements Listener
 
 		if (entity instanceof Projectile)
 		{
+			Projectile projectile = (Projectile) entity;
 			List<MetadataValue> list = e2.getMetadata("hasShield");
 			for (MetadataValue value : list) {
 				if (value.getOwningPlugin() == TheOnePower.plugin) {
 					boolean hasShield = (boolean) value.value();
 					if ( hasShield )
 					{
-						entity.setVelocity( entity.getVelocity().multiply(-1) );
+						ProjectileSource shooter = projectile.getShooter();
+						if (shooter instanceof Entity)
+						{
+							Location shooterLocation = ((Entity) shooter).getLocation();
+							Vector newPath = shooterLocation.toVector().subtract(e2.getLocation().toVector());
+							projectile.setVelocity(newPath);
+						}
+
 						event.setCancelled(true);
 						e2.setMetadata("hasShield", new FixedMetadataValue(TheOnePower.plugin, false) );
 					}
@@ -152,7 +167,7 @@ public class EventListener implements Listener
 												.getTargetBlock((HashSet<Byte>) null, 5)
 												.getLocation();
 										Location destination = memory
-												.getLocation(false);
+												.getLocation();
 										Direction direction = Utility
 												.getDirection(yaw);
 										new Portal(spawnLocation, destination, player
@@ -252,6 +267,50 @@ public class EventListener implements Listener
 			}
 		}
 
+	}
+
+	/**
+	 * Release saidar when opening a chest
+	 */
+
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event)
+	{
+		Block b = event.getClickedBlock();
+		if ( b != null)
+		{
+			if (b.getType().equals(Material.CHEST))
+			{
+				Channel c = TheOnePower.database.getChannel(event.getPlayer());
+				if (c != null)
+				{
+					c.close();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Register and cancel fall event
+	 */
+	@EventHandler
+	public void onEntityDamage(EntityDamageEvent event)
+	{
+		if (event.getCause().equals(DamageCause.FALL) )
+		{
+			Entity entity = event.getEntity();
+			List<MetadataValue> list = entity.getMetadata("hasFeatherFall");
+			for (MetadataValue value : list) {
+				if (value.getOwningPlugin() == TheOnePower.plugin) {
+					boolean hasFeatherFall = (boolean) value.value();
+					if ( hasFeatherFall )
+					{					
+						entity.setMetadata("hasFeatherFall", new FixedMetadataValue(TheOnePower.plugin, false) );
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
 	}
 
 }

@@ -8,31 +8,34 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
-import com.pulsior.theonepower.TheOnePower;
 import com.pulsior.theonepower.channeling.Element;
 import com.pulsior.theonepower.channeling.Level;
 import com.pulsior.theonepower.weaves.Weave;
 
-public class ProjectileShield implements Weave {
+public class Stun implements Weave {
 
-	//WIP
 	List<Element> elements = new ArrayList<Element>();
-	String id = "ProjectileShield";
+	private final String id = "Stun";
 	
-	public ProjectileShield()
+	public Stun()
 	{
 		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
-		elements.add(Element.SPIRIT);
+		elements.add(Element.FIRE);
 		elements.add(Element.SPIRIT);
 	}
 	
 	@Override
-	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
-		player.setMetadata("hasShield", new FixedMetadataValue(TheOnePower.plugin, true) );
-		return true;
+	public boolean cast(Player player, World world, Block clickedBlock,
+			BlockFace clickedFace, Entity clickedEntity) {
+		if (clickedEntity instanceof Player)
+		{
+			Player target = (Player) clickedEntity;
+			
+			return true;
+		}
+		return false;
+		
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class ProjectileShield implements Weave {
 	public Level getLevel() {
 		return Level.AES_SEDAI;
 	}
-	
+
 	@Override
 	public String getID() {
 		return id;

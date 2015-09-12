@@ -32,6 +32,8 @@ public class Utility {
 	
 	public static Direction getDirection(float yaw){
 		
+		yaw += 180;
+		
 		if(-yaw > 135 && -yaw < 225){
 			return Direction.NORTH;
 		}

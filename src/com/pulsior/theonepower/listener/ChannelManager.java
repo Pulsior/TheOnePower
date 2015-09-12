@@ -43,7 +43,7 @@ public class ChannelManager implements Listener {
 			case DIRT:
 				event.setCancelled(true);
 				break;
-			case WATER_LILY:
+			case WATER_BUCKET:
 				event.setCancelled(true);
 				break;
 			case RED_ROSE:
@@ -63,6 +63,19 @@ public class ChannelManager implements Listener {
 	public void onExpGet(PlayerExpChangeEvent event){
 		if( TheOnePower.database.getChannel(event.getPlayer() ) != null){
 			event.setAmount(0);
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event)
+	{
+		ItemStack i = event.getItem();
+		if (i != null && TheOnePower.database.getChannel(event.getPlayer() ) != null)
+		{
+			if (i.getType() == Material.WATER_BUCKET)
+			{
+				event.setCancelled(true);
+			}
 		}
 	}
 
