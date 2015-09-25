@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -27,6 +28,8 @@ public class Sparks implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Sparks";
+	private final String name = "Sparks";
+	private final ChatColor color = ChatColor.DARK_RED;
 	
 	public Sparks(){
 		elements.add(Element.FIRE);
@@ -76,6 +79,17 @@ public class Sparks implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

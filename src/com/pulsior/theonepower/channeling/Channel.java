@@ -7,17 +7,20 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Dye;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,7 +49,7 @@ public class Channel implements Serializable
 	public static final Material FIRE = Material.FIREBALL;
 	public static final Material WATER = Material.WATER_BUCKET;
 	public static final Material SPIRIT = Material.NETHER_STAR;
-	
+
 	public boolean pickUpItems = false;
 	public UUID id;
 	public List<Element> weave = new ArrayList<Element>();
@@ -60,8 +63,11 @@ public class Channel implements Serializable
 	float normalExpProgress;
 
 	Weave lastWeave = null;
+	public Weave shortcut = null;
 
 	public int maxLevel;
+	public int naturalMax;
+	public int usedLevels;
 	long taskDuration;
 
 	@SuppressWarnings("deprecation")
@@ -79,7 +85,7 @@ public class Channel implements Serializable
 		 * Set up the data in PowerMap
 		 */
 
-		if (TheOnePower.power.levelMap.get(id) == null)
+		if (TheOnePower.power.maxLevelMap.get(id) == null)
 		{
 			TheOnePower.power.addPlayer(id);
 		}
@@ -96,10 +102,13 @@ public class Channel implements Serializable
 		TheOnePower.database.addChannel(id, this);
 
 		normalExpLevel = player.getLevel(); // Add the correct levels to the
-											// player
-		maxLevel = TheOnePower.power.levelMap.get(id);
-		maxLevel = maxLevel + extraLevels;
-		player.setLevel(maxLevel);
+		// player
+		maxLevel = TheOnePower.power.maxLevelMap.get(id);
+		naturalMax = maxLevel; //The maximum amount of levels a player could hold without the help of items
+		usedLevels = TheOnePower.power.usedLevelMap.get(id);
+		
+		maxLevel = maxLevel + extraLevels;		
+		player.setLevel(maxLevel - usedLevels);
 		player.setExp((1F / (float) TheOnePower.power.requiredWeavesMap
 				.get(id)) *
 				TheOnePower.power.weaveProgressMap.get(id));
@@ -107,11 +116,11 @@ public class Channel implements Serializable
 		PlayerInventory inv = player.getInventory();
 		inv.clear();
 
-		taskDuration = (long) 120 / maxLevel; // Fully regenerating your levels
-												// will always take 120 ticks
+		taskDuration = (long) 180 / maxLevel; // Fully regenerating your levels
+		// will always take 180 ticks
 
 		/*
-		 * Add items to the inventory
+		 * Add correct items to the player's inventory
 		 */
 
 		ItemStack spirit = new ItemStack(SPIRIT);
@@ -257,7 +266,7 @@ public class Channel implements Serializable
 	 * @param clickedBlock
 	 */
 
-	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity)
+	public void cast(Block clickedBlock, BlockFace clickedFace, Entity clickedEntity, boolean useShortcut)
 	{
 
 		Player player = Bukkit.getPlayer(id);
@@ -269,28 +278,43 @@ public class Channel implements Serializable
 			close();
 			return;
 		}
-
+		
 		Weave effect = WeaveRegistry.compareWeave(weave);
+		
+		if (useShortcut && this.shortcut != null)
+		{
+			effect = this.shortcut;
+		}
+		
 		UUID id = player.getUniqueId();
 
-		if (effect != null)
-		{
+		if (effect != null && ( effect.getElements() != null || effect.getID().equals("Invalid") ) )
+		{			
+			
 			World world = player.getWorld();
 			int xpLevel = player.getLevel();
-			int levelCost = weave.size() * effect.getLevel().getMultiplier();
+			int size = weave.size();
+			
+			if (useShortcut)
+			{
+				size = shortcut.getElements().size();
+			}			
+			
+			int mult = effect.getLevel().getMultiplier();
+			int levelCost = size * mult;
 			int difference = xpLevel - levelCost;
-			boolean casted = false;
+			boolean successfullyCast = false;
 
 			if (difference >= 0)
 			{
-				casted = effect
+				successfullyCast = effect
 						.cast(player, world, clickedBlock, clickedFace, clickedEntity);
 				player.setLevel(xpLevel - levelCost);
 			}
 
 			if ( ! effect.equals(lastWeave) &&
 					! effect.getID().equalsIgnoreCase("Invalid") &&
-					casted)
+					successfullyCast)
 			{
 				TheOnePower.power.addWeave(id);
 				player.setExp((1F / (float) TheOnePower.power.requiredWeavesMap
@@ -327,6 +351,16 @@ public class Channel implements Serializable
 		PlayerInventory inventory = player.getInventory();
 		inventory.setContents(normalInventory);
 
+		
+		if (maxLevel == naturalMax)
+		{
+			TheOnePower.power.usedLevelMap.put(id, maxLevel - player.getLevel() );
+		}
+		else
+		{
+			TheOnePower.power.usedLevelMap.put(id, naturalMax);
+		}
+		
 		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		player.removePotionEffect(PotionEffectType.ABSORPTION);
 		player.setLevel(normalExpLevel);
@@ -339,6 +373,7 @@ public class Channel implements Serializable
 			task.cancel();
 		}
 
+
 		TheOnePower.taskHolder.remove(id);
 		TheOnePower.database.removeChannel(id);
 
@@ -346,9 +381,6 @@ public class Channel implements Serializable
 
 	public void disband()
 	{
-
-		Player player = Bukkit.getPlayer(id);
-		player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 		weave.clear();
 		resetElements();
 		isCasting = false;
@@ -390,12 +422,116 @@ public class Channel implements Serializable
 	{
 		return isCasting;
 	}
-	
+
 	//Workaround for non-serializable field lastWeave
 	//TODO permanent solution
 	public void fix()
 	{
 		lastWeave = null;
+		shortcut = null;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void setShortcut()
+	{
+		Weave weave = WeaveRegistry.compareWeave(this.weave);
+		Player player = Bukkit.getPlayer(id);
+		
+		if (weave.getID().equals("FireSword") )
+		{
+			ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+			sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+			sword.addEnchantment(Enchantment.DURABILITY, 3);
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GOLD+"A sword made out of the One Power");
+			ItemMeta meta = sword.getItemMeta();
+			meta.setDisplayName(ChatColor.RED+"Fire-Wrought Sword");
+			meta.setLore(lore);
+			sword.setItemMeta(meta);
+			Channel channel = TheOnePower.database.getChannel(player);
+			channel.pickUpItems = true;
+			player.getInventory().setItem(3, sword);			
+			player.updateInventory();
+			channel.pickUpItems = false;
+		}
+		
+		else{
+			ChatColor color = weave.getColor();
+			String name = weave.getName();
+		
+			Dye dye = new Dye();
+			DyeColor dyeColor;
+			
+			switch(color)
+			{
+			case AQUA:
+				dyeColor = DyeColor.LIGHT_BLUE;
+				break;
+			case BLACK:
+				dyeColor = DyeColor.BLACK;
+				break;
+			case BLUE:
+				dyeColor = DyeColor.BLUE;
+				break;
+			case DARK_AQUA:
+				dyeColor = DyeColor.BLUE;
+				break;
+			case DARK_BLUE:
+				dyeColor = DyeColor.BLUE;
+				break;
+			case DARK_GRAY:
+				dyeColor = DyeColor.GRAY;
+				break;
+			case DARK_GREEN:
+				dyeColor = DyeColor.GREEN;
+				break;
+			case DARK_PURPLE:
+				dyeColor = DyeColor.PURPLE;
+				break;
+			case DARK_RED:
+				dyeColor = DyeColor.RED;
+				break;
+			case GOLD:
+				dyeColor = DyeColor.YELLOW;
+				break;
+			case GRAY:
+				dyeColor = DyeColor.GRAY;
+				break;
+			case GREEN:
+				dyeColor = DyeColor.GREEN;
+				break;
+			case LIGHT_PURPLE:
+				dyeColor = DyeColor.MAGENTA;
+				break;
+			case RED:
+				dyeColor = DyeColor.RED;
+				break;
+			case YELLOW:
+				dyeColor = DyeColor.YELLOW;
+				break;
+			default:
+				dyeColor = DyeColor.WHITE;
+				break;
+			
+			}
+			
+			dye.setColor(dyeColor);
+			ItemStack shortcut = dye.toItemStack();
+			shortcut.setAmount(1);
+			
+			ItemMeta meta = shortcut.getItemMeta();			
+			meta.setDisplayName(color + name);
+			
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GOLD + "Shortcut to quickly use a weave");
+			
+			meta.setLore(lore);
+			shortcut.setItemMeta(meta);
+			player.getInventory().setItem(3, shortcut);
+			this.shortcut = weave;
+			this.weave.clear();
+			resetElements();
+		}
 	}
 
 }

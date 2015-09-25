@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -19,6 +20,8 @@ public class Strike implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Strike";
+	private final String name = "Explosion of Lightning";
+	private final ChatColor color = ChatColor.GOLD;
 	
 	
 	public Strike(){
@@ -54,6 +57,17 @@ public class Strike implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

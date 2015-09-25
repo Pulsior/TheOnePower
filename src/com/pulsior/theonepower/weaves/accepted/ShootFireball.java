@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.accepted;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,6 +25,8 @@ public class ShootFireball implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "ShootFireball";
+	private final String name = "Shoot Fireball";
+	private final ChatColor color = ChatColor.RED;
 	
 	public ShootFireball(){
 		elements.add(Element.FIRE);
@@ -95,5 +98,16 @@ public class ShootFireball implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 }

@@ -3,7 +3,6 @@ package com.pulsior.theonepower.listener;
 import java.util.HashSet;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -18,7 +17,6 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.pulsior.theonepower.TheOnePower;
@@ -123,6 +121,13 @@ public class ChannelManager implements Listener {
 				player.setItemInHand(stack);
 				item.remove();
 			}
+			
+			
+			if ( player.isSneaking() )
+			{
+				channel.setShortcut();
+				return;
+			}
 
 			Block block = player.getTargetBlock((HashSet<Byte>) null, 5);
 			Entity entity = Utility.getTargetEntity(player);
@@ -133,11 +138,11 @@ public class ChannelManager implements Listener {
 			}
 
 			if(block.getType() == Material.AIR){
-				channel.cast(null, null, entity);
+				channel.cast(null, null, entity, false);
 
 			}
 			else{
-				channel.cast(block, null, entity);
+				channel.cast(block, null, entity, false);
 			}
 		}
 	}
@@ -147,15 +152,13 @@ public class ChannelManager implements Listener {
 
 	@EventHandler
 	public void onItemPickup(PlayerPickupItemEvent event){
-		Channel c = TheOnePower.database.getChannel( event.getPlayer() );
+		Player player = event.getPlayer();
+		Channel c = TheOnePower.database.getChannel( player );
 		if( c != null) {
-			/*
-			Inventory inv = Bukkit.createInventory(event.getPlayer(), 36);
-			inv.setContents(c.normalInventory);
-			boolean isStored = ( inv.addItem( event.getItem().getItemStack() ) == null );
-			c.normalInventory = inv.getContents();
-			if (isStored ) { event.getItem().remove(); }
-			*/
+			if ( player.isSneaking() )
+			{			
+				c.setShortcut();
+			}
 			event.setCancelled(true);
 		}
 	}

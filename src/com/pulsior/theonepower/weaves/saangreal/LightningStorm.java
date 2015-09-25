@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -26,6 +27,8 @@ public class LightningStorm implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "LightningStorm";
+	private final String name = "Summon Storm";
+	private final ChatColor color = ChatColor.WHITE;
 	
 	public LightningStorm(){
 		elements.add(Element.FIRE);
@@ -77,6 +80,17 @@ public class LightningStorm implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

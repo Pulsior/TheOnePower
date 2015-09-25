@@ -25,6 +25,8 @@ public class Travel implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Travel";
+	private final String name = "Open Travel Gate";
+	private final ChatColor color = ChatColor.DARK_PURPLE;
 
 	public Travel(){
 		elements.add(Element.SPIRIT);
@@ -78,6 +80,17 @@ public class Travel implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

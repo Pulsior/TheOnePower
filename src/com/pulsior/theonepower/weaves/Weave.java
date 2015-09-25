@@ -2,6 +2,7 @@ package com.pulsior.theonepower.weaves;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,5 +20,6 @@ public interface Weave {
 	public List<Element> getElements();
 	public Level getLevel();
 	public String getID();
-	
+	public String getName();
+	public ChatColor getColor();
 }

@@ -28,6 +28,8 @@ public class RemoveShield implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "RemoveShield";
+	private final String name = "Remove Shield";
+	private final ChatColor color = ChatColor.LIGHT_PURPLE;
 	
 	public RemoveShield(){
 		elements.add(Element.SPIRIT);
@@ -82,6 +84,17 @@ public class RemoveShield implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

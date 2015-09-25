@@ -17,15 +17,17 @@ public class PowerMap implements Serializable
 	 */
 	private static final long serialVersionUID = 1455786389387906551L;
 
-	public HashMap<UUID, Integer> levelMap;
+	public HashMap<UUID, Integer> maxLevelMap;
+	public HashMap<UUID, Integer> usedLevelMap;
 	public HashMap<UUID, Integer> weaveProgressMap;
 	public HashMap<UUID, Integer> requiredWeavesMap;
 
 	public PowerMap()
 	{
-		levelMap = new HashMap<UUID, Integer>();
-		weaveProgressMap = new HashMap<UUID, Integer>();
-		requiredWeavesMap = new HashMap<UUID, Integer>();
+		maxLevelMap = new HashMap<UUID, Integer>(); //The maximum amount of levels a player can hold
+		usedLevelMap = new HashMap<UUID, Integer>(); //The amount of levels that a player has not yet regenerated
+		weaveProgressMap = new HashMap<UUID, Integer>(); //The amount of waeves that *have* been performed in order to reach the next level
+		requiredWeavesMap = new HashMap<UUID, Integer>(); //The amount of weaves that should be performed to reach the next level
 	}
 
 	/**
@@ -49,9 +51,9 @@ public class PowerMap implements Serializable
 	 */
 	public void increaseLevel(UUID id)
 	{
-		int amtOfLevels = levelMap.get(id);
+		int amtOfLevels = maxLevelMap.get(id);
 		amtOfLevels = amtOfLevels + 1;
-		levelMap.put(id, amtOfLevels);
+		maxLevelMap.put(id, amtOfLevels);
 		TheOnePower.database.getChannel(id).maxLevel = amtOfLevels;
 		Player player = Bukkit.getPlayer(id);
 		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 0);
@@ -64,7 +66,8 @@ public class PowerMap implements Serializable
 	 */
 	public void addPlayer(UUID id)
 	{
-		levelMap.put(id, 3);
+		maxLevelMap.put(id, 3);
+		usedLevelMap.put(id, 0);
 		weaveProgressMap.put(id, 0);
 		requiredWeavesMap.put(id, 3);
 	}
@@ -72,7 +75,7 @@ public class PowerMap implements Serializable
 	/**
 	 * Checks whether the level of a player should be increased
 	 * 
-	 * @param name
+	 * @param id
 	 * @return
 	 */
 	public boolean checkLevel(UUID id)

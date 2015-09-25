@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.novice;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +24,8 @@ public class OpenDoor implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "OpenDoor";
+	private final String name = "Smash Lock";
+	private final ChatColor color = ChatColor.DARK_GRAY;
 	
 
 	public OpenDoor(){
@@ -80,6 +83,17 @@ public class OpenDoor implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

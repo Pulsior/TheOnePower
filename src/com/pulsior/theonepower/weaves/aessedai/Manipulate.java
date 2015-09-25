@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -28,6 +29,8 @@ public class Manipulate implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Manipulate";
+	private final String name = "Illusion";
+	private final ChatColor color = ChatColor.LIGHT_PURPLE;
 	
 	public Manipulate(){
 		elements.add(Element.SPIRIT);
@@ -95,6 +98,17 @@ public class Manipulate implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,6 +20,8 @@ public class LaunchPlayer implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "LaunchPlayer";
+	private final String name = "Push";
+	private final ChatColor color = ChatColor.WHITE;
 	public LaunchPlayer()
 	{
 		elements.add(Element.AIR);
@@ -71,6 +74,17 @@ public class LaunchPlayer implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

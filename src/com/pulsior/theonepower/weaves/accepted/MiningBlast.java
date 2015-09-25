@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.accepted;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -18,6 +19,8 @@ public class MiningBlast implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "MiningBlast";
+	private final String name = "Mining Blast";
+	private final ChatColor color = ChatColor.DARK_RED;
 	
 	public MiningBlast(){
 		elements.add(Element.EARTH);
@@ -66,6 +69,17 @@ public class MiningBlast implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

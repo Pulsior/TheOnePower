@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -22,6 +23,8 @@ public class ExtinguishFire implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "ExtinguishFire";
+	private final String name = "Extinguish Fire";
+	private final ChatColor color = ChatColor.AQUA;
 	
 	
 	public ExtinguishFire(){
@@ -64,5 +67,16 @@ public class ExtinguishFire implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 }

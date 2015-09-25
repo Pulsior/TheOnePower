@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -25,6 +26,8 @@ public class HeavenFire implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "HeavenFire";
+	private final String name = "Fires of Heaven";
+	private final ChatColor color = ChatColor.RED;
 	
 	public HeavenFire(){
 		elements.add(Element.FIRE);
@@ -92,6 +95,17 @@ public class HeavenFire implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

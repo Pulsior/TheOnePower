@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.World;
@@ -25,6 +26,8 @@ public class Meteor implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Meteor";
+	private final String name = "Launch Meteor";
+	private final ChatColor color = ChatColor.DARK_RED;
 	
 	public Meteor(){
 		elements.add(Element.FIRE);
@@ -78,6 +81,17 @@ public class Meteor implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

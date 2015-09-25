@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.novice;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -20,6 +21,8 @@ public class Waterbreathing implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "WaterBreathing";
+	private final String name = "Bubble of Air";
+	private final ChatColor color = ChatColor.AQUA;
 	
 	public Waterbreathing(){
 		elements.add(Element.WATER);
@@ -51,6 +54,17 @@ public class Waterbreathing implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

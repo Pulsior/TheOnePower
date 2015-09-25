@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.World;
@@ -25,6 +26,8 @@ public class SpotHostileMobs implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "SpotHostileMobs";
+	private final String name = "Sense Darkspawn";
+	private final ChatColor color = ChatColor.LIGHT_PURPLE;
 	
 	public SpotHostileMobs(){
 		elements.add(Element.SPIRIT);
@@ -76,6 +79,17 @@ public class SpotHostileMobs implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

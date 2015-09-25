@@ -31,6 +31,8 @@ public class FireSword implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "FireSword";
+	private final String name = "Conjure Fire-Wrought sword";
+	private final ChatColor color = ChatColor.DARK_RED;
 	
 
 	@Override
@@ -50,7 +52,7 @@ public class FireSword implements Weave{
 		player.getInventory().setItem(3, sword);
 		player.updateInventory();
 		channel.pickUpItems = false;
-		return false;
+		return true;
 	}
 
 	@Override
@@ -67,6 +69,17 @@ public class FireSword implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

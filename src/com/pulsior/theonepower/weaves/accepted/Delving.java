@@ -18,6 +18,8 @@ public class Delving implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Delving";
+	private final String name = "Delving";
+	private final ChatColor color = ChatColor.WHITE;
 	
 	public Delving(){
 		elements.add(Element.SPIRIT);
@@ -54,6 +56,17 @@ public class Delving implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

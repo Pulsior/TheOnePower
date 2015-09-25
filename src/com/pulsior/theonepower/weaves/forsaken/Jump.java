@@ -1,8 +1,9 @@
-package com.pulsior.theonepower.weaves.aessedai;
+package com.pulsior.theonepower.weaves.forsaken;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,6 +21,8 @@ public class Jump implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Jump";
+	private final String name = "Air-Powered Boost";
+	private final ChatColor color = ChatColor.GRAY;	
 	public Jump()
 	{
 		elements.add(Element.AIR);
@@ -29,11 +32,18 @@ public class Jump implements Weave {
 	@Override
 	public boolean cast(Player player, World world, Block clickedBlock,
 			BlockFace clickedFace, Entity clickedEntity) {
-		Vector v = player.getVelocity();
-		player.setVelocity( player.getVelocity().setY( v.getY() + 0.5) );
-		player.setVelocity(player.getVelocity().multiply(5));
-		player.setMetadata("hasFeatherFall", new FixedMetadataValue(TheOnePower.plugin, true) );
-		return true;
+		if (player.getLocation().getY() < 260)
+		{
+			Vector v = player.getVelocity();
+			player.setVelocity( player.getVelocity().setY( v.getY() + 0.5) );
+			player.setVelocity( player.getVelocity().setX( v.getX() * 2));
+			player.setVelocity( player.getVelocity().setZ( v.getZ() * 2));
+			player.setVelocity(player.getVelocity().multiply(5));
+			player.setMetadata("hasFeatherFall", new FixedMetadataValue(TheOnePower.plugin, true) );
+			return true;
+		}
+
+		return false;
 	}
 
 
@@ -50,6 +60,17 @@ public class Jump implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

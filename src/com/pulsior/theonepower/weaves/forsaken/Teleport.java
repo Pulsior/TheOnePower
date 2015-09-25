@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -21,6 +22,8 @@ public class Teleport implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Teleport";
+	private final String name = "Blink";
+	private final ChatColor color = ChatColor.BLACK;
 
 	public Teleport(){
 		elements.add(Element.EARTH);
@@ -59,6 +62,17 @@ public class Teleport implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

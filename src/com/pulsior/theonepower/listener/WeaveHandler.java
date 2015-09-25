@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -78,19 +79,19 @@ public class WeaveHandler implements Listener
 							", the current level is " + player.getLevel());
 					System.out.println("Is the task running? " +
 							Bukkit.getScheduler()
-									.isCurrentlyRunning(channel.taskId));
+							.isCurrentlyRunning(channel.taskId));
 					System.out.println("Is it queued? " +
 							Bukkit.getScheduler().isQueued(channel.taskId));
 
 					try
 					{
 						System.out
-								.println("Is the player casting, according to the castingPlayerMap? " +
-										channel.isCasting());
+						.println("Is the player casting, according to the castingPlayerMap? " +
+								channel.isCasting());
 					} catch (NullPointerException ex)
 					{
 						System.out
-								.println("A NullPointerException was thrown when trying to access TheOnePower.castingPlayersMap");
+						.println("A NullPointerException was thrown when trying to access TheOnePower.castingPlayersMap");
 					}
 				}
 
@@ -98,13 +99,14 @@ public class WeaveHandler implements Listener
 
 
 			/*
-			 * Check if the item is bound to saidar embracing
+			 * Check if the item has lore and act upon it
 			 */
 
 			List<String> lore = item.getItemMeta().getLore();
 			if (lore != null)
 			{
-				if (lore.get(0).equalsIgnoreCase(ChatColor.GOLD +
+				String lore0 = lore.get(0);
+				if (lore0.equalsIgnoreCase(ChatColor.GOLD +
 						"Saidar-bound item") &&
 						(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event
 								.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
@@ -112,21 +114,30 @@ public class WeaveHandler implements Listener
 
 					SaidarEmbraceEvent saidarEvent = new SaidarEmbraceEvent(player);
 					Bukkit.getServer().getPluginManager()
-							.callEvent(saidarEvent);
+					.callEvent(saidarEvent);
 					if (!saidarEvent.isCancelled())
 					{
 						event.setCancelled(true);
 						new Channel(id, 0);
 					}
 				}
+				else if (lore0.endsWith("Shortcut to quickly use a weave"))
+				{
+					Channel c = TheOnePower.database.getChannel(player);
+					if (c != null)
+					{
+						c.cast(event.getClickedBlock(), event.getBlockFace(), null, true);
+					}
+				}
+
 			}
 
 			/*
-			 * Check if the item is a ter'angreal
+			 * Check if the item is a ter'angreal or another named item
 			 */
 
 			if (meta.hasDisplayName())
-			{
+			{				
 				TerAngreal terAngreal = TerAngreal.toTerAngreal(item);
 
 				Action action = event.getAction();
@@ -139,6 +150,7 @@ public class WeaveHandler implements Listener
 					event.setCancelled(true);
 				}
 			}
+
 
 			/*
 			 * Channeling and creating weaves starts here
@@ -178,13 +190,15 @@ public class WeaveHandler implements Listener
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET +
 						"Cast Weave"))
 				{ // Casts and executes the weave
-					channel.cast(event.getClickedBlock(), event.getBlockFace(), null);
+					channel.cast(event.getClickedBlock(), event.getBlockFace(), null, false);
 
 				}
 
 				else if (itemName.equalsIgnoreCase(ChatColor.RESET +
 						"Disband Weave"))
-				{ // Clears the weave
+				{ // Clears the weave and plays sheep sound
+
+					player.playSound(player.getLocation(), Sound.SHEEP_SHEAR, 1, 0);
 
 					channel.disband();
 					Block block = event.getClickedBlock();
@@ -207,10 +221,16 @@ public class WeaveHandler implements Listener
 					player.updateInventory();
 					event.setCancelled(true);
 				}
+
+				else if (itemName.equalsIgnoreCase(ChatColor.RESET + "Shortcut") )
+				{
+					channel.cast(event.getClickedBlock(), event.getBlockFace(), null, true);
+				}
 			}
 		}
-
 	}
+
+
 
 	/*
 	 * Some more listeners
@@ -232,7 +252,7 @@ public class WeaveHandler implements Listener
 				if (displayName
 						.equalsIgnoreCase(ChatColor.RESET + "Cast Weave"))
 				{
-					channel.cast(null, null, entity);
+					channel.cast(null, null, entity, false);
 					return;
 				}
 			}

@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.EntityEffect;
 import org.bukkit.World;
@@ -19,6 +20,8 @@ public class Healing implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Healing";
+	private final String name = "Healing";
+	private final ChatColor color = ChatColor.GOLD;
 	
 	public Healing(){
 		elements.add(Element.SPIRIT);
@@ -63,6 +66,17 @@ public class Healing implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 

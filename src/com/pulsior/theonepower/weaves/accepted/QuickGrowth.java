@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.accepted;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.CropState;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -21,6 +22,8 @@ public class QuickGrowth implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "QuickGrowth";
+	private final String name = "Accelerate Growth";
+	private final ChatColor color = ChatColor.DARK_GREEN;
 	
 	
 	public QuickGrowth(){
@@ -63,5 +66,16 @@ public class QuickGrowth implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 }

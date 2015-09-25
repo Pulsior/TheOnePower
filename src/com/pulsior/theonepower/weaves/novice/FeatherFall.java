@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.novice;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,6 +20,8 @@ public class FeatherFall implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "FeatherFall";
+	private final String name = "Cushion of Air";
+	private final ChatColor color = ChatColor.WHITE;
 	
 	public FeatherFall()
 	{
@@ -45,6 +48,17 @@ public class FeatherFall implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

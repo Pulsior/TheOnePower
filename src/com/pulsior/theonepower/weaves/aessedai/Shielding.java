@@ -30,6 +30,9 @@ public class Shielding implements Weave {
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Shielding";
 	
+	private final String name = "Shield Player";
+	private final ChatColor color = ChatColor.LIGHT_PURPLE;
+	
 	public Shielding(){
 		elements.add(Element.SPIRIT);
 		elements.add(Element.SPIRIT);
@@ -65,7 +68,7 @@ public class Shielding implements Weave {
 			casterLevel = casterChannel.maxLevel;
 
 
-			TheOnePower.database.addShield(targetId, new Shield(casterLevel, TheOnePower.power.levelMap.get(targetId), casterId) );
+			TheOnePower.database.addShield(targetId, new Shield(casterLevel, TheOnePower.power.maxLevelMap.get(targetId), casterId) );
 
 		}
 		return false;
@@ -85,6 +88,17 @@ public class Shielding implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

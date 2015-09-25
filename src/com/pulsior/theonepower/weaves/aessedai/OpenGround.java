@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -22,6 +23,8 @@ public class OpenGround implements Weave{
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "OpenGround";
+	private final String name = "Split Earth";
+	private final ChatColor color = ChatColor.DARK_GREEN;
 	
 	public OpenGround(){
 		elements.add(Element.EARTH);
@@ -36,8 +39,8 @@ public class OpenGround implements Weave{
 	public boolean cast(Player player, World world, Block clickedBlock,	BlockFace clickedFace, Entity clickedEntity) {
 		Block target = player.getTargetBlock((HashSet<Byte>) null, 50);
 		Location location = target.getLocation();
-		location.add(4, 0, 4);
 		world.strikeLightning(location);
+		location.add(4, 0, 4);		
 		List<Block> blocks = new ArrayList<Block>();
 		
 		
@@ -97,6 +100,17 @@ public class OpenGround implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

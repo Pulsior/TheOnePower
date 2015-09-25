@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,6 +21,8 @@ public class ProjectileShield implements Weave {
 	//WIP
 	List<Element> elements = new ArrayList<Element>();
 	String id = "ProjectileShield";
+	private final String name = "Projectile Shield";
+	private final ChatColor color = ChatColor.LIGHT_PURPLE;
 	
 	public ProjectileShield()
 	{
@@ -48,6 +51,17 @@ public class ProjectileShield implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

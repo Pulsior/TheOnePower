@@ -31,7 +31,7 @@ public class StaffOfMeteor extends TerAngreal{
 
 		ball.setYield(8F);
 
-		BukkitRunnable task = new BukkitRunnable(){
+		Runnable task = new BukkitRunnable(){
 
 			@Override
 			public void run() {
@@ -45,7 +45,7 @@ public class StaffOfMeteor extends TerAngreal{
 		BukkitScheduler scheduler = Bukkit.getScheduler();
 
 		for(long x = 0; x < 100; x = x+2){
-			scheduler.scheduleSyncDelayedTask(TheOnePower.plugin, task, x);
+			scheduler.runTaskLater(TheOnePower.plugin, task, x);
 		}
 		
 	}

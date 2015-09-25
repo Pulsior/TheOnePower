@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,6 +18,9 @@ public class Rain implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Rain";
+	
+	private final String name = "Rain";
+	private final ChatColor color = ChatColor.DARK_BLUE;
 	
 	public Rain(){
 		elements.add(Element.AIR);
@@ -47,6 +51,17 @@ public class Rain implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

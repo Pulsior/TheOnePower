@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -20,12 +21,14 @@ import com.pulsior.theonepower.channeling.Level;
 public class Invalid implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
-	String id = "Invalid";
+	private final String id = "Invalid";
+	private final String name = "Invalid";
+	private final ChatColor color = ChatColor.RED;
+	
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean cast(Player player, World world, Block clickedBlock, BlockFace clickedFace, Entity clickedEntity) {
-		
 		double weaveLength = (double) TheOnePower.database.getChannel(player).weave.size();
 		double playerHealth = player.getHealth() - weaveLength;
 		if(playerHealth < 0){
@@ -57,5 +60,16 @@ public class Invalid implements Weave {
 	public String getID()
 	{
 		return id;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 }

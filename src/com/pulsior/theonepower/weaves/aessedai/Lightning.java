@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,6 +19,8 @@ public class Lightning implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "Lightning";
+	private final String name = "Lightning";
+	private final ChatColor color = ChatColor.YELLOW;
 	
 	public Lightning(){
 		elements.add(Element.AIR);
@@ -46,5 +49,16 @@ public class Lightning implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 }

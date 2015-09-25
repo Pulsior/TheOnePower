@@ -10,9 +10,7 @@ import com.pulsior.theonepower.weaves.Invalid;
 import com.pulsior.theonepower.weaves.Weave;
 
 public class WeaveRegistry
-{
-	private static Invalid i = new Invalid();
-	
+{	
 	private static List<Weave> weaves = new ArrayList<Weave>();
 	
 	private WeaveRegistry()
@@ -30,7 +28,7 @@ public class WeaveRegistry
 				return weave;
 			}
 		}
-		return i;
+		return new Invalid();
 	}
 	
 	public static boolean registerWeave(Weave newWeave)

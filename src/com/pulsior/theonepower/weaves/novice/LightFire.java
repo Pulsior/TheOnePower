@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.novice;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,6 +21,8 @@ public class LightFire implements Weave {
 
 	List<Element> elements = new ArrayList<Element>();
 	String id = "LightFire";
+	private final String name = "Light Fire";
+	private final ChatColor color = ChatColor.RED;
 
 	public LightFire(){
 		elements.add(Element.FIRE);
@@ -88,6 +91,17 @@ public class LightFire implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

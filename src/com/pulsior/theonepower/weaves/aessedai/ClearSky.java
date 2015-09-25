@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.aessedai;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -18,6 +19,8 @@ public class ClearSky implements Weave{
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "ClearSky";
+	private final String name = "Clear Skies";
+	private final ChatColor color = ChatColor.DARK_AQUA;
 	
 	public ClearSky(){
 		elements.add(Element.AIR);
@@ -61,6 +64,17 @@ public class ClearSky implements Weave{
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

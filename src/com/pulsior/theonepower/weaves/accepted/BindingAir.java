@@ -3,6 +3,7 @@ package com.pulsior.theonepower.weaves.accepted;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -27,6 +28,8 @@ public class BindingAir implements Weave {
 	
 	List<Element> elements = new ArrayList<Element>();
 	String id = "BindingAir";
+	private final String name = "Binding Air";
+	private final ChatColor color = ChatColor.WHITE;
 	
 	public BindingAir(){
 		elements.add(Element.AIR);
@@ -69,6 +72,17 @@ public class BindingAir implements Weave {
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public ChatColor getColor()
+	{
+		return color;
 	}
 
 }

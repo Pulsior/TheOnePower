@@ -55,7 +55,6 @@ import com.pulsior.theonepower.weaves.aessedai.BindWolfGaidin;
 import com.pulsior.theonepower.weaves.aessedai.ClearSky;
 import com.pulsior.theonepower.weaves.aessedai.FoldedLight;
 import com.pulsior.theonepower.weaves.aessedai.Healing;
-import com.pulsior.theonepower.weaves.aessedai.Jump;
 import com.pulsior.theonepower.weaves.aessedai.LaunchPlayer;
 import com.pulsior.theonepower.weaves.aessedai.Lightning;
 import com.pulsior.theonepower.weaves.aessedai.Manipulate;
@@ -67,10 +66,11 @@ import com.pulsior.theonepower.weaves.aessedai.Shielding;
 import com.pulsior.theonepower.weaves.aessedai.Sparks;
 import com.pulsior.theonepower.weaves.aessedai.SpotHostileMobs;
 import com.pulsior.theonepower.weaves.aessedai.SpotPlayers;
+import com.pulsior.theonepower.weaves.aessedai.Stun;
 import com.pulsior.theonepower.weaves.forsaken.FireSword;
+import com.pulsior.theonepower.weaves.forsaken.Jump;
 import com.pulsior.theonepower.weaves.forsaken.Meteor;
 import com.pulsior.theonepower.weaves.forsaken.Strike;
-import com.pulsior.theonepower.weaves.forsaken.Teleport;
 import com.pulsior.theonepower.weaves.forsaken.Travel;
 import com.pulsior.theonepower.weaves.novice.ExtinguishFire;
 import com.pulsior.theonepower.weaves.novice.FeatherFall;
@@ -326,11 +326,11 @@ public final class TheOnePower extends JavaPlugin
 		{
 			UUID id = ((Player) sender).getUniqueId();
 
-			if (power.levelMap.containsKey(id))
+			if (power.maxLevelMap.containsKey(id))
 			{
 				sender.sendMessage("Your current saidar level is " +
 						ChatColor.GREEN +
-						Integer.toString(power.levelMap.get(id)));
+						Integer.toString(power.maxLevelMap.get(id)));
 				sender.sendMessage("You have to do " +
 						ChatColor.GREEN +
 						Integer.toString(power.requiredWeavesMap.get(id) -
@@ -630,11 +630,12 @@ public final class TheOnePower extends JavaPlugin
 		WeaveRegistry.registerWeave(new ProjectileShield());
 		WeaveRegistry.registerWeave (new LaunchPlayer() );
 		WeaveRegistry.registerWeave(new Jump( ));
+		WeaveRegistry.registerWeave(new Stun() );
 		
 		WeaveRegistry.registerWeave(new FireSword());
 		WeaveRegistry.registerWeave(new Meteor());
 		WeaveRegistry.registerWeave(new Strike());
-		WeaveRegistry.registerWeave(new Teleport());
+		//WeaveRegistry.registerWeave(new Teleport());
 		WeaveRegistry.registerWeave(new Travel());
 		
 		WeaveRegistry.registerWeave(new HeavenFire());
